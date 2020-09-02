@@ -42,12 +42,29 @@ router.post("/api/usersLength", async (req, res) => {
         const comanderLength = await Comander.countDocuments();
         const pilotLength = await Pilot.countDocuments();
         const users = comanderLength + pilotLength;
-
-
-
-
-
         res.json({ usersLength: users })
+    } catch (e) {
+        res.status(400).json({ response: "fail" });
+    }
+});
+
+
+router.post("/newWishForm", async (req, res) => {
+    try {
+        // const comanderLength = await Comander.countDocuments();
+        // const users = comanderLength + pilotLength;
+        const { email, wishForm } = req.body;
+
+        await Pilot.updateOne(
+            { email },
+            {
+                $set: {
+                    wishForm
+                }
+            }
+        )
+
+        res.status(200).json({ response: "success", wishForm: wishForm })
     } catch (e) {
         res.status(400).json({ response: "fail" });
     }

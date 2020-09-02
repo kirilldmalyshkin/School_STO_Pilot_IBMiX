@@ -81,19 +81,32 @@ class Signup extends Component {
                         message.success(`Новый пилот успешно зарегистрирован`, 5)
                         this.props.cookies.set('Role', crewRole);
                         this.props.cookies.set('station', 'station');
+                        this.props.cookies.set('isLogin', true, { path: "/" });
+                        this.setState({
+                            isRedirect: true,
+
+                        })
                     } else {
                         message.success(`Новый командир эскадрильи успешно зарегистрирован`, 5)
                         this.props.cookies.set('Role', crewRole);
                         this.props.cookies.set('station', 'station');
+                        this.props.cookies.set('isLogin', true, { path: "/" });
+                        this.setState({
+                            isRedirect: true,
+
+                        })
                     }
 
-                    function foo() {
-                        // window.location.href = 'http://какой то адрес/signupAll';
-                        window.location = window.location.href + '/login'
-                    }
+
+                    // window.location.href = 'http://какой то адрес/signupAll';
+                    // window.location = window.location.href + '/login'
+                    // this.setState({ isRedirect: true })
 
 
-                    setInterval(foo, 3000)
+
+                    // this.props.cookies.set('isLogin', true, { path: "/" });
+                    // this.props.cookies.set('Role', result.crewRole, { path: "/" });
+
 
 
 
@@ -118,16 +131,17 @@ class Signup extends Component {
 
     render() {
         if (this.state.isRedirect) {
-            if (this.state.crewRole === 'командир оставляем на будущее') {
-                window.location.href = 'http://localhost:3000/signup/where_owner';
+            // if (this.state.crewRole === 'командир оставляем на будущее') {
+            //     window.location.href = 'http://localhost:3000/signup/where_owner';
 
 
-                // return <Redirect to={'/signup/where_owner'} />
-            } else if (this.state.crewRole || this.state.crewRole !== 'командир') {
-                window.location.href = 'http://localhost:3000/signup/you';
+            //     // return <Redirect to={'/signup/where_owner'} />
+            // } else if (this.state.crewRole || this.state.crewRole !== 'командир') {
+            //     window.location.href = 'http://localhost:3000/signup/you';
 
-                // return <Redirect to={'/signup/where'} />
-            }
+            //     // return <Redirect to={'/signup/where'} />
+            // }
+            return <Redirect to={'/dashboard3'} />
         }
         const { getFieldDecorator } = this.props.form;
 

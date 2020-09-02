@@ -8,6 +8,16 @@
   
 }
 
+.wantForm{
+    background-image: url(../images/air.gif);
+    background-attachment: fixed;
+     background-position: center;
+     background-repeat: no-repeat; 
+     background-size: cover;
+     /* margin-top: 25px; */
+   
+ }
+
 /* .registerFormMain{
     background-image: url(../images/imagesPixabel/personal3.jpg);
     background-attachment: fixed;

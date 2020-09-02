@@ -26,6 +26,14 @@ a {
   display: flex;
   justify-content: center;
 }
+
+
+.wantForm{
+  display: flex;
+  justify-content: center;
+}
+
+
 .login-form-button {
   width: 100%;
 }
