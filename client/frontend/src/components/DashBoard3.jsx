@@ -1531,7 +1531,11 @@ class DashBoard extends Component {
                         color="none"
                         className="userCardWP hoverCard shadow-lg"
                       >
-                        <font color={'#5a5a5a'}>Предпочтительное время вылета: {user.preferenceTimeFly[0].name}, {user.preferenceTimeFly[1].name}, {user.preferenceTimeFly[2].name}, {user.preferenceTimeFly[3].name}</font>
+                        <font color={'#5a5a5a'}>Предпочтительное время вылета:
+                        {user.preferenceTimeFly[0] === "Не заполнено" && "Не заполнено"}
+
+                          {user.preferenceTimeFly[0] !== "Не заполнено" && ` ${user.preferenceTimeFly[0].name}, ${user.preferenceTimeFly[1].name}, ${user.preferenceTimeFly[2].name}, ${user.preferenceTimeFly[3].name}`}
+                        </font>
                       </Buttonr>
 
                       <Buttonr
@@ -1539,12 +1543,21 @@ class DashBoard extends Component {
                         color="none"
                         className="userCardWP hoverCard shadow-lg"
                       >
-                        <font color={'#5a5a5a'}>Выходные дни: {user.selectedDates.map((user, key) =>
+                        <font color={'#5a5a5a'}>Выходные дни:
+                        {user.selectedDates[0] === "Не заполнено" && " Не заполнено"}
 
-                          <span>{user.day}.{user.month}.{user.year} / </span>
 
 
-                        )}
+                          {user.selectedDates[0] !== "Не заполнено" &&
+
+                            user.selectedDates.map((user, key) =>
+                              <span>{user.day}.{user.month}.{user.year} / </span>
+
+
+
+                            )}
+
+
                         </font>
                       </Buttonr>
                     </div>,
