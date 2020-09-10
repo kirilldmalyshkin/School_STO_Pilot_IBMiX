@@ -910,8 +910,13 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '10px' }}
                     onClick={this.step}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
 
 
@@ -976,10 +981,8 @@ class DashBoard extends Component {
                     className='bidding-btn-step'
                     style={{ float: 'right', marginRight: '10px' }}
                     onClick={this.handleSubmit}
-
                   >
-                    <span style={{ marginLeft: '10px' }}>&#10004;</span>
-                    <span style={{ marginLeft: '35px' }}>Сохранить</span>
+                    <span>Сохранить</span>
                   </Button>
 
                   <Button
@@ -988,7 +991,19 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step6}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡸</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
                     <span style={{ marginLeft: '15px' }}>Назад</span>
                   </Button>
 
@@ -1023,7 +1038,7 @@ class DashBoard extends Component {
                   <span className='newForm3'>Выберите одни из вариантов</span>
                 </div>
 
-                <div style={{ textAlign: 'center', height: '300px' }}>
+                <div style={{ textAlign: 'center'}}>
                   {/* {this.props.flight_direction && (
                     <RadioButtonList dispatcher_func={SetFlightDirection} data={this.props.flight_direction} />
                   )} */}
@@ -1053,8 +1068,13 @@ class DashBoard extends Component {
                     onClick={this.step3}
                     disabled
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
                 {this.state.checkboxTransAirCoontinent &&
@@ -1064,8 +1084,13 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step3}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
 
@@ -1076,7 +1101,19 @@ class DashBoard extends Component {
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.stepBack}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
                   <span style={{ marginLeft: '15px' }}>Назад</span>
                 </Button> */}
               </Card>
@@ -1126,8 +1163,13 @@ class DashBoard extends Component {
                     disabled
                     onClick={this.step4}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
 
@@ -1139,8 +1181,13 @@ class DashBoard extends Component {
 
                     onClick={this.step4}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
 
@@ -1150,7 +1197,19 @@ class DashBoard extends Component {
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
+                  <span style={{ marginLeft: '10px' }}>
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0">
+                        <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </span>
                   <span style={{ marginLeft: '15px' }}>Назад</span>
                 </Button>
               </Card>
@@ -1225,8 +1284,13 @@ class DashBoard extends Component {
                     onClick={this.step5}
                     disabled
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
                 {this.state.checkboxWorkLaziness &&
@@ -1236,8 +1300,13 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step5}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
 
@@ -1248,7 +1317,19 @@ class DashBoard extends Component {
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step3}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
                   <span style={{ marginLeft: '15px' }}>Назад</span>
                 </Button>
               </Card>
@@ -1322,8 +1403,13 @@ class DashBoard extends Component {
                     onClick={this.step6}
                     disabled
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
                 {this.state.checkboxLongDayEasyDay &&
@@ -1333,8 +1419,13 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step6}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Далее</span>
                   </Button>
                 }
 
@@ -1345,7 +1436,19 @@ class DashBoard extends Component {
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step4}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
                   <span style={{ marginLeft: '15px' }}>Назад</span>
                 </Button>
               </Card>
@@ -1422,8 +1525,13 @@ class DashBoard extends Component {
                   type="primary"
                   className='bidding-btn-step'
                   style={{ float: 'right', marginRight: '0px' }} disabled onClick={this.dataComponent}>
-
-                  <span style={{ marginLeft: '35px' }}>Сохранить/Далее</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                  <span style={{ marginLeft: '35px' }}>Далее</span>
                 </Button>
 
                 }
@@ -1433,8 +1541,13 @@ class DashBoard extends Component {
                     type="primary"
                     className='bidding-btn-step'
                     style={{ float: 'right', marginRight: '0px' }} onClick={this.dataComponent}>
-
-                    <span style={{ marginLeft: '35px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '35px' }}>Далее</span>
                   </Button>}
 
                 <Button
@@ -1443,7 +1556,19 @@ class DashBoard extends Component {
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step5}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                  </span>
                   <span style={{ marginLeft: '35px' }}>Назад</span>
                 </Button>
 
