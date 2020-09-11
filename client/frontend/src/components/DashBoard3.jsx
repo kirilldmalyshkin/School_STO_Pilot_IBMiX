@@ -1,7 +1,5 @@
 import React, { Suspense, Component } from 'react';
 import plane from '../images/plane.jpg';
-import moment from 'moment';
-import logo from '../images/logo.png';
 import ItemList from '../components/DnD/itemList';
 import ItemList_day from '../components/DnD_day/itemList';
 import { UncontrolledCollapse, Button as Buttonr, CardBody, Card as Cardr, Collapse as Collapser } from 'reactstrap';
@@ -69,6 +67,7 @@ class DashBoard extends Component {
       minTime: 0,
       maxTime: 50000,
 
+      airports: null,
       visible: false,
       visible2: false,
       // isRedirect: false,
@@ -140,6 +139,16 @@ class DashBoard extends Component {
     });
     let usersLength = await reqUsersLength.json();
 
+    const allAirports = await fetch('/api/getAirports', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    });
+    let airport = await allAirports.json();
+
+    this.setState({ airport: airport.response });
+    // this.state.airport.forEach(el => console.log('country –- ', el.countryName, 'city –- ', el.cityName))
 
     this.setState({ usersLength: usersLength.usersLength });
 
@@ -152,7 +161,7 @@ class DashBoard extends Component {
       headers: { 'Content-Type': 'application/json' },
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     if (result.response !== 'fail') {
 
       await this.props.addUser(result.response);
@@ -160,7 +169,7 @@ class DashBoard extends Component {
 
     }
 
-    console.log('есть', this.props.user);
+    // console.log('есть', this.props.user);
 
     const reqComparison = await fetch('/api/getAllFly', {
 
@@ -178,7 +187,7 @@ class DashBoard extends Component {
     this.setState({ loading: false });
 
     this.props.AddUsersDashBoard(users);
-    console.log('есть ', users, this.props.users, this.props.users.response);
+    // console.log('есть ', users, this.props.users, this.props.users.response);
     this.setState({ workingDays: this.getWorkingDays() });
 
     this.setState({
@@ -257,7 +266,7 @@ class DashBoard extends Component {
     })
 
     const result = await response.json();
-    console.log(result)
+    // console.log(result)
     if (result.response === 'success') {
       message.success(`Ваша заявка на полет успешно сохранена`, 5)
       this.setState({
@@ -352,7 +361,7 @@ class DashBoard extends Component {
           day: parseInt(year_month_day[2]),
         });
       });
-      console.log(days);
+      // console.log(days);
       return days;
     }
   };
@@ -1043,14 +1052,14 @@ class DashBoard extends Component {
                     <RadioButtonList dispatcher_func={SetFlightDirection} data={this.props.flight_direction} />
                   )} */}
                   <div className={'main_radio_block'}>
-                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: 'rgb(249,221,142)' }} onClick={this.checkboxTransAir}>
+                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: '#FFDC82' }} onClick={this.checkboxTransAir}>
                       <div className={'radio_circle'} style={{ backgroundColor: this.state.colorTransAir }}></div>
                       <div className={'radio_text_wrapper'}>
                         <p className={'radio_text'} style={{ color: 'black' }}>Трансатлантические</p>
                       </div>
                     </div>
 
-                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: 'rgb(119,93,246)' }} onClick={this.checkboxContinent}>
+                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: '#7D58FF' }} onClick={this.checkboxContinent}>
                       <div className={'radio_circle'} style={{ backgroundColor: this.state.colorContinent }}></div>
                       <div className={'radio_text_wrapper'}>
                         <p className={'radio_text'} style={{ color: 'black' }}>Континентальные</p>
