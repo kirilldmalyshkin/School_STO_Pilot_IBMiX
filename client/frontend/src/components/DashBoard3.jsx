@@ -32,6 +32,12 @@ import { connect } from 'react-redux';
 import { AddPhotoAC, AddUserAC, AddUsersDashBoard, SetPriority, SetFlightDirection, SetDayTime } from '../redux/action';
 import './DashBoard.css';
 
+
+
+function handleChange(value) {
+  console.log(`selected ${value}`);
+}
+
 const { Option } = Select;
 const { Panel } = Collapse;
 const openNotification = (placement, icon, title, message) => {
@@ -554,7 +560,7 @@ class DashBoard extends Component {
 
   };
 
-  checkboxTransAir = (e) => {
+  checkboxTransAir = async (e) => {
     this.setState({
       checkboxTransAir: true,
       checkboxContinent: false,
@@ -563,9 +569,29 @@ class DashBoard extends Component {
       checkboxTransAirCoontinent: true
 
     });
+
+    const reqComparison = await fetch('/api/getAirports', {
+
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        reliabilityIndex: this.props.user.reliabilityIndex,
+      }),
+    });
+    let cities = await reqComparison.json();
+    console.log(cities.response)
+    this.setState({
+      cities: []
+    });
+    this.setState({
+      cities: cities.response
+    });
   };
 
-  checkboxContinent = (e) => {
+  checkboxContinent = async (e) => {
+
     this.setState({
       checkboxTransAir: false,
       checkboxContinent: true,
@@ -574,7 +600,27 @@ class DashBoard extends Component {
       checkboxTransAirCoontinent: true
 
     });
+
+    const reqComparison = await fetch('/api/getAirports/russia', {
+
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        reliabilityIndex: this.props.user.reliabilityIndex,
+      }),
+    });
+    let cities = await reqComparison.json();
+    console.log(cities.response)
+    this.setState({
+      cities: cities.response
+    });
+
+
   };
+
+
 
   checkboxWork = (e) => {
     this.setState({
@@ -696,9 +742,9 @@ class DashBoard extends Component {
 
         <div className="dashBoardContainer">
           {(this.state.loading || !this.props.users) && (
-              <div className='progress-page'>
-                <Spin size="small" tip="Загрузка..." />
-              </div>
+            <div className='progress-page'>
+              <Spin size="small" tip="Загрузка..." />
+            </div>
           )}
           {/* START HEAD PANEL */}
           <div className="head-panel">
@@ -1065,8 +1111,27 @@ class DashBoard extends Component {
                         <p className={'radio_text'} style={{ color: 'black' }}>Континентальные</p>
                       </div>
                     </div>
-                  </div>
 
+
+                    <Select
+                      mode="multiple"
+                      style={{ width: '50%' }}
+                      placeholder="Приоритетный город"
+                      // defaultValue={['china']}
+                      onChange={handleChange}
+                    // optionLabelProp="label"
+                    >
+
+                      {this.state.cities && this.state.cities.map(city => (
+                        <Option value={city.cityName} key={city.cityName}>
+                          <div className="demo-option-label-item">
+                            {city.cityName}
+                          </div>
+                        </Option>
+                      ))}
+
+                    </Select>,
+                  </div>
                   {/* <RadioButtonList /> */}
                 </div>
                 {!this.state.checkboxTransAirCoontinent &&
@@ -1607,7 +1672,7 @@ class DashBoard extends Component {
 
         <div className="dashBoardContainer">
           <div className="dashBoardContent">
-            <div className='yourTrip'><font face="Arial Black">Заявка на текущий период:</font></div>
+            <div className='yourTrip' style={{ marginBottom: '15px' }}><font face="Arial Black">Заявка на текущий период:</font></div>
             <Card
               color="primary"
               className="userCardW shadow-sm"
@@ -1628,7 +1693,7 @@ class DashBoard extends Component {
                     </div>) ||
                     (this.props.user.wishForm &&
                       <div style={{ marginLeft: '10px' }}>
-                        <font face="Arial" color={'#ffffff'} size={4}>Октябрь</font>
+                        <font face="Arial" color={'#ffffff'} size={4}>Ноябрь</font>
                       </div>)}
                 </div>
 
@@ -1637,29 +1702,29 @@ class DashBoard extends Component {
 
                     <div>
                       <Buttonr
-                        onClick={() => this.changeDirection(user.longFly)}
+                        // onClick={this.step}
                         color="none"
                         className="userCardWP hoverCard shadow-lg"
                       >
                         <font color={'#5a5a5a'}>Направление: {user.longFly}</font>
                       </Buttonr>
                       <Buttonr
-                        onClick={() => this.changeDuration(user.timeFly)}
+                        // onClick={this.step3}
                         color="none"
                         className="userCardWP hoverCard shadow-lg"
                       >
-                        <font color={'#5a5a5a'}>Продолжительность рабочей смены: {user.timeFly}</font>
+                        <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly}</font>
                       </Buttonr>
                       <Buttonr
-                        onClick={() => this.changeWork(user.otherTime)}
+                        // onClick={() => this.changeWork(user.otherTime)}
                         color="none"
                         className="userCardWP hoverCard shadow-lg"
                       >
-                        <font color={'#5a5a5a'}>Желание дополнительной подработки: {user.otherTime}</font>
+                        <font color={'#5a5a5a'}>Подработка: {user.otherTime}</font>
                       </Buttonr>
 
                       <Buttonr
-                        onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
+                        // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
                         color="none"
                         className="userCardWP hoverCard shadow-lg"
                       >
@@ -1671,7 +1736,7 @@ class DashBoard extends Component {
                       </Buttonr>
 
                       <Buttonr
-                        onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
+                        // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
                         color="none"
                         className="userCardWP hoverCard shadow-lg"
                       >
@@ -1683,7 +1748,7 @@ class DashBoard extends Component {
                           {user.selectedDates[0] !== "Не заполнено" &&
 
                             user.selectedDates.map((user, key) =>
-                              <span>{user.day}.{user.month}.{user.year} / </span>
+                              <span style={{ color: 'red' }}>  {user.day}.{user.month}.{user.year} </span>
 
 
 
@@ -1722,7 +1787,7 @@ class DashBoard extends Component {
             <div className='mediumText'><font face="Arial Black">История заявок:</font></div>
 
             {this.props.user.arrWish &&
-              this.props.user.arrWish.map((user, key) =>
+              this.props.user.arrWish.reverse().map((user, key) =>
                 <Card key={key} color="primary" className="userCardW shadow-sm" bordered={true}>
                   <div style={{ width: '60%', float: 'inherit' }}>
                     <div className="userCard1" style={{ width: '70%' }}>
@@ -1730,46 +1795,46 @@ class DashBoard extends Component {
                       </div>
                     </div>
                     <div>
-                      <Buttonr color="none" id={"form" + key + "toggler1"} className="userCardRed hoverCard shadow-lg">
-                        <font color={'#5a5a5a'}>Направление: {user.longFly}</font>
+                      <Buttonr color="none" id={"form" + key + "toggler1"} className={user.longFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                        <font color={'#5a5a5a'}>Направление: {user.longFly[0].fly}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler1"}>
                         <Cardr className="userCardW">
                           <CardBody>
-                            {user.longFly}
+                            {user.longFly[0].fly}
                           </CardBody>
                         </Cardr>
                       </UncontrolledCollapse>
 
-                      <Buttonr color="none" id={"form" + key + "toggler2"} className="userCardRed hoverCard shadow-lg">
-                        <font color={'#5a5a5a'}>Продолжительность рабочей смены: {user.timeFly}</font>
+                      <Buttonr color="none" id={"form" + key + "toggler2"} className={user.otherTime[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                        <font color={'#5a5a5a'}>Подработка: {user.otherTime[0].time}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler2"}>
                         <Cardr className="userCardW">
                           <CardBody>
-                            {user.timeFly}
+                            {user.otherTime[0].time}
                           </CardBody>
                         </Cardr>
                       </UncontrolledCollapse>
 
-                      <Buttonr color="none" id={"form" + key + "toggler3"} className="userCardRed hoverCard shadow-lg">
-                        <font color={'#5a5a5a'}>Желание дополнительной подработки: {user.otherTime}</font>
+                      <Buttonr color="none" id={"form" + key + "toggler3"} className={user.timeFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                        <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly[0].flyTime}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler3"}>
                         <Cardr className="userCardW">
                           <CardBody>
-                            {user.otherTime}
+                            {user.timeFly[0].flyTime}
                           </CardBody>
                         </Cardr>
                       </UncontrolledCollapse>
 
-                      <Buttonr color="none" id={"form" + key + "toggler4"} className="userCardGreen hoverCard shadow-lg">
-                        <font color={'#5a5a5a'}>Предпочтительное время вылета: {user.preferenceTimeFly}</font>
+                      <Buttonr color="none" id={"form" + key + "toggler4"} className={user.preferenceTimeFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                        <font color={'#5a5a5a'}>Предпочтительное время вылета: {user.preferenceTimeFly[0].dayTime}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler4"}>
                         <Cardr className="userCardW">
                           <CardBody>
-                            {user.preferenceTimeFly}
+                            {user.preferenceTimeFly[0].dayTime}
                           </CardBody>
                         </Cardr>
                       </UncontrolledCollapse>
