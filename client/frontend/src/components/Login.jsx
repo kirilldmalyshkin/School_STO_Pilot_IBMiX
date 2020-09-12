@@ -14,7 +14,7 @@ const openNotification = (placement, icon, title, message) => {
     description:
     message,
     placement,
-    icon: <Icon type={icon} style={{color: '#108ee9'}}/>,
+    icon: <Icon type={icon} style={{ color: '#108ee9' }} />,
     duration: 3,
   });
 };
@@ -33,10 +33,10 @@ class Login extends Component {
     event.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
-        this.setState({iconLoading: true});
+        this.setState({ iconLoading: true });
         const response = await fetch('/api/login', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email: values.email,
             password: values.password,
@@ -46,8 +46,8 @@ class Login extends Component {
         const result = await response.json();
         if (result.response === 'success') {
 
-          this.props.cookies.set('isLogin', true, {path: '/'});
-          this.props.cookies.set('Role', result.crewRole, {path: '/'});
+          this.props.cookies.set('isLogin', true, { path: '/' });
+          this.props.cookies.set('Role', result.crewRole, { path: '/' });
           this.props.addIsLogin(true);
           if (result.crewRole === 'командир отдельно на будещее') {
 

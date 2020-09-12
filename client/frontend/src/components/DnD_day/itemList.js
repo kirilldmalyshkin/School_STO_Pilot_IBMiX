@@ -4,7 +4,7 @@ import Item from './itemComponent';
 import './dnd_style.css';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-function ItemList() {
+function ItemList(props) {
     const [wishes, setWishes] = useState(data);
 
     const handleDragEnd = (result) => {
@@ -19,7 +19,8 @@ function ItemList() {
         new_wishes.splice(source.index, 1);
         new_wishes.splice(destination.index, 0, element);
         setWishes(new_wishes);
-        console.log(new_wishes)
+        // console.log(new_wishes)
+        props.func(new_wishes)
 
     }
 

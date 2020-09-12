@@ -75,15 +75,27 @@ const faker = require('faker');
 //   password: { type: String },
 // });
 
+
+const Airport = mongoose.model('Airport', {
+  airportId: { type: String },
+  airportName: { type: String },
+  airportName: { type: String },
+  airportNameEng: { type: String },
+  cityNameEng: { type: String },
+  countryName: { type: String },
+  countryNameEng: { type: String },
+  difficulty: { type: Number },
+});
+
 const Flights = mongoose.model('Flights', {
-  where_to: {type: String},
-  where_from: {type: String},
-  time_of_departure: {type: String},
-  time_of_arrival: {type: String},
-  flight_time: {type: String},
-  level_flights: {type: String},
-  city_photo: {type: String},
-  airport_name: {type: String},
+  where_to: { type: String },
+  where_from: { type: String },
+  time_of_departure: { type: String },
+  time_of_arrival: { type: String },
+  flight_time: { type: String },
+  level_flights: { type: String },
+  city_photo: { type: String },
+  airport_name: { type: String },
 });
 
 seedFlights = async () => {
@@ -97,10 +109,10 @@ seedFlights = async () => {
     const flights = new Flights({
       where_to: faker.address.city(),
       where_from: 'Moscow',
-      flight_time: faker.random.number({min: 1, max: 48}),
+      flight_time: faker.random.number({ min: 1, max: 48 }),
       time_of_departure: departureDate,
       time_of_arrival: arrivalDate,
-      level_flights: faker.random.number({min: 1, max: 10}),
+      level_flights: faker.random.number({ min: 1, max: 10 }),
       city_photo: faker.image.city(),
       airport_name: faker.name.firstName(),
     });

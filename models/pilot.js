@@ -15,7 +15,7 @@ const pilot = Schema({
   password: {type: String},
   keyForNewPassword: {type: String},
   wishForm: {type: Array},
-  arrWish: { type: Array },
+  arrWish: {type: Array},
 });
 
 module.exports = mongoose.model('Pilot', pilot);

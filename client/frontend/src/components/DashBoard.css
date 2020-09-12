@@ -2,6 +2,13 @@
     padding: 164px 164px 54px 164px;
 }
 
+.progress-page {
+    text-align: center;
+    border-radius: 4px;
+    padding: 30px 50px;
+    margin: 20px 0 0 0;
+}
+
 .head-panel {
     display: flex;
     justify-content: space-between;
