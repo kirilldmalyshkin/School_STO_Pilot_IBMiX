@@ -159,7 +159,7 @@
     margin-left: 10px;
     background: #5459CD;
     border-color: #5459CD;
-    width: 160px;
+    width: 145px;
     box-shadow: 0 12px 12px -8px rgba(84, 89, 205, 0.5);
     border-radius: 10px;
     font-style: normal;
@@ -168,12 +168,76 @@
     line-height: 12px;
 }
 
+.bidding-btn-step:disabled {
+    background-color: #979797;
+    border-color: #979797;
+    box-shadow: 0 12px 12px -8px rgba(99, 99, 99, 0.5);
+    color: #FFFFFF;
+}
+
+.bidding-btn-step:disabled:hover {
+    background-color: #979797;
+    border-color: #979797;
+    box-shadow: 0 12px 12px -8px rgba(99, 99, 99, 0.5);
+    color: #FFFFFF;
+}
+
+.bidding-btn-step--back {
+    margin-top: 21px;
+    margin-left: 10px;
+    background: #6686FF;
+    border-color: #6686FF;
+    box-shadow: 0 12px 12px -8px rgba(102, 134, 255, 0.5);
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.bidding-btn-step--skip {
+    margin-top: 21px;
+    margin-left: 10px;
+    background: #FFFFFF;
+    border: unset;
+    color: #000000;
+    width: 145px;
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+    box-shadow: unset;
+}
+
 .bidding-btn-step:hover {
     background: #7D58FF;
     border-color: #7D58FF;
 }
 
-.bidding-btn-step:focus{
+.bidding-btn-step:focus {
     background: #7D58FF;
     border-color: #7D58FF;
+}
+
+.bidding-btn-step--back:hover {
+    background: #7D58FF;
+    border-color: #7D58FF;
+}
+
+.bidding-btn-step--back:focus {
+    background: #7D58FF;
+    border-color: #7D58FF;
+}
+
+.bidding-btn-step--skip:hover {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 0 16px -6px rgba(99, 99, 99, 0.5);
+}
+
+.bidding-btn-step--skip:focus {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 0 16px -6px rgba(99, 99, 99, 0.5);
 }
