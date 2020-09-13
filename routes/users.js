@@ -24,6 +24,8 @@ router.get("/api/profilePilot", sessionChecker, async (req, res, next) => {
       keyForNewPassword,
       wishForm,
       arrWish,
+      arrFlights,
+      flagVisit,
     } = userMainInfo;
 
 
@@ -41,6 +43,8 @@ router.get("/api/profilePilot", sessionChecker, async (req, res, next) => {
       email,
       wishForm,
       arrWish,
+      arrFlights,
+      flagVisit,
     };
     console.log('Да, вот он юзер', user)
     res.status(201).json({ response: user });
@@ -48,6 +52,35 @@ router.get("/api/profilePilot", sessionChecker, async (req, res, next) => {
     res.status(400).json({ response: "fail" });
   }
 });
+
+
+
+
+
+router.post("/expierence/pilot", sessionChecker, async (req, res, next) => {
+  try {
+    console.log('пришел опыт пилота')
+    const { email } = req.session.user;
+
+    const flagVisit = true;
+
+    await Pilot.updateOne(
+      { email },
+      {
+        $set: {
+          flagVisit,
+        }
+      }
+    );
+    console.log('проходит без ошибки')
+
+    res.status(200).json({ response: 'success' });
+  } catch (e) {
+    res.status(400).json({ response: "fail" });
+  }
+});
+
+
 
 
 router.post("/api/pilot/edit", sessionChecker, async (req, res, next) => {

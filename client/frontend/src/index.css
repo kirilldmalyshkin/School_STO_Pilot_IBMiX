@@ -217,8 +217,20 @@ a {
     background: #F3F3FF;
     box-shadow: 0px 0px 6px #F3F3FF;
     border-radius: 15px;
-
 }
+
+
+.dashBoardContentDataLeans {
+
+    width: 90%;
+    padding: 30px;
+    margin-right: 30px;
+    background: #F3F3FF;
+    box-shadow: 0px 0px 6px #F3F3FF;
+    border-radius: 15px;
+}
+
+
 
 .accordion {
 

@@ -25,7 +25,8 @@ const pilot = Schema({
     password: { type: String },
     keyForNewPassword: { type: String },
     wishForm: { type: Array },
-    arrWish: { type: Array }
+    arrWish: { type: Array },
+    flagVisit: { type: Boolean },
 });
 
 const Pilot = mongoose.model('Pilot', pilot);
@@ -216,6 +217,10 @@ async function foo() {
 
         randomInteger(1, 12)
         pilotCollection[j].arrWish = arrWish
+
+        let flagVisit = false
+        pilotCollection[j].flagVisit = flagVisit
+
         await pilotCollection[j].save();
     }
 }

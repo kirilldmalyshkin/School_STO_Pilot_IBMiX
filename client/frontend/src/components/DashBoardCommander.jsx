@@ -8,7 +8,9 @@ import {
   notification,
   Spin,
   Button,
-  Select,Collapse,
+  Select,
+  Collapse,
+  Radio
 } from 'antd';
 import { connect } from 'react-redux';
 import { AddPhotoAC, AddUserAC, AddUsersDashBoard, SetPriority, SetFlightDirection, SetDayTime } from '../redux/action';
@@ -62,6 +64,7 @@ class DashBoardCommander extends Component {
       preference4: false,
       preference5: false,
       selectedDates: [],
+      valueIframe: 1,
     };
   }
 
@@ -141,7 +144,7 @@ class DashBoardCommander extends Component {
 
     this.props.AddUsersDashBoard(users);
     console.log('есть ', users, this.props.users, this.props.users.response);
-    
+
 
   }
 
@@ -184,21 +187,12 @@ class DashBoardCommander extends Component {
     });
   };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  onChangeIframe = e => {
+    console.log('radio checked', e.target.value);
+    this.setState({
+      valueIframe: e.target.value,
+    });
+  };
 
 
   render() {
@@ -344,10 +338,24 @@ class DashBoardCommander extends Component {
             </div>
           )}
 
-          <Iframe url="https://datalens.yandex/z8qygi47ww50u?_embedded=1&tab=N6&_theme=dark" width="100%" height={window.innerHeight - 70}/>
-          </div>
+        </div>
+        <div className="dashBoardContainer">
+          <div className="dashBoardContentDataLeans">
+            <div>
+              <Radio.Group onChange={this.onChangeIframe} value={this.state.valueIframe}>
+                <Radio value={1}>Информация о пилотах</Radio>
+                <Radio value={2}>Статистика истории заявок</Radio>
 
-        
+              </Radio.Group>
+            </div>
+            {this.state.valueIframe === 1 &&
+              <Iframe url="https://datalens.yandex/u45zuwto2g02p" width="100%" height={window.innerHeight - 70} />
+            }
+            {this.state.valueIframe === 2 &&
+              <Iframe url="https://datalens.yandex/z8qygi47ww50u?_embedded=1&tab=N6&_theme=dark" width="100%" height={window.innerHeight - 70} />
+            }
+          </div>
+        </div>
 
 
         <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: '80%' }}
