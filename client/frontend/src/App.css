@@ -10,10 +10,20 @@
 
 
 .icons:hover {
-    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 4px blue;
+    box-shadow: 0 0 10px 0 blue inset, 0 0 10px 1px blue;
     color: red;
 }
 
+.newForm4{
+    float: right;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    background: lightblue;
+    /* margin: 1em; */
+    border-radius: 50%;
+    text-align: center;
+}
 
 .imageMainStringSearch {
     position: relative;

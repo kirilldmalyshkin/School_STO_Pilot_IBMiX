@@ -485,6 +485,8 @@ class DashBoard extends Component {
       checkboxTransAirCoontinent: false,
 
     });
+
+
   };
 
   step4 = () => {
@@ -759,6 +761,44 @@ class DashBoard extends Component {
     let redCircle = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADXElEQVRoge2Zz2scZRzGn+edLWxQCV6sFVupihuvdv+CeBdiy0JrkpKLaCx6KD2IDb7QioJS2qIN1UNpFwUXTcS78Q8w7dXUQ0qrqDnVHxUHdud9PDQ9OPPuzryT3Wmg+Ry/7/fd+TzMzM7M+wI77PBgw2H8iKw12F9rgpgUXBPgcwCeBPDQZss/AH4BcZ3iVQgruNFbpbVuq8feUgC139vj5N4gMAtgb+D0WwLahuYTzrzzW1mHUgH0+fuPuqRrCb4KoF724JvEgj41iXuXc/aP0MnBAXTl1MsCFgE8Fjo3hw0C85xdWAqZVDiAOp3IxWtnCL4Z7lYcCefMWOM4W62kSH+hALpk66qZLyBObU2vINQye+4I52yc12ryGtTpRKpF7crkAUCckom+1Pe2lteaG8DFa2cgHBqOWQDES+5n82F+2wA2b9ivh2cVjCge5NGTy/0a+gZQ54Nxxd0fAewZiVpxNhjVnucrb9/2Dfa9hFzcPYX7Lw8Au13Stf0GvWdAl+zjiqJ1AGOjsgok5q7kGR62v6YHvGfARdExbB95AKi7bjTvG8gEkLWGwMzoncIgMC1rM77ZM7C/1gSwrwqpQJ7C07UX0sVsAOrFSnTKMZkuZC8h6EA1LuEIaqZrnpuYjSpkSjKRLvj+hZ6oQKQsmeeSL8DDFYiU5ZF0IfdlbrvjC3Cncovi/J0u+AJkHtfbiMzHvyeArldhUpK1dCETgODValzCIbiarmXPgPhdJTblWEkXsgFu9FYB3KrCJpCbWO9dSxezl5C1TkC7GqfiCGr7liK9zwGTJB8D+HfkVsWJzS636BvwBuCc/V3QZ6N1Ko6Ei76vMWDAk9gYtwDP/+59YMO4xPYb7BuA0/YvAscAaBRWBRGJ1wYt+g58F+LswpKE88P3KoaAs5xZ+GZQT+7LnBlrHAfx1fC0CiJ8a+qNE3ltuQHYaiW8PT4Nqu/q2AhY4p/jrSIr1KHL6x8RfCtkXiAScNbUGyeGurz+vyNcPj0lahHA7mC9wWxQfH3QOqiP4A8aHj25zCSZEHQeQO76fQFiCeeYJBOh8sBQNvmSeYKzCF9LuimobRhdqHyTL42sNXjWHIA4KaAJ4d42673v6zu4u836E8UfAKxgvXdtGNusO+zwoPMfinkPENdCPQgAAAAASUVORK5CYII=';
     let greenCircle = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADlUlEQVRoge2ZTWwbRRiG33e3sWM7Fe6FUtQSVaghXGjSWogr4Y4UfnIo/ZGFhCBUuVQcEStxRCptBFSFQ4QsQESQIO6kd3BLygWKEVV/BOTUiLrxrirPy4FISLtr745jL5Ga5/jNN97nkz3emW+AHXZ4sGE/PsSTnIOtqxVDMwU6FciMgdwPobT5lHuQbpO8JumyI2fleuFw3SPNVp+9pQJq9+r77jvum4ROAjxgOf2mgNqQaX94olT5s1eHngr4bP2nPUHOeCReAzTc68M3FXwJHzPQO9U9k+vWs20nLGysvgDqAoCHbecmsAZxtlqcWLKZlLqARS26zdbYWVJz9m4WCOdLhcaZGc6006SnKmBBl4YVlD+nML01u3SIWGZ+/ViVz/pJuU5SwqIWXQblWlbyAEBhWq3yl54u7UrKTSyg2Ro7K+Gl/qilh8Tzo0H5vcS8boObC/br/mlZI0d88VRxYrlTQscCLqr+UM53fwawbyBq6VnLBe6Tr5SfuhM32PEnlGvtehf/vzwA7A1yxus0GPsNLDS/fwTu0O8ACoOysoO+MebxV0tH/giPxH4DcodOY9vIA4CG6XA2biRSgCc5BE4MXsoOAsc9KeIbCRxsXa0AeCwTKztGD2z8eCQcjBTQpp7Lxscel5wKxyIFkDyajY49clAJx6IFSE9ko9MD0ng4FClAwKPZ2NhDMPJeivsbHcnApScE7A7HEjdz2524ApqZW6SEwN1wLLqIgcjrersgKHL4jy5i8lo2Oj1A/hIORQuQLmdjYw8N6uFYpABX/C4bHXva0ko4FingeuFwHcDNTIzsuHGrOHklHIzuRkkjoJaNU3oI1eJakbHvAbbvfwCgNXCr1NBvG1yIG4ktoDry9F8SPxmslAXSxbjTGNDtTFzw3wbQc9O1j6whgNdpsGMBx/nM3xBPA9AgrFIiGLzerenbdS9ULU4sQZjvv1c6SJyrlia/6ZaTuJkrFRpnSHzVP610SPi2mG+8lZSXqrk7r0Z+JGh+kVl/lFq6m999bI6HgqTUVNvpOR4KRvKNl0Gcw2DXhEi8X8r/NpNGHujhguPTjdVp8+8Fx15rve6sOeIb3fqgcVgfaE4VJ5bhY1ziPMDE/n0y9CGch49xW3mgD5d8bceZFXgS9r2kG4RqrjEfZX7JF8aTnNGN1aMgp+ioIoMxEPvx3/m6CeE2HfwKgx/a0sqt4uSVflyz7rDDg84/KB4mhRttl6cAAAAASUVORK5CYII=';
 
+    let onePreference;
+    if (this.state.checkboxTransAir || this.state.checkboxContinent) {
+      onePreference = 15
+    } else {
+      onePreference = 0
+    }
+
+    let twoPreference;
+    if (this.state.timeDay.length !== 0) {
+      twoPreference = 15
+    } else {
+      twoPreference = 0
+    }
+
+    let thirdPreference;
+
+    if (this.state.checkboxWork || this.state.checkboxLaziness) {
+      thirdPreference = 15
+    } else {
+      thirdPreference = 0
+    }
+
+    let fourthPreference;
+    if (this.state.checkboxLongDay || this.state.checkboxEasyDay) {
+      fourthPreference = 15
+    } else {
+      fourthPreference = 0
+    }
+
+    let fithPreference;
+    if (this.state.selectedDates.length !== 0) {
+      fithPreference = 15
+    } else {
+      fithPreference = 0
+    }
+
+    let points = 100 - onePreference - twoPreference - thirdPreference - fourthPreference - fithPreference
+
 
 
     return (
@@ -776,6 +816,7 @@ class DashBoard extends Component {
           <div className="head-panel">
             <div className='head-part'>
               <Button type="primary" className='bidding-btn' onClick={this.onNewWishList}>Новая заявка</Button>
+              {/* {(this.props.user.crewRole === 'командир') && <Button type="primary" className='bidding-btn' onClick={() => this.props.history.push('/dashboardC')}>Аналитика</Button>} */}
               {/*<span className="dots" />*/}
 
               <div className='bidding-info'>
@@ -783,8 +824,8 @@ class DashBoard extends Component {
                 <span className='bidding-info--finish'>Финиш подачи</span>
               </div>
               <div className='bidding-date'>
-                <span className='bidding-date--digit'>23.08.2020</span>
-                <span className='bidding-date--digit'>23.08.2020</span>
+                <span className='bidding-date--digit'>01.09.2020</span>
+                <span className='bidding-date--digit'>30.09.2020</span>
               </div>
               <div className='date-clock'>
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
@@ -817,53 +858,107 @@ class DashBoard extends Component {
                   30
                   </span>%
                 </div>
-              <div className='stats-icon'>
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <g filter="url(#filter0_d)">
-                    <path
-                      d="M33 20C33 27.1792 27.1792 33 20 33C12.8208 33 7 27.1792 7 20C7 12.8208 12.8208 7 20 7C26.3247 7 31.5978 11.5208 32.759 17.5096C32.9197 18.3129 33 19.1455 33 20Z"
-                      fill="#5459CD" />
-                  </g>
-                  <g filter="url(#filter1_d)">
-                    <path
-                      d="M33 18.0087C26.593 19.5005 20 21 20 21V7C26.4442 7 31.8168 11.7355 33 18.0087Z"
-                      fill="#FFDE84" />
-                  </g>
-                  <defs>
-                    <filter id="filter0_d" x="0" y="0" width="40" height="40"
-                      filterUnits="userSpaceOnUse"
-                      color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                      <feColorMatrix in="SourceAlpha" type="matrix"
-                        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                      <feOffset />
-                      <feGaussianBlur stdDeviation="3.5" />
-                      <feColorMatrix type="matrix"
-                        values="0 0 0 0 0.328368 0 0 0 0 0.3474 0 0 0 0 0.804167 0 0 0 0.1 0" />
-                      <feBlend mode="normal" in2="BackgroundImageFix"
-                        result="effect1_dropShadow" />
-                      <feBlend mode="normal" in="SourceGraphic"
-                        in2="effect1_dropShadow" result="shape" />
-                    </filter>
-                    <filter id="filter1_d" x="13" y="0" width="27" height="28"
-                      filterUnits="userSpaceOnUse"
-                      color-interpolation-filters="sRGB">
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                      <feColorMatrix in="SourceAlpha" type="matrix"
-                        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                      <feOffset />
-                      <feGaussianBlur stdDeviation="3.5" />
-                      <feColorMatrix type="matrix"
-                        values="0 0 0 0 0.328368 0 0 0 0 0.3474 0 0 0 0 0.804167 0 0 0 0.1 0" />
-                      <feBlend mode="normal" in2="BackgroundImageFix"
-                        result="effect1_dropShadow" />
-                      <feBlend mode="normal" in="SourceGraphic"
-                        in2="effect1_dropShadow" result="shape" />
-                    </filter>
-                  </defs>
-                </svg>
-              </div>
+
+
+              {(this.props.user.crewRole === 'командир') &&
+                <div className='stats-icon icons' onClick={() => this.props.history.push('/dashboardC')}>
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <g filter="url(#filter0_d)">
+                      <path
+                        d="M33 20C33 27.1792 27.1792 33 20 33C12.8208 33 7 27.1792 7 20C7 12.8208 12.8208 7 20 7C26.3247 7 31.5978 11.5208 32.759 17.5096C32.9197 18.3129 33 19.1455 33 20Z"
+                        fill="#5459CD" />
+                    </g>
+                    <g filter="url(#filter1_d)">
+                      <path
+                        d="M33 18.0087C26.593 19.5005 20 21 20 21V7C26.4442 7 31.8168 11.7355 33 18.0087Z"
+                        fill="#FFDE84" />
+                    </g>
+                    <defs>
+                      <filter id="filter0_d" x="0" y="0" width="40" height="40"
+                        filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix"
+                          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="3.5" />
+                        <feColorMatrix type="matrix"
+                          values="0 0 0 0 0.328368 0 0 0 0 0.3474 0 0 0 0 0.804167 0 0 0 0.1 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix"
+                          result="effect1_dropShadow" />
+                        <feBlend mode="normal" in="SourceGraphic"
+                          in2="effect1_dropShadow" result="shape" />
+                      </filter>
+                      <filter id="filter1_d" x="13" y="0" width="27" height="28"
+                        filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix"
+                          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="3.5" />
+                        <feColorMatrix type="matrix"
+                          values="0 0 0 0 0.328368 0 0 0 0 0.3474 0 0 0 0 0.804167 0 0 0 0.1 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix"
+                          result="effect1_dropShadow" />
+                        <feBlend mode="normal" in="SourceGraphic"
+                          in2="effect1_dropShadow" result="shape" />
+                      </filter>
+                    </defs>
+                  </svg>
+                </div>
+              }
+
+              {(this.props.user.crewRole === 'КВС') &&
+                <div className='stats-icon icons' onClick={() => this.props.history.push('/dashboardC')}>
+                  <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <g filter="url(#filter0_d)">
+                      <path
+                        d="M33 20C33 27.1792 27.1792 33 20 33C12.8208 33 7 27.1792 7 20C7 12.8208 12.8208 7 20 7C26.3247 7 31.5978 11.5208 32.759 17.5096C32.9197 18.3129 33 19.1455 33 20Z"
+                        fill="#5459CD" />
+                    </g>
+                    <g filter="url(#filter1_d)">
+                      <path
+                        d="M33 18.0087C26.593 19.5005 20 21 20 21V7C26.4442 7 31.8168 11.7355 33 18.0087Z"
+                        fill="#FFDE84" />
+                    </g>
+                    <defs>
+                      <filter id="filter0_d" x="0" y="0" width="40" height="40"
+                        filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix"
+                          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="3.5" />
+                        <feColorMatrix type="matrix"
+                          values="0 0 0 0 0.328368 0 0 0 0 0.3474 0 0 0 0 0.804167 0 0 0 0.1 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix"
+                          result="effect1_dropShadow" />
+                        <feBlend mode="normal" in="SourceGraphic"
+                          in2="effect1_dropShadow" result="shape" />
+                      </filter>
+                      <filter id="filter1_d" x="13" y="0" width="27" height="28"
+                        filterUnits="userSpaceOnUse"
+                        color-interpolation-filters="sRGB">
+                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                        <feColorMatrix in="SourceAlpha" type="matrix"
+                          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                        <feOffset />
+                        <feGaussianBlur stdDeviation="3.5" />
+                        <feColorMatrix type="matrix"
+                          values="0 0 0 0 0.328368 0 0 0 0 0.3474 0 0 0 0 0.804167 0 0 0 0.1 0" />
+                        <feBlend mode="normal" in2="BackgroundImageFix"
+                          result="effect1_dropShadow" />
+                        <feBlend mode="normal" in="SourceGraphic"
+                          in2="effect1_dropShadow" result="shape" />
+                      </filter>
+                    </defs>
+                  </svg>
+                </div>
+              }
               {/* <Popover content={content} placement="bottom"> */}
               <Avatar
                 className="user-avatar"
@@ -894,68 +989,69 @@ class DashBoard extends Component {
           </div>
           {/* END HEAD PANEL */}
 
-          {this.state.visibleSort === true && (
-            <div className='modalWidth'>
-              <Modal
-                width='700px'
-                title="Фильтрация расписания рейсов"
-                visible={this.state.visibleSort}
-                onCancel={this.handleCancel3}
-                footer={[]}
-              >
-                <div style={{ textAlign: 'center' }}>
-                  <div className="dashBoardContainerMoreFiltres">
-                    <div className="dashBoardContentMoreFiltres">
-                      <Card size="small" title="Длительность смены"
-                        className="userCardFilter"
-                      >
-                        <div style={{ textAlign: 'left' }}>
-                          <Switch defaultChecked onChange={this.onChangeLongWork} /> Трансатлантические рейсы
+
+          <div className='modalWidth'>
+            <Modal
+              width='700px'
+              title="Фильтрация расписания рейсов"
+              visible={this.state.visibleSort}
+              onCancel={this.handleCancel3}
+              footer={[]}
+            >
+              <div style={{ textAlign: 'center' }}>
+                <div className="dashBoardContainerMoreFiltres">
+                  <div className="dashBoardContentMoreFiltres">
+                    <Card size="small" title="Длительность смены"
+                      className="userCardFilter"
+                    >
+                      <div style={{ textAlign: 'left' }}>
+                        <Switch defaultChecked onChange={this.onChangeLongWork} /> Трансатлантические рейсы
                             </div>
-                        <div style={{ textAlign: 'left' }}>
-                          <Switch defaultChecked onChange={this.onChangeShortWork} /> Короткие разворотные рейсы
+                      <div style={{ textAlign: 'left' }}>
+                        <Switch defaultChecked onChange={this.onChangeShortWork} /> Короткие разворотные рейсы
                             </div>
 
-                      </Card>
-                      <Card size="small" title="Время полета" className="userCardFilter">
-                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
-                          <Slider range value={[this.state.minPrice, this.state.maxPrice]} max={24}
-                            onChange={this.onChangeTime}
-                            defaultValue={[this.state.minTime, this.state.maxTime]}
-                            marks={{ 0: 'ч', 24: 'ч.' }} />
-                        </div>
-                      </Card>
+                    </Card>
+                    <Card size="small" title="Время полета" className="userCardFilter">
+                      <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                        <Slider range value={[this.state.minPrice, this.state.maxPrice]} max={24}
+                          onChange={this.onChangeTime}
+                          defaultValue={[this.state.minTime, this.state.maxTime]}
+                          marks={{ 0: 'ч', 24: 'ч.' }} />
+                      </div>
+                    </Card>
 
-                      <Card size="small" title="Время полета" className="userCardFilter">
-                        <div style={{ textAlign: 'left' }}>
-                          <Switch defaultChecked onChange={this.onChangeMorning} /> Утро
+                    <Card size="small" title="Время полета" className="userCardFilter">
+                      <div style={{ textAlign: 'left' }}>
+                        <Switch defaultChecked onChange={this.onChangeMorning} /> Утро
                             </div>
-                        <div style={{ textAlign: 'left' }}>
-                          <Switch defaultChecked onChange={this.onChangeDay} /> День
+                      <div style={{ textAlign: 'left' }}>
+                        <Switch defaultChecked onChange={this.onChangeDay} /> День
                             </div>
 
-                      </Card>
+                    </Card>
 
-                      <Card size="small" title="Время полета" className="userCardFilter">
-                        <div style={{ textAlign: 'left' }}>
-                          <Switch defaultChecked onChange={this.onChangeEvening} /> Вечер
+                    <Card size="small" title="Время полета" className="userCardFilter">
+                      <div style={{ textAlign: 'left' }}>
+                        <Switch defaultChecked onChange={this.onChangeEvening} /> Вечер
                             </div>
-                        <div style={{ textAlign: 'left' }}>
-                          <Switch defaultChecked onChange={this.onChangeNight} /> Ночь
+                      <div style={{ textAlign: 'left' }}>
+                        <Switch defaultChecked onChange={this.onChangeNight} /> Ночь
                             </div>
-                        <div>
+                      <div>
 
-                        </div>
-                      </Card>
-                    </div>
+                      </div>
+                    </Card>
                   </div>
                 </div>
-              </Modal>
-            </div>
-          )}
+              </div>
+            </Modal>
+          </div>
+
         </div>
 
-        {(this.state.newWish && this.state.preference)
+        {
+          (this.state.newWish && this.state.preference)
           && (
             <div className="dashBoardContainer">
               <div className="dashBoardContentDrag borderDesign">
@@ -1015,10 +1111,12 @@ class DashBoard extends Component {
 
               </div>
             </div>
-          )}
+          )
+        }
 
 
-        {(this.state.newWish && this.state.preference6)
+        {
+          (this.state.newWish && this.state.preference6)
           && (
             <div className="dashBoardContainer">
               <div className="dashBoardContentDrag borderDesign">
@@ -1041,6 +1139,7 @@ class DashBoard extends Component {
                     <span className='newForm2'>
                       &nbsp;&nbsp;&nbsp; 6. Приоритет заявки</span> &nbsp;&nbsp;&nbsp;
                       <span className='newForm3'>Переместите бокс по приоритету</span>
+                    <span className='newForm4'>{points}</span>
                   </div>
                   <div style={{ textAlign: 'left', height: '300px' }}>
                     {/* <ItemList />
@@ -1093,9 +1192,11 @@ class DashBoard extends Component {
 
               </div>
             </div>
-          )}
+          )
+        }
 
-        {(this.state.newWish && this.state.preference1) &&
+        {
+          (this.state.newWish && this.state.preference1) &&
 
           < div className="dashBoardContainer">
             <div className="dashBoardContentDrag borderDesign">
@@ -1117,6 +1218,7 @@ class DashBoard extends Component {
                   </svg>
                   <span className='newForm2'>&nbsp;&nbsp;&nbsp; 1. Направление полета</span> &nbsp;&nbsp;&nbsp;
                   <span className='newForm3'>Выберите одни из вариантов</span>
+                  <span className='newForm4'>{points}</span>
                 </div>
 
                 <div style={{ textAlign: 'center'}}>
@@ -1253,6 +1355,7 @@ class DashBoard extends Component {
                   </svg>
                   <span className='newForm2'>&nbsp;&nbsp;&nbsp; 2. Выбор приоритетного времени вылета</span> &nbsp;&nbsp;&nbsp;
                   <span className='newForm3'>Переместите бокс по приоритету</span>
+                  <span className='newForm4'>{points}</span>
                 </div>
                 <ItemList_day func={this.timeDayPreference} />
                 {this.state.timeDay.length === 0 &&
@@ -1350,6 +1453,7 @@ class DashBoard extends Component {
                   </svg>
                   <span className='newForm2'>&nbsp;&nbsp;&nbsp; 3. Преференции переработок</span> &nbsp;&nbsp;&nbsp;
                   <span className='newForm3'>Выберите одни из вариантов</span>
+                  <span className='newForm4'>{points}</span>
                 </div>
 
                 {/* <div style={{ textAlign: 'center', height: '300px' }}>
@@ -1470,6 +1574,7 @@ class DashBoard extends Component {
                   </svg>
                   <span className='newForm2'>&nbsp;&nbsp;&nbsp; 4. Префренции длительности смены</span> &nbsp;&nbsp;&nbsp;
                   <span className='newForm3'>Выберите одни из вариантов</span>
+                  <span className='newForm4'>{points}</span>
                 </div>
 
                 {/* <div style={{ textAlign: 'center', height: '300px' }}>
@@ -1589,6 +1694,7 @@ class DashBoard extends Component {
                   </svg>
                   <span className='newForm2'>&nbsp;&nbsp;&nbsp; 5. Выбор желаемых выходных дней</span> &nbsp;&nbsp;&nbsp;
                   <span className='newForm3'>Выберите одни из вариантов</span>
+                  <span className='newForm4'>{points}</span>
                 </div>
 
                 <div className={'calendar_block'}>
@@ -1813,7 +1919,7 @@ class DashBoard extends Component {
             <div className='mediumText'><font face="Arial Black">История заявок:</font></div>
 
             {this.props.user.arrWish &&
-              this.props.user.arrWish.reverse().map((user, key) =>
+              this.props.user.arrWish.map((user, key) =>
                 <Card key={key} color="primary" className="userCardW shadow-sm" bordered={true}>
                   <div style={{ width: '60%', float: 'inherit' }}>
                     <div className="userCard1" style={{ width: '70%' }}>
@@ -2044,15 +2150,16 @@ class DashBoard extends Component {
               <div className='yourTrip1'><font face="Arial Black">Ваши Рейсы</font></div>
               <div className="userCardW">
 
-                <Card className='sUserCard hoverCard' onClick={() => this.showSort()}> <font className="sortString"
+                <Card className='sUserCard hoverCard' onClick={this.showSort}> <font className="sortString"
                   face="Arial Black"><font
                     face="Arial Black" color={'#615d73'}>Сортировка</font></font>
                 </Card>
 
+
                 <Suspense fallback={<h1>Loading posts....</h1>}>
                   {this.props.user.arrFlights &&
 
-                  this.props.user.arrFlights.map((user, i) => {
+                    this.props.user.arrFlights.map((user, i) => {
 
                       // if (this.filterPrise(user.time)) {
                       if (user.city_photo) {
@@ -2082,55 +2189,61 @@ class DashBoard extends Component {
                         }
 
                         return (
-                            <div>
-                              <Buttonr id={"flight" + i + "toggler"}
-                                  //onClick={() => this.showModal(user)}
-                            className={styl}
-                          // cover={
-                          //     <img
-                          //         style={{ borderRadius: "10px 10px 0px 0px" }}
-                          //         alt="example"
-                          //         src={srcImg}
-                          //     />
-                          // }
+                          <div>
+                            <Buttonr id={"flight" + i + "toggler"}
+                              //onClick={() => this.showModal(user)}
+                              className={styl}
+                            // cover={
+                            //     <img
+                            //         style={{ borderRadius: "10px 10px 0px 0px" }}
+                            //         alt="example"
+                            //         src={srcImg}
+                            //     />
+                            // }
 
-                          >
+                            >
 
 
-                            {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
+                              {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
                                         <p>
                                             <div
                                                 className={'fontModal'}>Информация
                                     </div>
                                         </p>
                                     } type="info" /> */}
-                            <div style={{ float: 'left' }}>
-                              <Tag className="userCardW"><font size={2} color={'#5459cd'}><b>123456</b></font></Tag>
-                            </div>
-                            <div style={{ float: 'left' }}>
-                              <font size={2} color={'#ffffff'}>Отбытие</font> <br />
-                              <img src={depart}></img>
-                              <font size={2} color={'#ffffff'} className="textRight">{user.time_of_departure}</font>
-                            </div>
-                            <div color={'#ffffff'} style={{ width: '2px', height: '55px', float: 'left' }}
-                              className="userCardW">
-                            </div>
-                            <div style={{ float: 'left' }}>
-                              <font size={2} color={'#ffffff'}>Прибытие</font> <br />
-                              <img src={land}></img>
-                              <font size={2} color={'#ffffff'} className="textRight">{user.time_of_arrival}</font>
+                              <div style={{ float: 'left' }}>
+                                <Tag className="userCardW"><font size={2} color={'#5459cd'}><b>123456</b></font></Tag>
+                              </div>
+                              <div style={{ float: 'left' }}>
+                                <font size={2} color={'#ffffff'}>Отбытие</font> <br />
+                                <img src={depart}></img>
+                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_departure}</font>
+                              </div>
+                              <div color={'#ffffff'} style={{ width: '2px', height: '55px', float: 'left' }}
+                                className="userCardW">
+                              </div>
+                              <div style={{ float: 'left' }}>
+                                <font size={2} color={'#ffffff'}>Прибытие</font> <br />
+                                <img src={land}></img>
+                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_arrival}</font>
 
-                            </div>
-                              </Buttonr>
-                              <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
-                                <Cardr className="userCardW">
-                                  <CardBody>
-                                    {user.where_from + ' - ' + user.where_to} <br/>
-                                    {'Аэропорт: ' + user.airport_name}
-                                  </CardBody>
-                                </Cardr>
-                              </UncontrolledCollapse>
-                            </div>
+                              </div>
+                            </Buttonr>
+                            <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
+                              <Cardr className="userCardW">
+                                <CardBody>
+                                  {'Маршрут: ' + user.where_from + ' - ' + user.where_to} <br />
+                                  {'Аэропорт: ' + user.airport_name}<br />
+                                  {'Время в полете: ' + user.flight_time}<br />
+                                  {'Сложность аэропорта: ' + user.level_flights}
+
+
+
+
+                                </CardBody>
+                              </Cardr>
+                            </UncontrolledCollapse>
+                          </div>
                         );
                       }
                     })}
