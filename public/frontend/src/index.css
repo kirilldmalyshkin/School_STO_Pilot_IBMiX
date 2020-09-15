@@ -1,0 +1,325 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+a {
+  margin: 0 5px;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  background-color: #EDEEF0;
+}
+
+.loginForm{
+  display: flex;
+  justify-content: center;
+}
+
+
+.wantForm{
+  display: flex;
+  justify-content: center;
+}
+
+
+.login-form-button {
+  width: 100%;
+}
+.registerFormMain { 
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.registerForm{ 
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.aboutUs { 
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.aboutUsHeader { 
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.registerHeader {
+  text-align: center;
+}
+
+.navbarText {
+  font-weight: bold;
+}
+
+.newCard {
+  border-radius: 20px !important;
+  width: 800px !important;
+  margin-top: 20px !important;
+}
+
+.navbarUserName {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.dashBoardContainerMoreFiltres{
+  padding: 0px;
+  background: #ececec;
+  display: flex;
+  justify-content: center;
+}
+
+.dashBoardContentMoreFiltres {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.dashBoardContainer{
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.dashBoardCard {
+  width: 1000px !important;
+  border-radius: 20px !important;
+}
+
+.dashBoardContent {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 1000px;
+}
+
+.dashBoardContentDrag {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  width: 1500px;
+}
+
+.borderDesign{
+  border-color: 4px double black !important;
+ }
+
+ 
+.userCardSlider{
+  width: 100% !important;
+  border-radius: 10px !important;
+  padding: 8px 8px 0 8px !important;
+  margin: 10px !important;
+}
+
+ .buttonCardSlider{
+  background-color: #5459CD;
+  box-shadow: 0px 12px 12px -8px rgba(84, 89, 205, 0.5);
+  border-radius: 10px;
+  color: white;
+  width: 145px;
+  height: 28px;
+  }
+  
+  .buttonCardSlider,
+  .buttonCardSlider:active,
+  .buttonCardSlider:focus {
+  outline: none !important;
+  }
+
+.userCardFilter{
+  width: 300px !important;
+  border-radius: 10px !important;
+  padding: 8px 8px 0 8px !important;
+  margin: 10px !important;
+}
+
+.userCard{
+  width: 300px !important;
+  border-radius: 10px !important;
+  padding: 8px 8px 0 8px !important;
+  margin: 10px !important;
+}
+
+.anketaCard {
+  border-radius: 20px !important;
+  width: 500px !important; 
+  margin-top: 50px !important;
+}
+
+.choice_question{
+  text-align: center;
+  margin-top: 300px;
+}
+
+.have_btn{
+  font-size: 17px;
+  height: 50px;
+  background-color: lightblue;
+  color: #ffffff;
+  width: 150px;
+  cursor: pointer;
+  border: none;
+}
+
+hr.vertical {
+  width: 0px;
+  height: 100%;
+  /* or height in PX */
+}
+
+.need_btn{
+  font-size: 17px;
+  height: 50px;
+  background-color: lightgreen;
+  color: #ffffff;
+  width: 150px;
+  cursor: pointer;
+  border: none;
+}
+.question {
+  font-family: "Source Sans Pro", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    vertical-align: super;
+}
+
+ol {
+  list-style-type: none;
+  padding: 5px;
+}
+
+li {
+  list-style-type: none;
+}
+
+.customCheckbox {
+  border: 1px lightgrey solid !important;
+  padding: 7px !important;
+  margin: 10px 10px 10px 0 !important;
+  border-radius: 5px;
+}
+
+.customCheckbox:active {
+  background-color: #1990FF !important;
+  color: #ffffff !important;
+  padding: 7px !important;
+  margin: 10px 10px 10px 0 !important;
+  border-radius: 5px;
+}
+
+.customRadio {
+  margin: 0 5px 5px 0 !important;
+}
+
+.signUpForm {
+  border-radius: 5px ;
+  width: 1000px !important;
+  margin: auto !important;
+}
+
+.signupTextArea {
+  width: 400px !important;
+}
+
+@media screen and (max-width: 385px) {
+  .newCard {
+    width: 355px !important;
+  }
+}
+
+@media screen and (max-width: 554px) {
+  .userCard {
+    width: 350px !important;
+  }
+}
+
+@media screen and (max-width: 1020px) {
+  .signUpForm {
+    width: 700px !important;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  .signUpForm {
+    width: 500px !important;
+  }
+}
+
+@media screen and (max-width: 554px) {
+  .signUpForm {
+    width: 360px !important;
+  }
+}
+
+.modalWidth1 {
+  width: 90%;
+  height: 90%; 
+}
+/* @media screen and (max-width: 900px){
+  .modalWidth {
+      width: 90%;
+  }
+} */
+
+/* @media screen and (min-width: 901px){
+  .modalWidth {
+      width: 55%;
+  }
+} */
+
+.inputRegistration{
+  width: 95px; 
+  height: 30px;
+  border-radius: 5px; 
+  font-style: italic; 
+  font-weight: bold;
+  font-size: 14px;
+}
+.placeHolderForEdit{
+  width: 95px; 
+  height: 30px;
+  border-radius: 5px; 
+  font-style: italic; 
+  font-weight: bold;
+  font-size: 14px;
+  opacity: 1;
+}
+.placeHolderForEditForAntDesigne{
+  font-style: italic; 
+  font-weight: bold;
+  font-size: 14px;
+  opacity: 1;
+}
+
+.placeHolderForEditForAntDesigneCalendar{
+  font-style: italic; 
+  font-weight: bold;
+  font-size: 14px;
+  opacity: 1;
+}
+
+.placeHolderForEditForAntDesigne:hover{
+  border-color: #1990FF;
+}
+

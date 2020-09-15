@@ -2,6 +2,13 @@ import React, { Suspense, Component } from "react";
 // import avatar from "../images/avatar.png";
 import plane from "../images/plane.jpg";
 import logo from '../images/logo.png';
+import { Link } from 'react-router-dom';
+import StepD1 from './stepsPreference/StepD1'
+import StepD2 from './stepsPreference/StepD2'
+import ItemList from './DnD/itemList';
+
+import CalendarWithButtons from './CalendarWithButtons';
+
 import { Tabs } from 'antd';
 
 import {
@@ -11,9 +18,12 @@ import {
     Icon,
     notification,
     Calendar,
+    Input,
     message,
     Spin,
     Switch,
+
+
     Button,
     Carousel, Slider, Select, Badge, Form, Collapse,
     Tag,
@@ -30,10 +40,11 @@ const openNotification = (placement, icon, title, message) => {
     notification.open({
         message: title,
         description:
-        message,
+            message,
         placement,
         icon: <Icon type={icon} style={{ color: '#108ee9' }} />,
-        duration: 3
+        duration: 3,
+        newWishForm: ''
     });
 };
 
@@ -49,8 +60,6 @@ class DashBoard extends Component {
             modalUser: null,
             loading: false,
 
-            visibleSort: false,
-
             showLongWork: true,
             showShortWork: true,
 
@@ -61,6 +70,7 @@ class DashBoard extends Component {
             visible2: false,
             // isRedirect: false,
             usersLength: null,
+            visibleWant: false
         };
     }
 
@@ -83,10 +93,16 @@ class DashBoard extends Component {
         });
     };
 
-    showSort = () => {
 
+    showWant = () => {
         this.setState({
-            visibleSort: true
+            visibleWant: true
+        });
+    }
+
+    handleCancelWant = e => {
+        this.setState({
+            visibleWant: false,
         });
     };
 
@@ -112,7 +128,6 @@ class DashBoard extends Component {
             headers: { 'Content-Type': 'application/json' }
         })
         const result = await response.json();
-        console.log(result);
         if (result.response !== 'fail') {
 
             await this.props.addUser(result.response);
@@ -142,6 +157,63 @@ class DashBoard extends Component {
 
     }
 
+
+    handleSubmit = async event => {
+        event.preventDefault();
+        this.props.form.validateFields(async (err, values) => {
+            // if (!err) {
+            console.log(values)
+            const { longFly, otherTime, timeFly, preferenceTimeFly } = values;
+            console.log(longFly, otherTime, timeFly, preferenceTimeFly)
+            const wishForm = [{ longFly: longFly, otherTime: otherTime, timeFly, preferenceTimeFly }]
+            const response = await fetch('/newWishForm', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: this.props.user.email,
+                    wishForm: wishForm
+                })
+            })
+
+            const result = await response.json();
+            console.log(result)
+            if (result.response === 'success') {
+                message.success(`Ваша заявка на полет успешно сохранена`, 5)
+                // this.setState({
+                //     newWishForm: result.wishForm,
+
+                //             })
+                this.props.user.wishForm = result.wishForm
+            }
+
+            //     this.props.cookies.set('isLogin', true, { path: "/" });
+            //     this.props.cookies.set('Role', result.crewRole, { path: "/" });
+            //     this.props.addIsLogin(true);
+            //     if (result.crewRole === 'командир отдельно на будещее') {
+
+            //         this.setState({
+            //             isRedirect: true,
+            //             iconLoading: false,
+            //             dashboard: "/dashboard3"
+            //         })
+
+            //     } else if (result.crewRole || result.crewRole !== 'командир отдельно на будещее') {
+            //         this.setState({
+            //             isRedirect: true,
+            //             iconLoading: false,
+            //             dashboard: "/dashboard3"
+            //         })
+            //     }
+
+            // } else {
+            //     openNotification('topRight', 'warning', 'Warning', 'Неверный email и пароль, пожалуйста попробуйте еще раз!')
+            //     this.setState({ iconLoading: false })
+            // }
+            // }
+        })
+    };
+
+
     onChangeLongWork = (checked) => {
         this.setState({ showLongWork: checked })
     };
@@ -169,23 +241,20 @@ class DashBoard extends Component {
 
     }
     handleCancel = e => {
-        console.log(e);
         this.setState({
             visible: false,
         });
     };
 
     handleCancel2 = e => {
-        console.log(e);
         this.setState({
             visible2: false,
         });
     };
 
-    handleCancel3 = () => {
-
+    onNewWishList = () => {
         this.setState({
-            visibleSort: false,
+            newWish: true,
         });
     };
 
@@ -212,7 +281,7 @@ class DashBoard extends Component {
         const { cities } = this.state;
         const userMainInfo = JSON.parse(localStorage.getItem('userMainInfo'));
         let searchFlag;
-
+        const { getFieldDecorator } = this.props.form;
         return (
 
 
@@ -222,180 +291,135 @@ class DashBoard extends Component {
                         <Spin size="small" tip="Загрузка..." />
                     </div>
                 )}
+                {this.props.users && (
+                    <p style={{ fontSize: "25px" }} align={"center"}>
+                        {/* {this.props.user.crewRole === 'капитан' && ('Приветственное сообщение для капитана')}   {this.props.user.crewRole === 'пилот' && ('Приветственное сообщение для пилота')} */}
+                        Добро пожаловать, {this.props.user.firstName}!
+                    </p>
 
-                {this.state.visibleSort === true && (
-                    <div className='modalWidth'>
-                        <Modal
-                            width='700px'
-                            title="Фильтрация полетов"
-                            visible={this.state.visibleSort}
-                            onCancel={this.handleCancel3}
 
-                            footer={[
-
-                            ]}
-                        >
-                            <div style={{ textAlign: 'center' }} >
-                                <div className="dashBoardContainerMoreFiltres">
-                                    <div className="dashBoardContentMoreFiltres">
-                                        <Card size="small" title="Длительность смены"
-                                              className="userCardFilter"
-                                        >
-                                            <div style={{ textAlign: "left" }}>
-                                                <Switch defaultChecked onChange={this.onChangeLongWork} /> Трансатлантические рейсы
-                                            </div>
-                                            <div style={{ textAlign: "left" }}>
-                                                <Switch defaultChecked onChange={this.onChangeShortWork} /> Короткие разворотные рейсы
-                                            </div>
-
-                                        </Card>
-                                        <Card size="small" title="Время полета" className="userCardFilter">
-                                            <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
-                                                <Slider range value={[this.state.minPrice, this.state.maxPrice]} max={24}
-                                                        onChange={this.onChangeTime}
-                                                        defaultValue={[this.state.minTime, this.state.maxTime]}
-                                                        marks={{ 0: 'ч', 24: 'ч.' }} />
-                                            </div>
-                                        </Card>
-
-                                        <Card size="small" title="Время полета" className="userCardFilter">
-                                            <div style={{ textAlign: "left" }}>
-                                                <Switch defaultChecked onChange={this.onChangeMorning} /> Утро
-                                            </div>
-                                            <div style={{ textAlign: "left" }}>
-                                                <Switch defaultChecked onChange={this.onChangeDay} /> День
-                                            </div>
-
-                                        </Card>
-
-                                        <Card size="small" title="Время полета" className="userCardFilter">
-                                            <div style={{ textAlign: "left" }}>
-                                                <Switch defaultChecked onChange={this.onChangeEvening} /> Вечер
-                                            </div>
-                                            <div style={{ textAlign: "left" }}>
-                                                <Switch defaultChecked onChange={this.onChangeNight} /> Ночь
-                                            </div>
-
-                                        </Card>
-                                    </div>
-                                </div>
-                            </div>
-                        </Modal>
-                    </div>
                 )}
 
-                {/* </Collapse> */}
+
+
+                <button onClick={this.onNewWishList}>Новая заявка</button>
+                {this.state.newWish && (
+                    < div className="dashBoardContainer">
+
+                        <div className="dashBoardContentDrag borderDesign" style={{ borderColor: "4px double black;" }}>
+
+
+                            <Card size="small"
+                                className="userCardSlider"
+                            >
+                                <div style={{ textAlign: "left", height: '300px' }}>
+                                    <ItemList />
+                                </div>
+                                {/* <div className='buttonCardSlider'>Кнопка</div> */}
+
+                                <button className='buttonCardSlider' style={{ float: 'right', marginRight: '10px' }} onClick={this.stepWishD2} ><span style={{ marginLeft: '10px' }}>🡲</span><span style={{ marginLeft: '35px' }}>Далее</span> </button>
+                                {/* <Button className='buttonCardSlider'>Кнопка</Button> */}
+
+                            </Card>
+                        </div>
+                    </div >
+                )
+                }
+                <Collapse>
+                    <Panel header="Фильтры по моему расписанию" key="1">
+                        <div className="dashBoardContainerMoreFiltres">
+                            <div className="dashBoardContentMoreFiltres">
+                                <Card size="small" title="Длительность смены"
+                                    className="userCard"
+                                >
+                                    <div style={{ textAlign: "left" }}>
+                                        <Switch defaultChecked onChange={this.onChangeLongWork} /> Трансатлантические рейсы
+                                    </div>
+                                    <div style={{ textAlign: "left" }}>
+                                        <Switch defaultChecked onChange={this.onChangeShortWork} /> Короткие разворотные рейсы
+                                    </div>
+
+                                </Card>
+                                <Card size="small" title="Время полета" className="userCard">
+                                    <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                                        <Slider range value={[this.state.minPrice, this.state.maxPrice]} max={24}
+                                            onChange={this.onChangeTime}
+                                            defaultValue={[this.state.minTime, this.state.maxTime]}
+                                            marks={{ 0: 'ч', 24: 'ч.' }} />
+                                    </div>
+                                </Card>
+
+                                <Card size="small" title="Время полета" className="userCard">
+                                    <div style={{ textAlign: "left" }}>
+                                        <Switch defaultChecked onChange={this.onChangeMorning} /> Утро
+                                    </div>
+                                    <div style={{ textAlign: "left" }}>
+                                        <Switch defaultChecked onChange={this.onChangeDay} /> День
+                                    </div>
+
+                                </Card>
+
+                                <Card size="small" title="Время полета" className="userCard">
+                                    <div style={{ textAlign: "left" }}>
+                                        <Switch defaultChecked onChange={this.onChangeEvening} /> Вечер
+                                    </div>
+                                    <div style={{ textAlign: "left" }}>
+                                        <Switch defaultChecked onChange={this.onChangeNight} /> Ночь
+                                    </div>
+
+                                </Card>
+                            </div>
+                        </div>
+                    </Panel>
+
+
+                </Collapse>
 
 
                 <div className="dashBoardContainer">
 
                     <div className="dashBoardContent">
-                        <div className='yourTrip'> <font face="Arial Black" >Заявка на текущий период:</font> </div>
-
-                        <Collapse className="collapseCard" style={{ border: 'none'}}>
-                            <Panel showArrow={false} className="userCardW hoverCard" header="Заявка на Октябрь" key="1" bordered={false} >
-                                {this.props.user.wishForm &&
+                        <Suspense fallback={<h1>Loading posts...</h1>}>
+                            {this.props.users.response &&
 
 
-                                this.props.user.wishForm.map((user, key) =>
-                                    <h3 style={{ float: "left" }}>
+                                this.props.users.response.map((user, i) => {
 
-                                        <div>
-                                            <h5 style={{ float: "left" }}>
-                                                Направление
-                                            </h5>
-                                            <h3 style={{ float: "left", color: 'blue' }}>
-                                                {user.longFly}
-                                            </h3>
+                                    // if (this.filterPrise(user.time)) {
+                                    if (user.city_photo) {
+                                        let srcImg;
+                                        if (!user.city_photo) {
+                                            srcImg = user.city_photo;
+                                        } else {
+                                            srcImg = plane;
+                                        }
+                                        return (
 
-                                            <h5 style={{ float: "left" }}>
-                                                Продолжительность рабочей смены
-                                            </h5>
-                                            <h3 style={{ float: "left", color: 'blue' }}>
-                                                {user.timeFly}
-                                            </h3>
+                                            <div key={i}>
 
-                                            <h5 style={{ float: "left" }}>
-                                                Желание дополнительной подработки
-                                            </h5>
-
-                                            <h3 style={{ float: "left", color: 'blue' }}>
-                                                {user.otherTime}
-                                            </h3>
-
-                                            <h5 style={{ float: "left" }}>
-                                                Предпочтительное время вылета
-                                            </h5>
-                                            <h3 style={{ float: "left", color: 'blue' }}>
-                                                {user.preferenceTimeFly}
-                                            </h3>
-                                        </div>
-                                    </h3>
-                                )}
-                            </Panel>
-                            <div className='mediumText'> <font face="Arial Black" >История заявок:</font> </div>
-                            <Panel showArrow={false} className="userCardW hoverCard" header="Заявка на Сентябрь" key="2" bordered={false} >
-                                <p>Короткие разворотные рейсы</p>
-                                <p>Длительная смена</p>
-                                <p>Хочу работать с переработками</p>
-                                <p>Ночь</p>
-                            </Panel>
-                            <Panel showArrow={false} className="userCardW hoverCard" header="Заявка на Август" key="3" bordered={false} >
-                                <p>Короткие разворотные рейсы</p>
-                                <p>Длительная смена</p>
-                                <p>Хочу работать с переработками</p>
-                                <p>Ночь</p>
-                            </Panel>
-                        </Collapse>
-
-                        {/*логика отрисовки текущей заявки пользователя*/}
-                        {/*<Card width='100%'
-                              className="userCardW hoverCard"
-                              title="Заявка на октябрь 2020 г."
-                              bordered={false} style={{ width: 300 }}
-                        >
-
-
-                            {this.props.user.wishForm &&
-
-
-                            this.props.user.wishForm.map((user, key) =>
-                                <h3 style={{ float: "left" }}>
-
-                                    <div>
-                                        <h5 style={{ float: "left" }}>
-                                            Направление
-                                        </h5>
-                                        <h3 style={{ float: "left", color: 'blue' }}>
-                                            {user.longFly}
-                                        </h3>
-
-                                        <h5 style={{ float: "left" }}>
-                                            Продолжительность рабочей смены
-                                        </h5>
-                                        <h3 style={{ float: "left", color: 'blue' }}>
-                                            {user.timeFly}
-                                        </h3>
-
-                                        <h5 style={{ float: "left" }}>
-                                            Желание дополнительной подработки
-                                        </h5>
-
-                                        <h3 style={{ float: "left", color: 'blue' }}>
-                                            {user.otherTime}
-                                        </h3>
-
-                                        <h5 style={{ float: "left" }}>
-                                            Предпочтительное время вылета
-                                        </h5>
-                                        <h3 style={{ float: "left", color: 'blue' }}>
-                                            {user.preferenceTimeFly}
-                                        </h3>
-                                    </div>
-                                </h3>
-                            )}
-                        </Card>*/}
-
+                                                <Card width='100%'
+                                                    onClick={() => this.showModal(user)}
+                                                    className="userCard hoverCard"
+                                                    cover={
+                                                        <img
+                                                            style={{ borderRadius: "10px 10px 0px 0px" }}
+                                                            alt="example"
+                                                            src={srcImg}
+                                                        />
+                                                    }
+                                                    type="inner" title="Рейс"
+                                                >
+                                                    <div>
+                                                        <h3 style={{ float: "left" }}>
+                                                            {user.where_from} - {user.where_to}
+                                                        </h3>
+                                                    </div>
+                                                </Card>
+                                            </div>
+                                        );
+                                    }
+                                })}
+                        </Suspense>
                     </div>
 
                     {this.state.modalUser && (
@@ -426,19 +450,19 @@ class DashBoard extends Component {
                             onCancel={this.handleCancel}
                             footer={[
                                 <div style={{ height: 60 }}>
-                                    <Icon
+                                    {/* <Icon
                                         type="close-circle"
                                         style={{ fontSize: "62px", float: "left" }}
                                         onClick={this.handleCancel}
                                     />
-                                    <img style={{ width: '130px' }} src={logo} alt="" />
+                                    
                                     <Icon
                                         type="heart"
                                         theme="twoTone"
                                         twoToneColor="#eb2f96"
                                         style={{ fontSize: "62px", float: "right" }}
                                         onClick={this.isLike}
-                                    />
+                                    /> */}
                                 </div>
                             ]}
                         >
@@ -455,9 +479,13 @@ class DashBoard extends Component {
                             <p>
                                 <div style={{ height: '40%' }}>
                                     <div className="card-container">
+                                        <div style={{ textAlign: 'center' }}>
+                                            <img style={{ width: '130px', align: 'center' }} src={logo} alt="" />
+                                        </div>
+
                                         <br />
                                         <Tag color="green">
-                                            <div style={{ color: 'black', fontSize: '32px' }}>
+                                            <div style={{ color: 'black', fontSize: '18px' }}>
                                                 Маршрут: {this.state.modalUser.where_from} - {this.state.modalUser.where_to}
                                             </div>
                                         </Tag>
@@ -468,32 +496,39 @@ class DashBoard extends Component {
                                                 </p>
                                                 <Alert message={
                                                     <p>
-                                                        <div style={{ color: 'black' }}>Информация
+
+                                                        <div style={{ color: 'black' }}>Время в полете:</div>
+                                                        <div className={'fontModal'}>{this.state.modalUser.flight_time}
                                                         </div>
 
                                                     </p>
                                                 } type="info" />
                                                 <Alert message={
                                                     <p>
-                                                        <div style={{ color: 'black' }}>Заголовок</div>
-                                                        <div className={'fontModal'}>Информация
+                                                        <div style={{ color: 'black' }}>Название аэропорта</div>
+                                                        <div
+                                                            className={'fontModal'}>{this.state.modalUser.airport_name
+                                                            }
+                                                        </div>
+                                                    </p>
+                                                } type="info" />
+                                                <Alert message={
+                                                    <p>
+                                                        <div style={{ color: 'black' }}>Уровень сложности аэропорта</div>
+                                                        <div className={'fontModal'}>{this.state.modalUser.level_flights
+                                                        }
                                                         </div>
 
                                                     </p>
                                                 } type="info" />
+
                                                 <Alert message={
                                                     <p>
-                                                        <div style={{ color: 'black' }}>Заголовок</div>
+                                                        <div style={{ color: 'black' }}>Отправление - прибытие</div>
                                                         <div
-                                                            className={'fontModal'}>Информация
-                                                        </div>
-                                                    </p>
-                                                } type="info" />
-                                                <Alert message={
-                                                    <p>
-                                                        <div style={{ color: 'black' }}>Заголовок</div>
-                                                        <div
-                                                            className={'fontModal'}>Информация</div>
+                                                            className={'fontModal'}>{this.state.modalUser.time_of_departure
+                                                            } - {this.state.modalUser.time_of_arrival
+                                                            }</div>
                                                     </p>
                                                 } type="info" />
                                             </TabPane>
@@ -542,116 +577,240 @@ class DashBoard extends Component {
 
                     )}
 
-                    <div className='rightBar'>
-
-                        <div className="site-card-border-less-wrapper">
-
-                            <div className="site-calendar-demo-card" style={{ backgroundColor: '#F6F9FE' }}>
-                                <Calendar fullscreen={false} onPanelChange={onPanelChange} />
-                            </div>
-
-                            <div className='yourTrip'> <font face="Arial Black" >Ваши Рейсы:</font> </div>
-                            <Card className='sUserCard hoverCard' onClick={() => this.showSort()}> <font className="sortString" face="Arial Black" ><font face="Arial Black" color={"#615d73"} >Сортировка</font></font></Card>
-                            <div className="flightsCard">
-                                <Suspense fallback={<h1>Loading posts...</h1>}>
-                                    {this.props.users.response &&
-
-                                    this.props.users.response.map((user, i) => {
-
-                                        // if (this.filterPrise(user.time)) {
-                                        if (user.city_photo) {
-
-                                            console.log(user)
-
-                                            let srcImg;
-                                            if (!user.city_photo) {
-                                                srcImg = user.city_photo;
-                                            } else {
-                                                srcImg = plane;
-                                            }
-
-                                            // я у мамы быдлокодер(скопипастил 2 ретерна чтоб чередовать цвет отрисовки, хз как в хтмл коде сделать)
-                                            if(i % 2 === 0){
-                                                return (
-                                                        <Card key={i} width='100%'
-                                                            // onClick={() => this.showModal(user)}
-                                                              className="userCard"
-                                                            // cover={
-                                                            //     <img
-                                                            //         style={{ borderRadius: "10px 10px 0px 0px" }}
-                                                            //         alt="example"
-                                                            //         src={srcImg}
-                                                            //     />
-                                                            // }
-
-                                                        >
-
-
-                                                            {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
-                                                            <p>
-                                                                <div
-                                                                    className={'fontModal'}>Информация
-                                                        </div>
-                                                            </p>
-                                                        } type="info" /> */}
-                                                            <div style={{ display: 'flex', flexFlow: 'row wrap', justifyContent: 'center' }}>
-                                                                <div>
-                                                                    <font size={4} color={'#ffffff'}>Рейс:</font> <Tag color={"#ffffff"}><font size={4} color={"#5459cd"}><b>1234</b></font> <br /></Tag><br />
-                                                                    <font size={4} color={"#ffffff"}>Маршрут:</font> <Tag color={"#ffffff"}><font size={4} color={"#5232b0"}>{user.where_from}-{user.where_to}</font></Tag> <br />
-                                                                    <font size={4} color={"#ffffff"}>Время полета:</font> <Tag color={"#ffffff"}><font size={4} color={"#5332b0"}>{user.flight_time}</font></Tag><br />
-                                                                    <font size={4} color={"#ffffff"}>Вылет:</font> <Tag color={"#ffffff"}><font size={4} color={"#5432b0"}>{user.time_of_departure}</font></Tag><br />
-                                                                    <font size={4} color={"#ffffff"}>Прибытие:</font> <Tag color={"#ffffff"}><font size={4} color={"#5532b0"}>{user.time_of_arrival}</font></Tag><br />
-                                                                    <font size={4} color={"#ffffff"}>Сложность:</font> <Tag color={"#ffffff"}><font size={4} color={"#5632b0"}>{user.level_flights}</font></Tag><br />
-                                                                    <font size={4} color={"#ffffff"}>Аэропорт:</font> <Tag color={"#ffffff"}><font size={4} color={"#5732b0"}>{user.airport_name}</font></Tag><br />
-                                                                </div>
-                                                            </div>
-                                                        </Card>
-                                                );
-                                            }
-                                            return (
-                                                    <Card key={i} width='100%'
-                                                        // onClick={() => this.showModal(user)}
-                                                          className="userCard1"
-                                                        // cover={
-                                                        //     <img
-                                                        //         style={{ borderRadius: "10px 10px 0px 0px" }}
-                                                        //         alt="example"
-                                                        //         src={srcImg}
-                                                        //     />
-                                                        // }
-
-                                                    >
-
-
-                                                        {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
-                                                            <p>
-                                                                <div
-                                                                    className={'fontModal'}>Информация
-                                                        </div>
-                                                            </p>
-                                                        } type="info" /> */}
-                                                        <div style={{ display: 'flex', flexFlow: 'row wrap', justifyContent: 'center' }}>
-                                                            <div>
-                                                                <font size={4} color={'#ffffff'}>Рейс:</font> <Tag color={"#ffffff"}><font size={4} color={"#5459cd"}><b>1234</b></font> <br /></Tag><br />
-                                                                <font size={4} color={"#ffffff"}>Маршрут:</font> <Tag color={"#ffffff"}><font size={4} color={"#5232b0"}>{user.where_from}-{user.where_to}</font></Tag> <br />
-                                                                <font size={4} color={"#ffffff"}>Время полета:</font> <Tag color={"#ffffff"}><font size={4} color={"#5332b0"}>{user.flight_time}</font></Tag><br />
-                                                                <font size={4} color={"#ffffff"}>Вылет:</font> <Tag color={"#ffffff"}><font size={4} color={"#5432b0"}>{user.time_of_departure}</font></Tag><br />
-                                                                <font size={4} color={"#ffffff"}>Прибытие:</font> <Tag color={"#ffffff"}><font size={4} color={"#5532b0"}>{user.time_of_arrival}</font></Tag><br />
-                                                                <font size={4} color={"#ffffff"}>Сложность:</font> <Tag color={"#ffffff"}><font size={4} color={"#5632b0"}>{user.level_flights}</font></Tag><br />
-                                                                <font size={4} color={"#ffffff"}>Аэропорт:</font> <Tag color={"#ffffff"}><font size={4} color={"#5732b0"}>{user.airport_name}</font></Tag><br />
-                                                            </div>
-                                                        </div>
-                                                    </Card>
-                                            );
-                                        }
-                                    })}
-                                </Suspense>
-                            </div>
+                    <div className="site-card-border-less-wrapper" style={{ backgroundColor: '#EDEEF0', padding: '21px' }}>
+                        <div className="site-calendar-demo-card" style={{ backgroundColor: 'lightblue' }}>
+                            <CalendarWithButtons onPanelChange={onPanelChange} />
                         </div>
 
-                    </div>
+                        <Card className="userCard hoverCard" onClick={() => this.showWant()} bordered={false} style={{ width: 200, backgroundColor: '#4975A7', color: 'white' }}   >
+                            <div style={{ textAlign: 'center', fontSize: '21px', paddingBottom: '5px' }}>
+                                Новая заявка
+                            </div>
+                        </Card>
 
+                        <Card width='100%'
+                            // onClick={() => this.showModal()}
+                            className="userCard hoverCard"
+                            // cover={
+                            //     <img
+                            //         style={{ borderRadius: "10px 10px 0px 0px" }}
+                            //         alt="example"
+                            //         src={'https://avatars.mds.yandex.net/get-kinopoisk-post-img/1362954/454f9731e6c530fbb8eb903620d30df1/960x540'}
+                            //     />
+                            // }
+                            type="inner" title="Заявка на октябрь 2020 г."
+                        >
+
+
+                            {this.props.user.wishForm &&
+
+
+                                this.props.user.wishForm.map((user, key) =>
+                                    <h3 style={{ float: "left" }}>
+
+                                        <div>
+                                            <h5 style={{ float: "left" }}>
+                                                Направление
+                                            </h5>
+                                            <h3 style={{ float: "left", color: 'blue' }}>
+                                                {user.longFly}
+                                            </h3>
+
+                                            <h5 style={{ float: "left" }}>
+                                                Продолжительность рабочей смены
+                                            </h5>
+                                            <h3 style={{ float: "left", color: 'blue' }}>
+                                                {user.timeFly}
+                                            </h3>
+
+                                            <h5 style={{ float: "left" }}>
+                                                Желание дополнительной подработки
+                                            </h5>
+
+                                            <h3 style={{ float: "left", color: 'blue' }}>
+                                                {user.otherTime}
+                                            </h3>
+
+                                            <h5 style={{ float: "left" }}>
+                                                Предпочтительное время вылета
+                                            </h5>
+                                            <h3 style={{ float: "left", color: 'blue' }}>
+                                                {user.preferenceTimeFly}
+                                            </h3>
+                                        </div>
+                                    </h3>
+                                )}
+
+                            {/* {this.props.user.wishForm.map((user, i) => {
+
+                                return (<div key={i}>
+
+
+                                    <h3 style={{ float: "left" }}>
+                                        {user.preferenceTimeFly} - {user.preferenceTimeFly}
+                                    </h3>
+
+                                </div>
+                                );
+                            })
+                            } */}
+
+
+                        </Card>
+
+                        <Card className="userCard" title="Заявка на сентябрь 2020 г." bordered={false} style={{ width: 300 }}>
+                            <p>Короткие разворотные рейсы</p>
+                            <p>Длительная смена</p>
+                            <p>Хочу работать с переработками</p>
+                            <p>Ночь</p>
+
+                        </Card>
+                        <Card className="userCard" title="Заявка на август 2020 г." bordered={false} style={{ width: 300 }}>
+                            <p>Трансатлантические рейсы</p>
+                            <p>Короткая смена</p>
+                            <p>Переработки в этом месяце не нужны</p>
+                            <p>Вечер</p>
+
+                        </Card>
+                    </div>
                 </div>
+
+
+
+                <div className='modalWidth'>
+                    <Modal
+                        width="800px"
+                        title="Новая заявка"
+                        visible={this.state.visibleWant}
+                        onCancel={this.handleCancelWant}
+
+                        footer={[
+
+                        ]}
+                    >
+                        <div style={{ textAlign: 'center' }} >
+                            <div className="wantForm">
+                                <Card style={{ borderRadius: '20px', marginTop: '0%', marginBottom: '0%', width: '450px' }}>
+                                    <div style={{ textAlign: 'center' }}>
+                                        {/* <img style={{ width: '130px' }} src={logo} alt="" /> */}
+                                        <h2 style={{ color: '#4a76a8', margin: '0 !important' }}>Форма учета Ваших пожеланий на октябрь 2020 г.</h2>
+                                        <h3 style={{ color: '#4a76a8', margin: '0 !important' }}>Пожалуйста, заполните и проверьте все поля</h3>
+                                    </div>
+                                    <br />
+                                    <Form onSubmit={this.handleSubmit}>
+                                        {/* <Form.Item>
+                            {getFieldDecorator('town', {
+                                rules: [
+                                    {
+                                        required: true,
+                                        message: 'Пожалуйста, введите город!',
+                                    },
+                                ],
+                            })(
+                                <Select
+                                    showSearch
+                                    placeholder="Ваш город"
+                                    style={{ width: 260 }}
+                                >
+                                    <Option value="Москва">Москва</Option>
+                                    <Option value="Санкт-Петербург">Санкт-Петербург</Option>
+                                    <Option value="Казань">Казань</Option>
+                                    <Option value="Екатеринбург">Екатеринбург</Option>
+                                    <Option value="Нижний Новгород">Нижний Новгород</Option>
+                                    <Option value="Новосибирск">Новосибирск</Option>
+                                    <Option value="Самара">Самара</Option>
+                                    <Option value="Хабаровск">Хабаровск</Option>
+                                    <Option value="Чита">Чита</Option>
+                                </Select>
+
+                            )}
+                        </Form.Item> */}
+                                        <h3 style={{ color: 'black', margin: '0 !important' }}>Направление полета</h3>
+
+                                        <Form.Item style={{ color: 'black', margin: '0 !important' }}>
+                                            {getFieldDecorator('longFly', {
+                                                rules: [{ required: true, message: 'Пожалуйста, укажите направление полета' }],
+                                            })(
+                                                <Select
+                                                    showSearch
+                                                    placeholder="Направление"
+
+                                                >
+                                                    <Option value="Трансатлантические рейсы">Трансатлантические рейсы</Option>
+                                                    <Option value="Короткие разворотные рейсы">Короткие разворотные рейсы</Option>
+
+                                                </Select>
+
+                                            )}
+                                        </Form.Item>
+                                        <h3 style={{ color: 'black' }}>Продолжительность рабочей смены</h3>
+                                        <Form.Item>
+                                            {getFieldDecorator('timeFly', {
+                                                rules: [{ required: true, message: 'Пожалуйста, укажите продолжительность рабочей смены' }],
+                                            })(
+                                                <Select
+                                                    showSearch
+                                                    placeholder="Продолжительность смены"
+
+                                                >
+                                                    <Option value="Длительная смена">Длительная</Option>
+                                                    <Option value="Короткая смена">Короткая</Option>
+
+                                                </Select>
+
+                                            )}
+                                        </Form.Item>
+                                        <h3 style={{ color: 'black' }}>Переработка</h3>
+                                        <Form.Item>
+                                            {getFieldDecorator('otherTime', {
+                                                rules: [{ required: true, message: 'Пожалуйста, укажите время переработки' }],
+                                            })(
+                                                <Select
+                                                    showSearch
+                                                    placeholder="Переработка"
+
+                                                >
+                                                    <Option value="Хочу работать с переработкой">Хочу работать с переработкой</Option>
+                                                    <Option value="Переработки в этом месяце не нужны">Переработки в этом месяце не нужны</Option>
+
+                                                </Select>
+
+                                            )}
+                                        </Form.Item>
+                                        <h3 style={{ color: 'black' }}>Предпочтительное время вылета</h3>
+                                        <Form.Item>
+                                            {getFieldDecorator('preferenceTimeFly', {
+                                                rules: [{ required: true, message: 'Пожалуйста, укажите предпочтительное время вылета' }],
+                                            })(
+                                                <Select
+                                                    showSearch
+                                                    placeholder="Время вылета"
+
+                                                >
+                                                    <Option value="Утро">Утро</Option>
+                                                    <Option value="Вечер">Вечер</Option>
+                                                    <Option value="День">День</Option>
+                                                    <Option value="Ночь">Ночь</Option>
+                                                </Select>
+
+                                            )}
+                                        </Form.Item>
+                                        <Form.Item>
+                                            <Button style={{ backgroundColor: '#4A76A8', color: '#ffffff' }} htmlType="submit" className="login-form-button" loading={this.state.iconLoading} icon='login'>
+                                                Отправить
+                            </Button>
+                                            <div style={{ textAlign: 'center' }}>
+
+                                            </div>
+                                        </Form.Item>
+                                    </Form>
+                                </Card>
+                            </div >
+                        </div>
+                    </Modal>
+                </div>
+
+
 
                 {/* <div className="dashBoardContainer">
 
@@ -747,7 +906,7 @@ class DashBoard extends Component {
 
 
                 <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: "80%" }}
-                        align={"center"}>
+                    align={"center"}>
                     <p>Зарегистрировано пользователей IBMiX : {this.state.usersLength}</p>
 
                     <div dangerouslySetInnerHTML={{ __html: this.ym() }} />
@@ -781,4 +940,5 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashBoard);
+const WantForm = Form.create({ name: 'dashBoard' })(DashBoard);
+export default connect(mapStateToProps, mapDispatchToProps)(WantForm);

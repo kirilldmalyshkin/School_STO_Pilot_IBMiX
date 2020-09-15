@@ -2,15 +2,15 @@
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-
     align-items: center;
     width: 100%;
     height: 200px;
-    border-radius: 15px;
-    background: #F6F9FE;
-    box-shadow: inset 0px 0px 10px -1px rgba(158, 158, 158, 0.25);
+    margin: 0 10px;
+    border-radius: 25px;
+    box-shadow: inset 1px 1px 5px 5px rgba(100,100,100,0.15);
     padding-left: 10px;
     padding-right: 10px;
+    background-color: rgb(246, 249, 254);
 }
 
 .sub_block {
@@ -19,7 +19,7 @@
     padding-left: 15px;
     padding-right: 15px;
     height: 150px;
-    width: 18%;
+    width: 15%;
     text-align: center;
     padding-left: 30px;
     padding-right: 30px;
@@ -51,32 +51,10 @@
     background-color: rgb(194, 213, 251);
 }
 .time_of_fly2 {
-    background-color: #c2d5ff;
+    background-color: rgb(194, 213, 255);
 }
 .category_title {
     font-size: 16px;
     font-weight: bold;
     text-align: left;
-}
-
- /* Стили для блока заголовка (Приоритетно - Не приоритетно) */
- .prioritet_header_block {
-    display: flex;
-    justify-content: space-between;
-}
-.prioritet_text {
-    display: inline;
-    font-size: 1.2rem;
-    color: rgb(116, 142, 247);
-    margin-left: 50px;
-    margin-right: 50px;
-}   
-
-/* Стиль для руны */
-.runa {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: rgb(99,99,99);
-    text-align: center;
-    margin-bottom: 30px;
 }
