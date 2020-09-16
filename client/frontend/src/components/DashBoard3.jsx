@@ -168,10 +168,10 @@ class DashBoard extends Component {
       },
       method: 'POST',
     });
-    let cities = await allCities.json();
-    console.log('1',cities);
+    const cities = await allCities;
+    const citiesRes = await cities.json()
 
-    this.setState({ cities: cities.response });
+    this.setState({ cities: citiesRes.response });
 
     const response = await fetch('/api/profilePilot', {
       headers: { 'Content-Type': 'application/json' },
@@ -788,7 +788,15 @@ class DashBoard extends Component {
     });
   };
 
+  handleSelect = (value) => {
+    if (value.length < 9) {
+      this.setState({ areaTags: value });
+    }
+  }
 
+  handleSelectClear = (value) => {
+    console.log(value);
+  }
 
   render() {
     const { TabPane } = Tabs;
@@ -1393,9 +1401,12 @@ class DashBoard extends Component {
               <div className="step-city-select">
                   <Select
                       mode="multiple"
+                      allowClear={true}
                       className="select-city"
                       placeholder="Введите название города"
                       onChange={this.handleSelect}
+                      maxTagCount={8}
+                      bordered={false}
                   >
                     {this.state.cities && this.state.cities.map(el => (
                         <Option value={el} key={el}>
@@ -1406,9 +1417,18 @@ class DashBoard extends Component {
                     ))}
                   </Select>
                 <div className="area-tags" >
-                  {this.state.areaTags && this.state.areaTags.map(el => (
-                      <div className="area-tags--city">{el}</div>
-                  ))}
+                  <span className="pref-city">Предпочтительные города:</span>
+                  <div className="area-tags--grid">
+                    {this.state.areaTags && this.state.areaTags.map(el => (
+                        <div className="area-tags--city">
+                          {el}
+                        <svg style={{ marginTop: '2px' }} width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3.49957 4.35524L0.187073 1.05746C-0.0629272 0.808575 -0.0629272 0.419686 0.187073 0.170797C0.437073 -0.0780913 0.827698 -0.0780913 1.0777 0.170797L3.5152 2.59746L5.92145 0.186353C6.17145 -0.0625358 6.56207 -0.0625358 6.81207 0.186353C7.06207 0.435242 7.06207 0.824131 6.81207 1.07302L3.49957 4.35524Z" fill="#1E1E1E"/>
+                          <path d="M6.37518 7.00082C6.21893 7.00082 6.06268 6.9386 5.93768 6.81415L3.50018 4.40304L1.06268 6.81415C0.812683 7.06304 0.422058 7.06304 0.172058 6.81415C-0.0779419 6.56526 -0.0779419 6.17637 0.172058 5.92749L3.50018 2.64526L6.81268 5.94304C7.06268 6.19193 7.06268 6.58082 6.81268 6.82971C6.68768 6.9386 6.53143 7.00082 6.37518 7.00082Z" fill="#1E1E1E"/>
+                        </svg>
+                        </div>
+                    ))}
+                  </div>
                 </div>
                 </div>
               <Button
