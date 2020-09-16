@@ -3,14 +3,7 @@ import plane from '../images/plane.jpg';
 import ItemList from '../components/DnD/itemList';
 import ItemList_day from '../components/DnD_day/itemList';
 import { UncontrolledCollapse, Button as Buttonr, CardBody, Card as Cardr, Collapse as Collapser } from 'reactstrap';
-import RadioButtonList from './lineFlight/RadioButtonList';
-import RadioButtonList_WorkDay from './WorkTime/RadioButtonList';
-import { data_work_time } from './WorkTime/radio_data';
-import { data_work_day } from './WorkDay/radio_data';
-import RadioButtonList_WorkTime from './WorkDay/RadioButtonList';
-
 import Calendar from './Calendar'
-
 import CalendarWithButtons from './CalendarWithButtons';
 import { Popover, Tabs } from 'antd';
 import {
@@ -69,7 +62,7 @@ class DashBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      areaTags: null,
+      areaTags: [],
 
       modalUser: null,
       loading: false,
@@ -1417,7 +1410,7 @@ class DashBoard extends Component {
                     ))}
                   </Select>
                 <div className="area-tags" >
-                  <span className="pref-city">Предпочтительные города:</span>
+                  <span className="pref-city">Предпочтительные города ({this.state.areaTags.length} из 8) :</span>
                   <div className="area-tags--grid">
                     {this.state.areaTags && this.state.areaTags.map(el => (
                         <div className="area-tags--city">
@@ -1443,7 +1436,7 @@ class DashBoard extends Component {
                 </svg>
                 <span style={{ marginLeft: '8px' }}>Пропустить</span>
               </Button>
-              {!this.state.checkboxTransAirCoontinent &&
+              {(this.state.areaTags.length === 0) &&
               <Button
                   type="primary"
                   className='bidding-btn-step'
@@ -1460,7 +1453,7 @@ class DashBoard extends Component {
                 <span style={{ marginLeft: '15px' }}>Подтвердить</span>
               </Button>
               }
-              {this.state.checkboxTransAirCoontinent &&
+              {(this.state.areaTags.length > 0) &&
               <Button
                   type="primary"
                   className='bidding-btn-step'
