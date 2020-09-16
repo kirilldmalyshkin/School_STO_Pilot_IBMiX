@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 mongoose.connect(
-    `mongodb+srv://igorg:ibmix4@cluster0.aev79.azure.mongodb.net/IBMiX4?retryWrites=true&w=majority`,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-    },
+  `mongodb+srv://igorg:ibmix4@cluster0.aev79.azure.mongodb.net/IBMiX4?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  },
 );
 
 const Schema = mongoose.Schema;
@@ -26,18 +26,18 @@ const pilot = Schema({
   keyForNewPassword: { type: String },
   wishForm: { type: Array },
   arrWish: { type: Array },
-  arrFlights: {type: Array},
+  arrFlights: { type: Array },
 });
 
 const flight = Schema({
-  where_to: {type: String},
-  where_from: {type: String},
-  flight_time: {type: String},
-  time_of_departure: {type: String},
-  time_of_arrival: {type: String},
-  level_flights: {type: String},
-  city_photo: {type: String},
-  airport_name: {type: String},
+  where_to: { type: String },
+  where_from: { type: String },
+  flight_time: { type: String },
+  time_of_departure: { type: String },
+  time_of_arrival: { type: String },
+  level_flights: { type: String },
+  city_photo: { type: String },
+  airport_name: { type: String },
 });
 
 const Pilot = mongoose.model('Pilot', pilot);
@@ -57,8 +57,8 @@ async function foo() {
   for (let j = 0; j < pilotCollection.length; j++) {
     let arrFlights = [];
 
-    for (let j = 0; j < 10; j++){
-      arrFlights.push(flightsClollection[ getRandomIntInclusive(0, 19)]);
+    for (let j = 0; j < 10; j++) {
+      arrFlights.push(flightsClollection[getRandomIntInclusive(0, 19)]);
     }
 
     pilotCollection[j].arrFlights = arrFlights
@@ -67,3 +67,4 @@ async function foo() {
 }
 
 //foo()
+

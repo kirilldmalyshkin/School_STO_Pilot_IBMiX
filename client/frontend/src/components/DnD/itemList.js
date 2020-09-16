@@ -37,7 +37,7 @@ function ItemList(props) {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
-                            {wishes.map((item, index) => <Item item={item} index={index} key={item.name + '_sprestay'} />)}
+                            {wishes.map((item, index) => <Item item={item} index={index} stars={props.data.length} key={item.name + '_sprestay'} />)}
                             {provided.placeholder}
                         </div>
                     )}

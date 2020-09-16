@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Avatar, Tabs, Icon, Button, Card, Form, DatePicker } from "antd";
 import pilotAvatar from "../images/pilotAvatarHalf.jpg";
+import './Profile.css';
 
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -15,15 +16,13 @@ function disabledDate(current) {
 
 
 class Profile extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       isRedirect: false,
       edit: false
     };
   }
-
-
 
   render() {
     const { getFieldDecorator } = this.props.form;
@@ -41,106 +40,116 @@ class Profile extends Component {
       linkEdite = "/login"
     }
 
-
-    console.log(linkEdite)
-
-
     return (
         <div style={{ padding: "10px" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Card
+            <div
                 style={{
                   borderRadius: "20px",
                   display: "flex",
-                  width: "800px",
+                  width: "850px",
                   marginTop: "20px",
-                  background:
+                  display: 'flex',
+                  flexDirection: 'column',
+                  background: 
                       "linear-gradient(6deg, rgba(132,100,250,1) 0%, rgba(74,118,168,1) 100%)"
                 }}
             >
-              <div style={{ display: "flex" }}>
-                <div>
+            
+            <div className={"setting"}>
+              <a href={linkEdite} style={{color: 'white'}}><Icon type='setting' /></a>
+            </div>
 
-                  <Avatar
-                      size={150}
-                      icon="user"
-                      src={pilotAvatar}
-                  />
-
+              <div className="block_with_avatar">
+                <div className="left_column_with_avatar">
+                    <Avatar
+                        size={150}
+                        icon="user"
+                        src={this.props.user.photo ? this.props.user.photo : pilotAvatar}
+                    />
                 </div>
-
-                <div>
-                  <Link to={linkEdite}>
-                    <Button ghost="default" icon="edit">
-                      Редактировать
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              <div>
-                {this.props.user && (
-                    <div>
+                <div className="right_column_with_avatar">
                       <h3
                           style={{ color: "#ffffff" }}
                       >{`${this.props.user.firstName} ${this.props.user.lastName}`}</h3>
+ 
                       <div>
                         <h5 style={{ color: "#ffffff" }}>
                       <span style={{ fontWeight: "bold" }}>
-                        <Icon type="user" /> &nbsp; Должность: {`${this.props.user.crewRole}`}
-                      </span>{" "}
-                          <span style={{ fontWeight: "normal" }}>
-                        {this.props.user.username}
+                        <Icon type="user" /> &nbsp; Должность: <span style={{ fontWeight: "normal" }}> {this.props.user.crewRole ? this.props.user.crewRole : '-/-'} </span>
                       </span>
                         </h5>
                       </div>
+
+                      <div>
+                        <h5 style={{ color: "#ffffff" }}>
+                          <span style={{ fontWeight: "bold" }}>
+                            <Icon type="mail" /> &nbsp; E-mail: <span style={{ fontWeight: "normal" }}>{this.props.user.email ? this.props.user.email : '-/-'}</span>
+                          </span>
+                        </h5>
+                      </div>
+
                       <div>
                         <h5 style={{ color: "#ffffff" }}>
                       <span style={{ fontWeight: "bold" }}>
-                        <Icon type="calendar" /> &nbsp; Стаж работы в должности:  с {`${this.props.user.standingFromDateInRole}`}
+                        <Icon type="phone" /> &nbsp; Телефон: <span style={{ fontWeight: "normal" }}>{this.props.user.phone ? this.props.user.phone : '-/-'}</span>
                       </span>
                         </h5>
                       </div>
+                </div>
+              </div>
+
+    
+
+              <div className='block_with_avatar'>
+                    <div>
                       <div>
                         <h5 style={{ color: "#ffffff" }}>
-                      <span style={{ fontWeight: "bold" }}>
-                        <Icon type="phone" /> &nbsp; Номер телефона:{" "}
-                      </span>{" "}
-                          <span style={{ fontWeight: "normal" }}>
-                        {this.props.user.phone}
-                      </span>
+                          <span style={{ fontWeight: "bold" }}>
+                            <Icon type="calendar" /> &nbsp; Стаж работы в должности: 
+                          </span>
+                          <li type='disc'>
+                            <span className={'subtext'}>с {this.props.user.standingFromDateInRole ? this.props.user.standingFromDateInRole : '-/-'} </span>
+                          </li>
                         </h5>
                       </div>
+
                       <div>
                         <h5 style={{ color: "#ffffff" }}>
-                      <span style={{ fontWeight: "bold" }}>
-                        <Icon type="mail" /> &nbsp; E-mail:{" "}
-                      </span>{" "}
-                          <span style={{ fontWeight: "normal" }}>
-                        {this.props.user.email}
-                      </span>
+                          <span style={{ fontWeight: "bold" }}>
+                            <Icon type="calendar" /> &nbsp; Стаж работы в авиакомпании:
+                          </span>
+                          <li>
+                            <span className={'subtext'}> с {this.props.user.standingFromDate ? this.props.user.standingFromDate : '-/-'}</span>
+                          </li>
                         </h5>
                       </div>
+                    </div>
+
+                    <div>
                       <div>
                         <h5 style={{ color: "#ffffff" }}>
-                      <span style={{ fontWeight: "bold" }}>
-                        <Icon type="calendar" /> &nbsp; Стаж работы в авиакомпании:  с {`${this.props.user.standingFromDate}`}
-                      </span>
+                          <span style={{ fontWeight: "bold" }}>
+                            <Icon type="global" /> &nbsp; Индекс сеньорити: 
+                          </span>
+                          <li>
+                            <span className={'subtext'}> {this.props.user.reliabilityIndex ? this.props.user.reliabilityIndex : '-/-'} </span>
+                          </li>
                         </h5>
                       </div>
+
                       <div>
                         <h5 style={{ color: "#ffffff" }}>
-                      <span style={{ fontWeight: "bold" }}>
-                        <Icon type="global" /> &nbsp; Индекс сеньорити: {`${this.props.user.reliabilityIndex}`}
-                      </span>
+                          <span style={{ fontWeight: "bold" }}>
+                            <Icon type="bell" /> &nbsp; Индекс поощрений и наказаний:
+                          </span>
+                          <li>
+                            <span className={'subtext'}> {this.props.user.rewardsAndPunishments ? this.props.user.rewardsAndPunishments : '-/-'}</span>
+                          </li>
                         </h5>
                       </div>
-                      <div>
-                        <h5 style={{ color: "#ffffff" }}>
-                      <span style={{ fontWeight: "bold" }}>
-                        <Icon type="bell" /> &nbsp; Индекс поощрений и наказаний: {`${this.props.user.rewardsAndPunishments}`}
-                      </span>
-                        </h5>
-                      </div>
+
+
                       {this.props.user.vk && (
                           <div>
                             <h5 style={{ color: "#ffffff" }}>
@@ -166,12 +175,11 @@ class Profile extends Component {
                           </div>
                       )}
                     </div>
-                )}
-
-
-                <br />
               </div>
-            </Card>
+
+
+            </div>
+
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <Card className="newCard">
