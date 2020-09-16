@@ -34,10 +34,6 @@ import './DashBoard.css';
 
 
 
-function handleChange(value) {
-  console.log(`selected ${value}`);
-}
-
 const { Option } = Select;
 const { Panel } = Collapse;
 const openNotification = (placement, icon, title, message) => {
@@ -61,7 +57,13 @@ const content = (
 class DashBoard extends Component {
   constructor(props) {
     super(props);
+
+    // this.areaTags = React.createRef();
+
+
     this.state = {
+      areaTags: null,
+
       modalUser: null,
       loading: false,
 
@@ -73,7 +75,7 @@ class DashBoard extends Component {
       minTime: 0,
       maxTime: 50000,
 
-      airports: null,
+      cities: null,
       visible: false,
       visible2: false,
       visible4: false,
@@ -147,23 +149,22 @@ class DashBoard extends Component {
     });
     let usersLength = await reqUsersLength.json();
 
-    const allAirports = await fetch('/api/getAirports', {
+    this.setState({ usersLength: usersLength.usersLength });
+
+    if (this.props.users.length === 0) {
+      this.setState({ loading: true });
+    }
+
+    const allCities = await fetch('/api/getCities', {
       headers: {
         'Content-Type': 'application/json',
       },
       method: 'POST',
     });
-    let airport = await allAirports.json();
+    let cities = await allCities.json();
+    console.log('1',cities);
 
-    this.setState({ airport: airport.response });
-    // this.state.airport.forEach(el => console.log('country –- ', el.countryName, 'city –- ', el.cityName))
-
-    this.setState({ usersLength: usersLength.usersLength });
-
-
-    if (this.props.users.length === 0) {
-      this.setState({ loading: true });
-    }
+    this.setState({ cities: cities.response });
 
     const response = await fetch('/api/profilePilot', {
       headers: { 'Content-Type': 'application/json' },
@@ -747,7 +748,10 @@ class DashBoard extends Component {
     });
   };
 
-
+  handleSelect = (value) => {
+    console.log(value)
+    this.setState({ areaTags: value });
+  }
 
   render() {
     const { TabPane } = Tabs;
@@ -759,10 +763,7 @@ class DashBoard extends Component {
     let redCircle = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADXElEQVRoge2Zz2scZRzGn+edLWxQCV6sFVupihuvdv+CeBdiy0JrkpKLaCx6KD2IDb7QioJS2qIN1UNpFwUXTcS78Q8w7dXUQ0qrqDnVHxUHdud9PDQ9OPPuzryT3Wmg+Ry/7/fd+TzMzM7M+wI77PBgw2H8iKw12F9rgpgUXBPgcwCeBPDQZss/AH4BcZ3iVQgruNFbpbVuq8feUgC139vj5N4gMAtgb+D0WwLahuYTzrzzW1mHUgH0+fuPuqRrCb4KoF724JvEgj41iXuXc/aP0MnBAXTl1MsCFgE8Fjo3hw0C85xdWAqZVDiAOp3IxWtnCL4Z7lYcCefMWOM4W62kSH+hALpk66qZLyBObU2vINQye+4I52yc12ryGtTpRKpF7crkAUCckom+1Pe2lteaG8DFa2cgHBqOWQDES+5n82F+2wA2b9ivh2cVjCge5NGTy/0a+gZQ54Nxxd0fAewZiVpxNhjVnucrb9/2Dfa9hFzcPYX7Lw8Au13Stf0GvWdAl+zjiqJ1AGOjsgok5q7kGR62v6YHvGfARdExbB95AKi7bjTvG8gEkLWGwMzoncIgMC1rM77ZM7C/1gSwrwqpQJ7C07UX0sVsAOrFSnTKMZkuZC8h6EA1LuEIaqZrnpuYjSpkSjKRLvj+hZ6oQKQsmeeSL8DDFYiU5ZF0IfdlbrvjC3Cncovi/J0u+AJkHtfbiMzHvyeArldhUpK1dCETgODValzCIbiarmXPgPhdJTblWEkXsgFu9FYB3KrCJpCbWO9dSxezl5C1TkC7GqfiCGr7liK9zwGTJB8D+HfkVsWJzS636BvwBuCc/V3QZ6N1Ko6Ei76vMWDAk9gYtwDP/+59YMO4xPYb7BuA0/YvAscAaBRWBRGJ1wYt+g58F+LswpKE88P3KoaAs5xZ+GZQT+7LnBlrHAfx1fC0CiJ8a+qNE3ltuQHYaiW8PT4Nqu/q2AhY4p/jrSIr1KHL6x8RfCtkXiAScNbUGyeGurz+vyNcPj0lahHA7mC9wWxQfH3QOqiP4A8aHj25zCSZEHQeQO76fQFiCeeYJBOh8sBQNvmSeYKzCF9LuimobRhdqHyTL42sNXjWHIA4KaAJ4d42673v6zu4u836E8UfAKxgvXdtGNusO+zwoPMfinkPENdCPQgAAAAASUVORK5CYII=';
     let greenCircle = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADlUlEQVRoge2ZTWwbRRiG33e3sWM7Fe6FUtQSVaghXGjSWogr4Y4UfnIo/ZGFhCBUuVQcEStxRCptBFSFQ4QsQESQIO6kd3BLygWKEVV/BOTUiLrxrirPy4FISLtr745jL5Ga5/jNN97nkz3emW+AHXZ4sGE/PsSTnIOtqxVDMwU6FciMgdwPobT5lHuQbpO8JumyI2fleuFw3SPNVp+9pQJq9+r77jvum4ROAjxgOf2mgNqQaX94olT5s1eHngr4bP2nPUHOeCReAzTc68M3FXwJHzPQO9U9k+vWs20nLGysvgDqAoCHbecmsAZxtlqcWLKZlLqARS26zdbYWVJz9m4WCOdLhcaZGc6006SnKmBBl4YVlD+nML01u3SIWGZ+/ViVz/pJuU5SwqIWXQblWlbyAEBhWq3yl54u7UrKTSyg2Ro7K+Gl/qilh8Tzo0H5vcS8boObC/br/mlZI0d88VRxYrlTQscCLqr+UM53fwawbyBq6VnLBe6Tr5SfuhM32PEnlGvtehf/vzwA7A1yxus0GPsNLDS/fwTu0O8ACoOysoO+MebxV0tH/giPxH4DcodOY9vIA4CG6XA2biRSgCc5BE4MXsoOAsc9KeIbCRxsXa0AeCwTKztGD2z8eCQcjBTQpp7Lxscel5wKxyIFkDyajY49clAJx6IFSE9ko9MD0ng4FClAwKPZ2NhDMPJeivsbHcnApScE7A7HEjdz2524ApqZW6SEwN1wLLqIgcjrersgKHL4jy5i8lo2Oj1A/hIORQuQLmdjYw8N6uFYpABX/C4bHXva0ko4FingeuFwHcDNTIzsuHGrOHklHIzuRkkjoJaNU3oI1eJakbHvAbbvfwCgNXCr1NBvG1yIG4ktoDry9F8SPxmslAXSxbjTGNDtTFzw3wbQc9O1j6whgNdpsGMBx/nM3xBPA9AgrFIiGLzerenbdS9ULU4sQZjvv1c6SJyrlia/6ZaTuJkrFRpnSHzVP610SPi2mG+8lZSXqrk7r0Z+JGh+kVl/lFq6m999bI6HgqTUVNvpOR4KRvKNl0Gcw2DXhEi8X8r/NpNGHujhguPTjdVp8+8Fx15rve6sOeIb3fqgcVgfaE4VJ5bhY1ziPMDE/n0y9CGch49xW3mgD5d8bceZFXgS9r2kG4RqrjEfZX7JF8aTnNGN1aMgp+ioIoMxEPvx3/m6CeE2HfwKgx/a0sqt4uSVflyz7rDDg84/KB4mhRttl6cAAAAASUVORK5CYII=';
 
-
-
     return (
-
 
       <div>
 
@@ -1094,7 +1095,7 @@ class DashBoard extends Component {
 
         {(this.state.newWish && this.state.preference1) &&
 
-          < div className="dashBoardContainer">
+          /*< div className="dashBoardContainer">
             <div className="dashBoardContentDrag borderDesign">
               <Card
                 size="small"
@@ -1117,9 +1118,9 @@ class DashBoard extends Component {
                 </div>
 
                 <div style={{ textAlign: 'center'}}>
-                  {/* {this.props.flight_direction && (
+                  {/!* {this.props.flight_direction && (
                     <RadioButtonList dispatcher_func={SetFlightDirection} data={this.props.flight_direction} />
-                  )} */}
+                  )} *!/}
                   <div className={'main_radio_block'}>
                     <div className={'sub_radio_block unselectable'} style={{ backgroundColor: '#FFDC82' }} onClick={this.checkboxTransAir}>
                       <div className={'radio_circle'} style={{ backgroundColor: this.state.colorTransAir }}></div>
@@ -1155,7 +1156,7 @@ class DashBoard extends Component {
 
                     </Select>,
                   </div>
-                  {/* <RadioButtonList /> */}
+                  {/!* <RadioButtonList /> *!/}
                 </div>
                 <Button
                     type="primary"
@@ -1203,7 +1204,120 @@ class DashBoard extends Component {
                   </Button>
                 }
 
-                {/* 
+                {/!*
+                <Button
+                  type="primary"
+                  className='bidding-btn-step--back'
+                  style={{ float: 'right', marginRight: '0px' }}
+                  onClick={this.stepBack}
+                >
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
+                </Button> *!/}
+              </Card>
+            </div>
+          </div>*/
+        < div className="dashBoardContainer">
+          <div className="dashBoardContentDrag borderDesign">
+            <Card
+                size="small"
+                bordered={false}
+                className="userCardSlider"
+            >
+              <div className='newForm'>Новая Заявка &nbsp;
+                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z"
+                      fill="#282828"
+                  />
+                  <path
+                      d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z"
+                      fill="#282828"
+                  />
+                </svg>
+                <span className='newForm2'>&nbsp;&nbsp;&nbsp; 1. Направление полета</span> &nbsp;&nbsp;&nbsp;
+                <span className='newForm3'>Выберите нужные варианты</span>
+              </div>
+
+              <div className="step-city-select">
+                  <Select
+                      mode="multiple"
+                      className="select-city"
+                      placeholder="Введите название города"
+                      onChange={this.handleSelect}
+                  >
+                    {this.state.cities && this.state.cities.map(el => (
+                        <Option value={el} key={el}>
+                          <div className="demo-option-label-item">
+                            {el}
+                          </div>
+                        </Option>
+                    ))}
+                  </Select>
+                <div className="area-tags" >
+                  {this.state.areaTags && this.state.areaTags.map(el => (
+                      <div className="area-tags--city">{el}</div>
+                  ))}
+                </div>
+                </div>
+              <Button
+                  type="primary"
+                  className='bidding-btn-step--skip'
+                  onClick={this.step3Clear}
+              >
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                  <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                  <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                </svg>
+                <span style={{ marginLeft: '8px' }}>Пропустить</span>
+              </Button>
+              {!this.state.checkboxTransAirCoontinent &&
+              <Button
+                  type="primary"
+                  className='bidding-btn-step'
+                  style={{ float: 'right', marginRight: '0px' }}
+                  onClick={this.step3}
+                  disabled
+              >
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                <span style={{ marginLeft: '15px' }}>Подтвердить</span>
+              </Button>
+              }
+              {this.state.checkboxTransAirCoontinent &&
+              <Button
+                  type="primary"
+                  className='bidding-btn-step'
+                  style={{ float: 'right', marginRight: '0px' }}
+                  onClick={this.step3}
+              >
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                <span style={{ marginLeft: '15px' }}>Подтвердить</span>
+              </Button>
+              }
+
+              {/*
                 <Button
                   type="primary"
                   className='bidding-btn-step--back'
@@ -1224,9 +1338,9 @@ class DashBoard extends Component {
                       </svg>
                     </span>
                 </Button> */}
-              </Card>
-            </div>
+            </Card>
           </div>
+        </div>
         }
 
         {
