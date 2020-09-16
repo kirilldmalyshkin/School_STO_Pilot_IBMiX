@@ -37,7 +37,7 @@ class CalendarWithButtons extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMenu: false;
+      isMenu: false
     }
   }
   componentDidMount() {
