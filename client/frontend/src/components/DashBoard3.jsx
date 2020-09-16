@@ -1,5 +1,10 @@
 import React, { Suspense, Component } from 'react';
 import plane from '../images/plane.jpg';
+import circle_0 from '../images/0%.png';
+import circle_25 from '../images/25%.png';
+import circle_50 from '../images/50%.png';
+import circle_75 from '../images/75%.png';
+import circle_100 from '../images/100%.png';
 import moment from 'moment';
 import logo from '../images/logo.png';
 import ItemList from '../components/DnD/itemList';
@@ -315,34 +320,23 @@ class DashBoard extends Component {
   showDiagram = (flag1, flag2, flag3, flag4) => {
     let arr = [flag1, flag2, flag3, flag4]
     let count1 = 0;
-    let count2 = 0;
 
     for (let i = 0; i < arr.length; i++) {
       if (arr[i] === true) {
         count1++
-      } else {
-        count2++
       }
-
     }
 
-    console.log(count1, count2)
-
     if (count1 === 0) {
-      console.log('0/100')
-      return '0/100'
+      return circle_0
     } else if (count1 === 1) {
-      console.log('25/75')
-      return '25/75'
+      return circle_25
     } else if (count1 === 2) {
-      console.log('50/50')
-      return '50/50'
+      return circle_50
     } else if (count1 === 3) {
-      console.log('75/25')
-      return '75/25'
+      return circle_75
     } else if (count1 === 4) {
-      console.log('100/0')
-      return '100/0'
+      return circle_100
     }
   };
 
@@ -781,7 +775,6 @@ class DashBoard extends Component {
   };
 
 
-
   render() {
     const { TabPane } = Tabs;
     const { cities } = this.state;
@@ -829,8 +822,14 @@ class DashBoard extends Component {
     }
 
     let points = 100 - onePreference - twoPreference - thirdPreference - fourthPreference - fithPreference
+    let count_satisfied_wishes = 0;
 
+    let date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    let firstDay = new Date(y, m, 1);
+    let lastDay = new Date(y, m + 1, 0);
 
+    firstDay = moment(firstDay).format('MM / DD / YYYY');
+    lastDay = moment(lastDay).format('MM / DD / YYYY');
 
     return (
 
@@ -855,8 +854,8 @@ class DashBoard extends Component {
                 <span className='bidding-info--finish'>Финиш подачи</span>
               </div>
               <div className='bidding-date'>
-                <span className='bidding-date--digit'>01.09.2020</span>
-                <span className='bidding-date--digit'>30.09.2020</span>
+                <span className='bidding-date--digit'>{firstDay}</span>
+                <span className='bidding-date--digit'>{lastDay}</span>
               </div>
               <div className='date-clock'>
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
@@ -1827,7 +1826,7 @@ class DashBoard extends Component {
             {this.props.user.arrWish &&
               this.props.user.arrWish.map((user, key) =>
                 <Card key={key} color="primary" className="userCardW shadow-sm" bordered={true}>
-                  <div style={{ width: '60%', float: 'inherit' }}>
+                  <div style={{ width: '60%', display: "inline-block" }}>
                     <div className="userCard1" style={{ width: '70%' }}>
                       <div style={{ marginLeft: '10px' }}><font face="Arial" color={'#ffffff'} size={4}>{user.month.description}</font>
                       </div>
@@ -1876,11 +1875,12 @@ class DashBoard extends Component {
                           </CardBody>
                         </Cardr>
                       </UncontrolledCollapse>
-                      <br />
-                      {user && this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag)} + вывод соответствующей картинки
-
                     </div>
                   </div>
+                  <div style={{ float: 'right', margin: '60px'}} >
+                  {user && <img style={{width: "100px"}} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag)} />}
+                  </div>
+
 
                 </Card>)}
 

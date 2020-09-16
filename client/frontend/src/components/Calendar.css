@@ -1,9 +1,27 @@
-.workDay{
-    border: 2px solid rgba(156, 136, 255, 0.7) !important;
+.filler {
+    width: 0%;
+    background-color: brown;
+    height: 0%;
+    border-radius: 50%;
+    transition: width 5s;
+}
+.filler.filled {
+    width: 300%;
+    height: 300%;
 }
 
-.responsive-calendar {
-    /* by setting font-size, all the elements will correspond */
-    font-size: 10px !important; /* default to 10px */
-    margin: auto;
-}
+.purpleDay:not(.-selectedStart):not(.-selectedBetween):not(.-selectedEnd):not(.-selected) {
+    border: 2px solid rgba(156, 136, 255, 0.7) !important;
+  }
+  
+  .orangeDay:not(.-selectedStart):not(.-selectedBetween):not(.-selectedEnd):not(.-selected) {
+    border: 2px solid rgba(219, 145, 60, 0.7) !important;
+  }
+  
+  .yellowDay:not(.-selectedStart):not(.-selectedBetween):not(.-selectedEnd):not(.-selected) {
+    border: 2px solid rgba(228, 231, 36, 0.7) !important;
+  }
+  
+  .navyBlueDay:not(.-selectedStart):not(.-selectedBetween):not(.-selectedEnd):not(.-selected) {
+    border: 2px solid rgba(52, 73, 94, 0.7) !important;
+  }

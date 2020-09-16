@@ -4,7 +4,7 @@ export const data = [
         style: 'flight_direction',
     },
     {
-        name: "Продолжительность\nсмены",
+        name: "Продолжительнсоть\nсмены",
         style: 'duration',
     },
     {
@@ -19,5 +19,8 @@ export const data = [
         name: "Время вылета",
         style: 'time_of_fly'
     },
-
+    {
+        name: "Время вылета2",
+        style: 'time_of_fly2'
+    },
 ]
