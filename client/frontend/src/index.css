@@ -168,34 +168,32 @@ a {
 }
 
 .yourTrip{
-    font-family: Gotham Pro;
     font-style: normal;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 18px;
     line-height: 17px;
-    margin-top: 30px;
+    margin-top: 21px;
+    margin-bottom: 23px;
 }
 
 .yourTrip1{
-    font-family: Gotham Pro;
     font-style: normal;
-    font-weight: bold;
-    font-size: 21px;
+    font-weight: 500;
+    font-size: 18px;
     line-height: 17px;
-    margin-top: 30px;
+    margin-bottom: 20px;
 }
 
 
 .mediumText{
-    font-family: Gotham Pro;
     font-style: normal;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 13px;
+    font-weight: bold;
+    line-height: 17px;
+    margin-top: 28px;
+    margin-bottom: 23px;
 }
 
 .sortString{
-    font-family: Gotham Pro;
     font-style: normal;
     font-weight: bold;
     font-size: 16px;
@@ -210,9 +208,8 @@ a {
 }
 
 .dashBoardContent {
-
     width: 60%;
-    padding: 30px;
+    padding: 0 18px 18px 18px;
     margin-right: 30px;
     background: #F3F3FF;
     box-shadow: 0px 0px 6px #F3F3FF;
@@ -254,18 +251,19 @@ a {
 }
 
 .userCardW{
-    border-radius: 30px !important;
-    /* padding: 8px 8px 0 8px !important; */
-    margin: 5px !important;
-    background-color: #ffffff !important;
+    box-shadow: 0px 0px 9.53px -0.95px rgba(158, 158, 158, 0.25)!important;
+    border: unset !important;
+    border-radius: 15px !important;
+    margin-bottom: 20px !important;
+    background-color: #ffffff;
+    padding: 20px 12px 42px 12px;
 }
 
 
 .userCardWP{
-    border-radius: 30px !important;
-    /* padding: 8px 8px 0 8px !important; */
-    margin: 5px !important;
-    background-color: #f3f3ff !important;
+    box-shadow: 0px 0px 10px -1px rgba(158, 158, 158, 0.25) !important;
+    border-radius: 15px !important;
+    margin-bottom: 20px !important;
 }
 
 .userCardGreen{
@@ -296,26 +294,79 @@ a {
 
 
 .sUserCard{
-    border-radius: 30px !important;
-    /* padding: 8px 8px 0 8px !important; */
-    margin: 5px !important;
-    background-color: #ffdc82 !important;
+    float: right;
+    cursor: pointer;
 }
 
 .userCard{
+    margin: 0 auto;
     width: 100% !important;
-    border-radius: 30px !important;
-    /* padding: 8px 8px 0 8px !important; */
-    margin: 5px !important;
+    height: 47px !important;
+    border-radius: 10.69px !important;
+    margin-bottom: 7px !important;
+    padding: 10px 0 10px 11px !important;
     background-color: #7d58ff !important;
+    align-items: center;
+    display: inline-flex;
 }
 
 .userCard1{
+    margin: 0 auto;
     width: 100% !important;
-    border-radius: 30px !important;
-    /* padding: 8px 8px 0 8px !important; */
-    margin: 5px !important;
+    height: 47px !important;
+    border-radius: 10.69px !important;
+    margin-bottom: 7px !important;
+    padding: 10px 0 10px 11px !important;
+    align-items: center;
+    display: inline-flex;
     background-color: #5459cd !important;
+}
+
+.flight-number {
+    margin: 5px 0 5px 0;
+    background: #FFFFFF;
+    border-radius: 7.129px;
+    width: 61.31px;
+    height: 19.96px;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12.8322px;
+    line-height: 12px;
+    color: #5459cd;
+    padding: 5px 15px 2.85px 15px;
+}
+
+.flight-info {
+    margin: 0 auto;
+    flex: 0 1 auto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 11px;
+
+    color: #FFFFFF;
+}
+
+.flight-trip {
+    display: inline-flex;
+    margin: 0;
+}
+
+.flight-date {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+.flight-date > svg {
+    margin-right: 7px;
+}
+
+.flight-divider {
+    width: 1px;
+    height: 27px;
+    background: #FFFFFF;
+    border-radius: 16.3967px;
 }
 
 .tagFlights{

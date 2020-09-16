@@ -1973,10 +1973,10 @@ class DashBoard extends Component {
 
         <div className="dashBoardContainer">
           <div className="dashBoardContent">
-            <div className='yourTrip' style={{ marginBottom: '15px' }}><font face="Arial Black">Заявка на текущий период:</font></div>
+            <div className='yourTrip'>Заявка на текущий период:</div>
             <Card
               color="primary"
-              className="userCardW shadow-sm"
+              className="userCardW"
               bordered={false}
             >
               {(!this.props.user.wishForm &&
@@ -1988,9 +1988,7 @@ class DashBoard extends Component {
                 <div className="userCard1" style={{ width: '70%' }}>
                   {(!this.props.user.wishForm &&
                     <div className='greyMediumText' style={{ marginLeft: '100px' }}>
-                      <font face="Arial Black">
                         Не заполнена
-                        </font>
                     </div>) ||
                     (this.props.user.wishForm &&
                       <div style={{ marginLeft: '10px' }}>
@@ -2005,21 +2003,21 @@ class DashBoard extends Component {
                       <Buttonr
                         // onClick={this.step}
                         color="none"
-                        className="userCardWP hoverCard shadow-lg"
+                        className="userCardWP hoverCard "
                       >
                         <font color={'#5a5a5a'}>Направление: {user.longFly}</font>
                       </Buttonr>
                       <Buttonr
                         // onClick={this.step3}
                         color="none"
-                        className="userCardWP hoverCard shadow-lg"
+                        className="userCardWP hoverCard "
                       >
                         <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly}</font>
                       </Buttonr>
                       <Buttonr
                         // onClick={() => this.changeWork(user.otherTime)}
                         color="none"
-                        className="userCardWP hoverCard shadow-lg"
+                        className="userCardWP hoverCard "
                       >
                         <font color={'#5a5a5a'}>Подработка: {user.otherTime}</font>
                       </Buttonr>
@@ -2027,7 +2025,7 @@ class DashBoard extends Component {
                       <Buttonr
                         // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
                         color="none"
-                        className="userCardWP hoverCard shadow-lg"
+                        className="userCardWP hoverCard "
                       >
                         <font color={'#5a5a5a'}>Предпочтительное время вылета:
                         {user.preferenceTimeFly[0] === "Не заполнено" && "Не заполнено"}
@@ -2039,7 +2037,7 @@ class DashBoard extends Component {
                       <Buttonr
                         // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
                         color="none"
-                        className="userCardWP hoverCard shadow-lg"
+                        className="userCardWP hoverCard "
                       >
                         <font color={'#5a5a5a'}>Выходные дни:
                         {user.selectedDates[0] === "Не заполнено" && " Не заполнено"}
@@ -2085,18 +2083,18 @@ class DashBoard extends Component {
 
             </Card>
 
-            <div className='mediumText'><font face="Arial Black">История заявок:</font></div>
+            <div className='mediumText'>История заявок:</div>
 
             {this.props.user.arrWish &&
               this.props.user.arrWish.map((user, key) =>
-                <Card key={key} color="primary" className="userCardW shadow-sm" bordered={true}>
+                <Card key={key} color="primary" className="userCardW " bordered={true}>
                   <div style={{ width: '60%', float: 'inherit' }}>
                     <div className="userCard1" style={{ width: '70%' }}>
                       <div style={{ marginLeft: '10px' }}><font face="Arial" color={'#ffffff'} size={4}>{user.month.description}</font>
                       </div>
                     </div>
                     <div>
-                      <Buttonr color="none" id={"form" + key + "toggler1"} className={user.longFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                      <Buttonr color="none" id={"form" + key + "toggler1"} className={user.longFly[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
                         <font color={'#5a5a5a'}>Направление: {user.longFly[0].fly}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler1"}>
@@ -2107,7 +2105,7 @@ class DashBoard extends Component {
                         </Cardr>
                       </UncontrolledCollapse>
 
-                      <Buttonr color="none" id={"form" + key + "toggler2"} className={user.otherTime[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                      <Buttonr color="none" id={"form" + key + "toggler2"} className={user.otherTime[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
                         <font color={'#5a5a5a'}>Подработка: {user.otherTime[0].time}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler2"}>
@@ -2118,7 +2116,7 @@ class DashBoard extends Component {
                         </Cardr>
                       </UncontrolledCollapse>
 
-                      <Buttonr color="none" id={"form" + key + "toggler3"} className={user.timeFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                      <Buttonr color="none" id={"form" + key + "toggler3"} className={user.timeFly[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
                         <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly[0].flyTime}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler3"}>
@@ -2129,7 +2127,7 @@ class DashBoard extends Component {
                         </Cardr>
                       </UncontrolledCollapse>
 
-                      <Buttonr color="none" id={"form" + key + "toggler4"} className={user.preferenceTimeFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
+                      <Buttonr color="none" id={"form" + key + "toggler4"} className={user.preferenceTimeFly[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
                         <font color={'#5a5a5a'}>Предпочтительное время вылета: {user.preferenceTimeFly[0].dayTime}</font>
                       </Buttonr>
                       <UncontrolledCollapse toggler={"#form" + key + "toggler4"}>
@@ -2319,15 +2317,9 @@ class DashBoard extends Component {
 
                 <CalendarWithButtons highlighted={this.state.workingDays} />
               </div>
-              <div className='yourTrip1'><font face="Arial Black">Ваши Рейсы</font></div>
-              <div className="userCardW">
-
-                <Card className='sUserCard hoverCard' onClick={this.showSort}> <font className="sortString"
-                  face="Arial Black"><font
-                    face="Arial Black" color={'#615d73'}>Сортировка</font></font>
-                </Card>
-
-
+              <div className="userCardW" style={{ marginTop: '30px' }}>
+                <div className='yourTrip1'>Ваши Рейсы</div>
+                <div className='sUserCard' onClick={this.showSort}>Сортировка</div>
                 <Suspense fallback={<h1>Loading posts....</h1>}>
                   {this.props.user.arrFlights &&
 
@@ -2351,56 +2343,63 @@ class DashBoard extends Component {
                         let depart_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACUUlEQVQ4jc2UXW/SYBTHzwNF3UbpoGsoLw60cxqmqJkhW7KNGS92N7f5Fj+Bt+5r+AH8BBovvFiyi10Yo0uEjLgxsDI3KWVhoYAB9wJDysuoFyULlm7owoXnqj3Pv7/nPP+n56CHT4PQidB0hPJfgrAzf2nExZsDOX1XNbvfFYmTSpARF6fH4m4mF+YoH2vbThtaERayODPOT9wSMG1dzghZvRI0ej0z5UnosHq/uTA9Fheyen/E6metqVwPADjo/OwEPzqU0vxpiZDrUYKWVpxhjno2w7ocuwBAk0WKKEkSXLHvz3ljw1d/IKQs8PM3+uWCG6n+RwjBveEdB51f9DFm469Zb8zN5BQaSYJg1LywPBBN9sJJZksSvF/rdzO5549Dgxf3WlbRepR6+3GQF4jjJPZgknPShcAGvf7dXKpoAQAhacSVmZvknfSB6jav3l1b9F1WJDEuaXx0lxsZSldrmi88xe30em8nrX1FVYRcjp+1tOa1pG1eyOo9rgymlax9xRvMT7y72qwoV7WJjMFkKMuvmwlyKXCpFYQBwMqGpfYGzT8J6bB6084QTxHLIfsn1jblSTC2xjF9rFW10obZq1v0i9d37o/zlZpGyOq30wTLUweH5+RV0iDKD7UjTSCici5ovrVwjArHKFURSZSONYWSTlXzV01LEg2DVG3+B5AJLwFAuaJd2zKfHaTD6nh3BQBWN81i5cRp0R5kwkW5v3xfbafI2s8jEyHWjjQfgvYwp34Vcqg3bXMY8TJC0m7+wumy9hXtFc631UAHZ/ZvaYTXa4YHSp4AAAAASUVORK5CYII=';
                         let depart_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVQ4jc2UQW/SYBjHn5e+WzJmYZMaimyRUBxCWUaiwahQyHZWb84v44fwOxhv6sWTHiQDZIdNhQ46ug7cgAGWTQdkc4xaD53LhApKOPic3v777+/5p0+foiePVRhFGUZC+S9BeOgnSbLJuPLGie/fDs35bUc3iCSb90JJhilsiQyf9lUqdC/CYjkIcYkFP08QiqbUZaobxPqEQGAd447V+iUYStZliudZnmfrsgUArHSN4xKsL2sw/DZruW7pBq0mA5LEPHj42uHYBYBpy8GU+VD9gWZmylwk7naLCHUHFLI3Xr28j3S/I4Tg5q0PVrqWiN2dvvyV4+KMq9DlUVUQxbmVaLBYtAOAPkgrxlVYXIrOzpZ6EEjMuaLvwuWy7VzE4UiMttWyGY+Yu35yMg4ACKleVghHEjRd1W3w9s1SPHanS8Slkj2yuMKyQqeDt7edxV2735+mruz/KaaqonSK7dWJ+atP6zLl8eYwoVDUvpP5bJw8vuhon45Vq1aTqaVd7uxcW00GekEYADIbXkUhHi2/wFi50Bn29myfPi6kU/OB22t2e0XT+ZRPN+nZ+DcF9/Nny0HufaeDZZmqVOi85Gy1JrW7JlNDOygKkdnw9AMBgCQxksToms5BksQcHU/oev5qac1TTe2g+5r/AUSSDQA4bY/lNueGB2GsGI1HACAI7nZ7fHgQSTa0/eJ5/Xmd9RsIMpmbikKsr/m3RP1RaNVv134laiGkNhpkf9vgRM3mpYEeGOE/+yep49ifb88TZgAAAABJRU5ErkJggg==';
                         if (i % 2 == 0) {
-                          styl = 'userCard hoverCard shadow-sm';
+                          styl = 'userCard hoverCard ';
                           depart = depart_purple;
                           land = landing_purple;
                         } else {
-                          styl = 'userCard1 hoverCard shadow-sm';
+                          styl = 'userCard1 hoverCard ';
                           depart = depart_blue;
                           land = landing_blue;
                         }
 
                         return (
                           <div>
-                            <Buttonr id={"flight" + i + "toggler"}
-                              //onClick={() => this.showModal(user)}
+                            <div
+                              id={"flight" + i + "toggler"}
                               className={styl}
-                            // cover={
-                            //     <img
-                            //         style={{ borderRadius: "10px 10px 0px 0px" }}
-                            //         alt="example"
-                            //         src={srcImg}
-                            //     />
-                            // }
-
                             >
-
-
-                              {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
-                                        <p>
-                                            <div
-                                                className={'fontModal'}>Информация
-                                    </div>
-                                        </p>
-                                    } type="info" /> */}
-                              <div style={{ float: 'left' }}>
-                                <Tag className="userCardW"><font size={2} color={'#5459cd'}><b>123456</b></font></Tag>
+                             {/* <div style={{ float: 'left' }}>
+                                <div className="flight-number">1234</div>
                               </div>
                               <div style={{ float: 'left' }}>
-                                <font size={2} color={'#ffffff'}>Отбытие</font> <br />
+                                <span>Отбытие</span>
                                 <img src={depart}></img>
-                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_departure}</font>
+                                <span className="textRight">{user.time_of_departure}</span>
                               </div>
                               <div color={'#ffffff'} style={{ width: '2px', height: '55px', float: 'left' }}
                                 className="userCardW">
                               </div>
                               <div style={{ float: 'left' }}>
-                                <font size={2} color={'#ffffff'}>Прибытие</font> <br />
+                                <span >Прибытие</span>
                                 <img src={land}></img>
-                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_arrival}</font>
+                                <span className="textRight">{user.time_of_arrival}</span>
+                              </div>*/}
 
+                              <div className="flight-number">1234</div>
+                              <div className='flight-info'>
+                                <span className='flight-trip'>Отбытие</span>
+                                <span className='flight-date'>
+                              {/*    <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.2774 1.10973C12.2246 1.02708 12.1586 0.971973 12.0794 0.91687C12.0794 0.91687 11.0893 0.544922 10.5348 0.544922C9.68988 0.544922 9.05619 0.889318 8.35649 1.31637C8.09246 1.48168 7.80201 1.66077 7.48517 1.85363C7.48517 1.85363 7.48517 1.85363 7.47197 1.85363L4.42234 1.30259C4.36953 1.28882 4.31673 1.30259 4.27712 1.31637L3.78865 1.55056C3.66983 1.60566 3.66983 1.78475 3.78865 1.83985L5.80854 2.85926C5.82174 2.85926 5.82174 2.87304 5.80854 2.88682C4.68638 3.58938 3.70944 4.18175 3.70944 4.18175C3.69624 4.18175 3.68304 4.19552 3.68304 4.19552C3.28698 4.42971 2.82492 4.51237 2.37605 4.40216L1.2935 4.14042C1.24069 4.12664 1.17468 4.12664 1.12188 4.14042C0.92385 4.2093 0.871042 4.47104 1.02946 4.62257L2.24403 5.77974C2.42886 5.95883 2.7061 6.01393 2.94373 5.9175L3.55102 5.65576L6.9703 4.15419L11.8418 2.06026C12.317 1.85363 12.5019 1.44035 12.2774 1.10973Z" fill="#FFDC82"/>
+                                    <path d="M7.90797 4.23682L6.46897 4.87051L6.19173 6.11033C6.17853 6.17921 6.23134 6.24809 6.29735 6.24809H6.44257C6.6406 6.24809 6.81222 6.15166 6.91784 5.97257L7.90797 4.23682Z" fill="#FFDC82"/>
+                                  </svg>*/}
+                                  {user.time_of_departure}
+                                </span>
                               </div>
-                            </Buttonr>
+                              <div className='flight-divider'>
+                              </div>
+                              <div className='flight-info'>
+                                <span className='flight-trip'>Прибытие</span>
+                                <span className='flight-date'>
+                    {/*              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11.917 8.74699C11.9381 8.6512 11.9304 8.56556 11.9133 8.47059C11.9133 8.47059 11.4762 7.50745 11.0841 7.11537C10.4867 6.51793 9.79507 6.31337 8.99833 6.12057C8.69474 6.05076 8.36273 5.97203 8.00232 5.88436C8.00232 5.88436 8.00232 5.88436 7.99298 5.87502L6.22621 3.32897C6.19861 3.28189 6.15153 3.25429 6.11378 3.23602L5.60279 3.05622C5.47981 3.01117 5.35317 3.1378 5.39822 3.26078L6.10566 5.40989C6.115 5.41922 6.10526 5.42896 6.08618 5.42937C4.79591 5.13268 3.68625 4.86074 3.68625 4.86074C3.67691 4.8514 3.65783 4.85181 3.65783 4.85181C3.21218 4.73735 2.82701 4.46907 2.58754 4.07375L2.00714 3.12319C1.97954 3.07611 1.93287 3.02943 1.88578 3.00183C1.69705 2.91051 1.47463 3.05825 1.4795 3.27742L1.52009 4.9545C1.52415 5.21182 1.68122 5.44682 1.91744 5.54667L2.53194 5.791L6.0115 7.14703L10.9368 9.11106C11.419 9.30101 11.8419 9.13947 11.917 8.74699Z" fill="#FFDC82"/>
+                                    <path d="M6.61613 7.86857L5.15051 7.29913L4.07779 7.97978C4.01975 8.01915 4.00838 8.1052 4.05506 8.15187L4.15774 8.25456C4.29777 8.39458 4.48731 8.44775 4.68863 8.3958L6.61613 7.86857Z" fill="#FFDC82"/>
+                                  </svg>*/}
+                                  {user.time_of_arrival}
+                                </span>
+                              </div>
+
+                            </div>
                             <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
                               <Cardr className="userCardW">
                                 <CardBody>
@@ -2428,7 +2427,7 @@ class DashBoard extends Component {
         </div>
 
 
-        <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: '80%' }}
+        <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: '90%' }}
           align={'center'}>
           <p>Зарегистрировано пользователей IBMiX : {this.state.usersLength}</p>
 
