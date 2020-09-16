@@ -317,8 +317,6 @@ class DashBoard extends Component {
     // })
   };
 
-
-
   onChangeLongWork = (checked) => {
     this.setState({ showLongWork: checked });
   };
