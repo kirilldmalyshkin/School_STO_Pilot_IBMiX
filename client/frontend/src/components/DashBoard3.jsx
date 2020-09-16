@@ -317,6 +317,7 @@ class DashBoard extends Component {
     // })
   };
 
+
   showDiagram = (flag1, flag2, flag3, flag4) => {
     let arr = [flag1, flag2, flag3, flag4]
     let count1 = 0;
