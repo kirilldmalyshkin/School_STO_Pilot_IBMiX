@@ -356,6 +356,7 @@ class DashBoard extends Component {
     });
   };
 
+
   filterTime = (time) => {
     return this.state.minTime <= time && time <= this.state.maxTime;
   };
@@ -1877,8 +1878,8 @@ class DashBoard extends Component {
                       </UncontrolledCollapse>
                     </div>
                   </div>
-                  <div style={{ float: 'right', margin: '60px'}} >
-                  {user && <img style={{width: "100px"}} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag)} />}
+                  <div style={{ float: 'right', margin: '60px' }} >
+                    {user && <img style={{ width: "100px" }} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag)} />}
                   </div>
 
 
