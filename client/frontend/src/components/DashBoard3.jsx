@@ -318,29 +318,6 @@ class DashBoard extends Component {
   };
 
 
-  showDiagram = (flag1, flag2, flag3, flag4) => {
-    let arr = [flag1, flag2, flag3, flag4]
-    let count1 = 0;
-
-    for (let i = 0; i < arr.length; i++) {
-      if (arr[i] === true) {
-        count1++
-      }
-    }
-
-    if (count1 === 0) {
-      return circle_0
-    } else if (count1 === 1) {
-      return circle_25
-    } else if (count1 === 2) {
-      return circle_50
-    } else if (count1 === 3) {
-      return circle_75
-    } else if (count1 === 4) {
-      return circle_100
-    }
-  };
-
 
   onChangeLongWork = (checked) => {
     this.setState({ showLongWork: checked });
