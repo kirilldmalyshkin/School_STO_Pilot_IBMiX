@@ -263,13 +263,18 @@ a {
     background-color: #F3F3FF !important;
 }
 
-.userCardW{
+.userCardW {
     box-shadow: 0px 0px 9.53px -0.95px rgba(158, 158, 158, 0.25)!important;
     border: unset !important;
-    border-radius: 15px !important;
+    border-radius: 10px !important;
     margin-bottom: 20px !important;
     background-color: #ffffff;
-    padding: 20px 12px 42px 12px;
+    padding: 20px 12px 20px 12px;
+    font-size: 14px;
+}
+
+.userCardW span {
+    font-weight: 600;
 }
 
 .bidding-status-card {

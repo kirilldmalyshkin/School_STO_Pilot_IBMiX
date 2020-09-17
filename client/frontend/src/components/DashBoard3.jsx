@@ -2333,7 +2333,7 @@ class DashBoard extends Component {
                 <CalendarWithButtons highlighted={this.state.workingDays} />
               </div>
               <div className="userCardW" style={{ marginTop: '30px' }}>
-                <div className='yourTrip1'>Ваши Рейсы</div>
+                <div className='yourTrip1'>Ваши рейсы</div>
                 <div className='sUserCard' onClick={this.showSort}>
                   <span className='sort-func-title'>Сортировка</span>
                   <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2416,23 +2416,6 @@ class DashBoard extends Component {
                               id={"flight" + i + "toggler"}
                                 className={styl}
                               >
-                               {/* <div style={{ float: 'left' }}>
-                                  <div className="flight-number">1234</div>
-                                </div>
-                                <div style={{ float: 'left' }}>
-                                  <span>Отбытие</span>
-                                  <img src={depart}></img>
-                                  <span className="textRight">{user.time_of_departure}</span>
-                                </div>
-                                <div color={'#ffffff'} style={{ width: '2px', height: '55px', float: 'left' }}
-                                  className="userCardW">
-                                </div>
-                                <div style={{ float: 'left' }}>
-                                  <span >Прибытие</span>
-                                  <img src={land}></img>
-                                  <span className="textRight">{user.time_of_arrival}</span>
-                              </div>*/}
-
                                 <div className="flight-number">1234</div>
                               <div className='flight-info'>
                                 <span className='flight-trip'>Отбытие</span>
@@ -2461,14 +2444,10 @@ class DashBoard extends Component {
                               <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
                                 <Cardr className="userCardW">
                                   <CardBody>
-                                    {'Маршрут: ' + user.where_from + ' - ' + user.where_to} <br />
-                                    {'Аэропорт: ' + user.airport_name}<br />
-                                    {'Время в полете: ' + user.flight_time}<br />
-                                    {'Сложность аэропорта: ' + user.level_flights}
-
-
-
-
+                                    <span>Маршрут:</span> {user.where_from + ' - ' + user.where_to} <br />
+                                    <span>Аэропорт:</span> {user.airport_name}<br />
+                                    <span>Время в полете:</span> {user.flight_time}<br />
+                                    <span>Сложность аэропорта:</span> {user.level_flights}
                                   </CardBody>
                                 </Cardr>
                               </UncontrolledCollapse>
