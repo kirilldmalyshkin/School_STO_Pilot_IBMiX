@@ -130,6 +130,12 @@
 
 .stats-icon {
     margin-right: 82px;
+    cursor: pointer;
+    border-radius: 45px;
+}
+
+.stats-icon:hover {
+    box-shadow: 0 0 10px -1px rgb(21, 168, 236);
 }
 
 .bidding-stats--first {
@@ -155,14 +161,206 @@
 }
 
 .bidding-btn-step {
+    margin-top: 21px;
     margin-left: 10px;
     background: #5459CD;
     border-color: #5459CD;
-    width: 160px;
+    width: 145px;
     box-shadow: 0 12px 12px -8px rgba(84, 89, 205, 0.5);
     border-radius: 10px;
     font-style: normal;
     font-weight: normal;
     font-size: 12px;
     line-height: 12px;
+}
+
+.bidding-btn-step:disabled {
+    background-color: #979797;
+    border-color: #979797;
+    box-shadow: 0 12px 12px -8px rgba(99, 99, 99, 0.5);
+    color: #FFFFFF;
+}
+
+.bidding-btn-step:disabled:hover {
+    background-color: #979797;
+    border-color: #979797;
+    box-shadow: 0 12px 12px -8px rgba(99, 99, 99, 0.5);
+    color: #FFFFFF;
+}
+
+.bidding-btn-step--back {
+    margin-top: 21px;
+    margin-left: 10px;
+    background: #6686FF;
+    border-color: #6686FF;
+    box-shadow: 0 12px 12px -8px rgba(102, 134, 255, 0.5);
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.bidding-btn-step--skip {
+    margin-top: 21px;
+    margin-left: 10px;
+    background: #FFFFFF;
+    border: unset;
+    color: #000000;
+    width: 145px;
+    border-radius: 10px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 12px;
+    box-shadow: unset;
+}
+
+.bidding-btn-step:hover {
+    background: #7D58FF;
+    border-color: #7D58FF;
+}
+
+.bidding-btn-step:focus {
+    background: #7D58FF;
+    border-color: #7D58FF;
+}
+
+.bidding-btn-step--back:hover {
+    background: #7D58FF;
+    border-color: #7D58FF;
+}
+
+.bidding-btn-step--back:focus {
+    background: #7D58FF;
+    border-color: #7D58FF;
+}
+
+.bidding-btn-step--skip:hover {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 0 16px -6px rgba(99, 99, 99, 0.5);
+}
+
+.bidding-btn-step--skip:focus {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 0 16px -6px rgba(99, 99, 99, 0.5);
+}
+
+.ant-select-selection,
+.ant-select-selection--multiple {
+    border-radius: unset;
+    border-top: unset;
+    border-right: unset;
+    border-left: unset;
+    border-bottom: 1px solid #7D58FF;
+}
+.ant-select-selectionq:focus,
+.ant-select-selection--multiple:focus {
+    box-shadow: unset;
+    border-radius: unset;
+    border-top: unset;
+    border-right: unset;
+    border-left: unset;
+    border-bottom: 1px solid #7D58FF;
+}
+
+.ant-select-selection__placeholder {
+    margin-left: 0;
+}
+
+.ant-select-selection__choice {
+    /*display: none;*/
+}
+
+.select-city {
+    margin-left: 40px;
+    width: 460px;
+    align-self: center;
+}
+
+.area-tags {
+    /*display: inline-flex;*/
+    margin-right: 40px;
+    padding: 13px 18px 0 18px;
+    width: 768px;
+    height: 130px;
+    background: #F6F9FE;
+    box-shadow: inset 0 0 10px -1px rgba(158, 158, 158, 0.25);
+    border-radius: 15px;
+    font-weight: 500;
+    font-size: 11px;
+    line-height: 9px;
+    color: #000000;
+}
+
+.area-tags--grid {
+    padding-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.area-tags--city {
+    width: 163px;
+    height: 24px;
+    margin-left: 14px;
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    box-shadow: 0 0 9.74394px -0.974394px rgba(158, 158, 158, 0.25);
+    border-radius: 22px;
+    transform: rotate(0.12deg);
+    padding: 6px 10px 7px 11px;
+}
+
+.step-city-select {
+    display: flex;
+    justify-content: space-between;
+}
+
+.Calendar {
+    background: unset;
+    box-shadow: unset;
+}
+
+.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-selected  {
+    background-color: #7D58FF;
+    color: #ffffff;
+}
+
+.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-selected .ant-select-selected-icon {
+     color: #ffffff;
+ }
+
+.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-selected .ant-select-selected-icon, .ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-selected:hover .ant-select-selected-icon {
+    color: #ffffff;
+}
+
+.ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-active {
+    background-color: #A187FF;
+    color: #ffffff;
+}
+
+.ant-select-dropdown {
+    background: #F3F3FF;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 0px 0px 10px 10px;
+}
+
+.ant-select-selected-icon {
+    color: #ffffff;
+}
+
+.sort-func-title {
+    margin-right: 4px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.sUserCard {
+    margin-bottom: 7px;
 }
