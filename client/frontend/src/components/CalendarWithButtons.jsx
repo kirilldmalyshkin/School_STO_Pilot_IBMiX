@@ -47,7 +47,9 @@ class CalendarWithButtons extends Component {
   render() {
     return (
       <div>
-        {this.state.isMenu ? <CalendarMenu onExit={() => { this.setState({ isMenu: false }) }} /> : <Calendar highlighted={this.props.highlighted} onChange={() => { this.setState({ isMenu: true }); }} />}
+        {this.state.isMenu ? <CalendarMenu onExit={() => { this.setState({ isMenu: false }) }} /> : <Calendar highlighted={this.props.highlighted} onChange={() => { 
+          // this.setState({ isMenu: true }); 
+          }} />}
       </div>
     )
   }
