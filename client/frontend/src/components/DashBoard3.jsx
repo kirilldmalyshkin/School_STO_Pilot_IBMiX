@@ -329,15 +329,15 @@ class DashBoard extends Component {
     }
 
     if (count1 === 0) {
-      return { image: circle_0, text: 'к сожалению, не удовлетпорена ни одна из заявок' }
+      return {image:circle_0, text: 'к сожалению, не удовлетпорена ни одна из заявок'}
     } else if (count1 === 1) {
-      return { image: circle_25, text: 'удовлетворено 25%' }
+      return {image:circle_25, text: 'удовлетворено 25%'}
     } else if (count1 === 2) {
-      return { image: circle_50, text: 'удовлетворено 50%' }
+      return {image:circle_50, text: 'удовлетворено 50%'}
     } else if (count1 === 3) {
-      return { image: circle_75, text: 'удовлетворено 75%' }
+      return {image:circle_75, text: 'удовлетворено 75%'}
     } else if (count1 === 4) {
-      return { image: circle_100, text: 'удовлетворено 100%' }
+      return {image:circle_100, text: 'удовлетворено 100%'}
     }
   };
 
@@ -1917,12 +1917,12 @@ class DashBoard extends Component {
                       </UncontrolledCollapse>
                     </div>
                   </div>
-                  <div style={{ float: 'right', margin: '60px' }} >
+                  <div style={{ float: 'right', margin: '60px'}} >
                     {user &&
-                      <div>
-                        <img style={{ width: "100px", margin: '20px' }} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).image} />
-                        <font>{this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).text}</font>
-                      </div>
+                        <div>
+                    <img style={{width: "100px", margin: '20px'}} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).image} />
+                    <font>{this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).text}</font>
+                        </div>
                     }
                   </div>
                 </Card>)}
@@ -2255,7 +2255,7 @@ class DashBoard extends Component {
         </div>
 
 
-        <footer style={{ backgroundColor: '#5459CD', color: '#ffffff', margin: '0 auto', width: '80%' }}
+        <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: '80%' }}
           align={'center'}>
           <p>Зарегистрировано пользователей IBMiX : {this.state.usersLength}</p>
 
