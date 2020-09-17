@@ -67,7 +67,7 @@ const content = (
 
 const rulesCount = (
   <div>
-    <p>Коэффициент вероятности учета пожеланий. <br /> При увелечении количества преференций <br /> уменьшается коэфициент вероятности учета <br /> Вашего пожелания </p>
+    <p><b><u>Коэффициент вероятности учета пожеланий</u></b> <br /> При увелечении количества преференций <br /> уменьшается  вероятность учета пожелания </p>
 
   </div >
 );
@@ -229,11 +229,19 @@ class DashBoard extends Component {
 
 
     let longFly;
-    if (this.state.checkboxTransAir) {
-      longFly = 'Трансатлантические'
-    } else if (this.state.checkboxContinent) {
-      longFly = 'Континентальные'
-    } else if (!this.state.checkboxTransAir && !this.state.checkboxContinent) {
+    // if (this.state.checkboxTransAir) {
+    //   longFly = 'Трансатлантические'
+    // } else if (this.state.checkboxContinent) {
+    //   longFly = 'Континентальные'
+    // } else if (!this.state.checkboxTransAir && !this.state.checkboxContinent) {
+    //   longFly = 'Не заполнено'
+    // }
+
+
+
+    if (this.state.areaTags.length !== 0) {
+      longFly = this.state.areaTags
+    } else {
       longFly = 'Не заполнено'
     }
 
@@ -850,6 +858,28 @@ class DashBoard extends Component {
       onePreference = 0
     }
 
+    let cityPreference = 0;
+    console.log(this.state.areaTags.length)
+    if (this.state.areaTags.length === 1) {
+      cityPreference = 5
+    } else if (this.state.areaTags.length === 2) {
+      cityPreference = 10
+    } else if (this.state.areaTags.length === 3) {
+      cityPreference = 15
+    } else if (this.state.areaTags.length === 4) {
+      cityPreference = 20
+    } else if (this.state.areaTags.length === 5) {
+      cityPreference = 25
+    } else if (this.state.areaTags.length === 6) {
+      cityPreference = 30
+    } else if (this.state.areaTags.length === 7) {
+      cityPreference = 35
+    } else if (this.state.areaTags.length === 8) {
+      cityPreference = 40
+    } else if (this.state.areaTags.length === 9) {
+      cityPreference = 40
+    }
+
     let twoPreference;
     if (this.state.timeDay.length !== 0) {
       twoPreference = 15;
@@ -879,7 +909,7 @@ class DashBoard extends Component {
       fithPreference = 0
     }
 
-    let points = 100 - onePreference - twoPreference - thirdPreference - fourthPreference - fithPreference;
+    let points = 100 - cityPreference - twoPreference - thirdPreference - fourthPreference - fithPreference;
 
     let date = new Date(), y = date.getFullYear(), m = date.getMonth();
     let first = new Date(y, m, 1);
@@ -1439,6 +1469,7 @@ class DashBoard extends Component {
                   </svg>
                   <span className='newForm2'>&nbsp;&nbsp;&nbsp; 1. Направление полета</span> &nbsp;&nbsp;&nbsp;
                 <span className='newForm3'>Выберите нужные варианты</span>
+                  <span className='newForm4'>{points}</span>
                 </div>
 
                 <div className="step-city-select">
@@ -2049,7 +2080,9 @@ class DashBoard extends Component {
                     <div className='bidding-status-prefs'>
                       <div className="bidding-prefs-card hoverCard ">
                         <span className='bidding-prefs-card--title'>Направление: </span>
-                        <span>{user.longFly}</span>
+                        <span>{typeof user.longFly === 'object' && user.longFly.join(', ')}</span>
+                        <span>{(typeof user.longFly === 'string') && user.longFly}</span>
+
                       </div>
                       <div className="bidding-prefs-card hoverCard">
                         <span className='bidding-prefs-card--title'>Продолжительность смены: </span>
