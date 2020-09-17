@@ -103,13 +103,16 @@ class Calendar extends Component {
         }
 
         let days = this.props.highlighted;
+        console.log('Снова видны даты', days)
         if (days) {
             days.forEach(day => {
                 day.className = 'workDay'
             });
         }
         return (
-            <ModernCalendar value={this.props.value} colorPrimary="#7D58FF" onChange={this.props.onChange} minimumDate={this.props.minimumDate} maximumDate={this.props.maximumDate} calendarClassName='responsive-calendar' customDaysClassName={days} locale={myCustomLocale} />
+            // <ModernCalendar value={this.props.value} colorPrimary="#7D58FF" onChange={this.props.onChange} minimumDate={this.props.minimumDate} maximumDate={this.props.maximumDate} calendarClassName='responsive-calendar' customDaysClassName={days} locale={myCustomLocale} />
+
+            <ModernCalendar value={this.props.value} colorPrimary="#7D58FF" minimumDate={this.props.minimumDate} maximumDate={this.props.maximumDate} calendarClassName='responsive-calendar' customDaysClassName={days} locale={myCustomLocale} />
         )
     }
 }
