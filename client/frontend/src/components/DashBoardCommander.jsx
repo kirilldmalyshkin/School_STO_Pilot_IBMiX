@@ -349,17 +349,17 @@ class DashBoardCommander extends Component {
               </Radio.Group>
             </div>
             {this.state.valueIframe === 1 &&
-              <Iframe url="https://datalens.yandex/u45zuwto2g02p" width="100%" height={window.innerHeight - 70} />
+              <Iframe className='iframe' url="https://datalens.yandex/u45zuwto2g02p" width="100%" height={window.innerHeight - 70} />
             }
             {this.state.valueIframe === 2 &&
-              <Iframe url="https://datalens.yandex/z8qygi47ww50u?_embedded=1&tab=N6&_theme=dark" width="100%" height={window.innerHeight - 70} />
+              <Iframe className='iframe' url="https://datalens.yandex/z8qygi47ww50u?_embedded=1&tab=N6&_theme=dark" width="100%" height={window.innerHeight - 70} />
             }
           </div>
         </div>
 
 
-        <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: '80%' }}
-          align={'center'}>
+        <footer className='footer-users'
+                align={'center'}>
           <p>Зарегистрировано пользователей IBMiX : {this.state.usersLength}</p>
 
           <div dangerouslySetInnerHTML={{ __html: this.ym() }} />

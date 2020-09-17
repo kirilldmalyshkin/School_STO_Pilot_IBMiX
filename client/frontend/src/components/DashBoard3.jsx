@@ -1,10 +1,17 @@
 import React, { Suspense, Component } from 'react';
 import plane from '../images/plane.jpg';
+import circle_0 from '../images/0%.png';
+import circle_25 from '../images/25%.png';
+import circle_50 from '../images/50%.png';
+import circle_75 from '../images/75%.png';
+import circle_100 from '../images/100%.png';
 import moment from 'moment';
 import logo from '../images/logo.png';
 import ItemList from '../components/DnD/itemList';
 import ItemList_day from '../components/DnD_day/itemList';
-import { UncontrolledCollapse, Button as Buttonr, CardBody, Card as Cardr, Collapse as Collapser, Modal as ModalProfile } from 'reactstrap';
+import { UncontrolledCollapse, Button as Buttonr, CardBody, Card as Cardr, Collapse as Collapser } from 'reactstrap';
+import Calendar from './Calendar'
+import CalendarWithButtons from './CalendarWithButtons';
 import RadioButtonList from './lineFlight/RadioButtonList';
 import RadioButtonList_WorkDay from './WorkTime/RadioButtonList';
 import { data_work_time } from './WorkTime/radio_data';
@@ -13,9 +20,6 @@ import RadioButtonList_WorkTime from './WorkDay/RadioButtonList';
 
 import Profile from './Profile';
 
-import Calendar from './Calendar'
-
-import CalendarWithButtons from './CalendarWithButtons';
 import { Popover, Tabs } from 'antd';
 import {
   Card,
@@ -36,11 +40,13 @@ import { connect } from 'react-redux';
 import { AddPhotoAC, AddUserAC, AddUsersDashBoard, SetPriority, SetFlightDirection, SetDayTime } from '../redux/action';
 import './DashBoard.css';
 
-
-
 function handleChange(value) {
   console.log(`selected ${value}`);
 }
+
+
+
+
 
 const { Option } = Select;
 const { Panel } = Collapse;
@@ -80,24 +86,24 @@ class DashBoard extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      areaTags: [],
+
       modalUser: null,
+      modalProfileShow: false,
       loading: false,
-
       visibleSort: false,
-
       showLongWork: true,
       showShortWork: true,
-
       minTime: 0,
       maxTime: 50000,
-
-      modalProfileShow: false,
-
+      maxTime: 24,
+      minDifficulty: 0,
+      maxDifficulty: 10,
+      cities: null,
       visible: false,
       visible2: false,
       visible4: false,
       flagVisit: false,
-      // isRedirect: false,
       usersLength: null,
       newWish: false,
       preference: false,
@@ -125,7 +131,9 @@ class DashBoard extends Component {
       checkboxLongDayEasyDay: false,
       data: [],
       timeDay: [],
-      newWishForm: []
+      newWishForm: [],
+      citiesSort: [],
+      showSortFilters: false,
     };
   }
 
@@ -133,8 +141,6 @@ class DashBoard extends Component {
 
     this.setState({
       modalUser: {
-        // id: user.id,
-        // about: user.plane.about,
         where_to: user.where_to,
         where_from: user.where_from,
         flight_time: user.flight_time,
@@ -151,7 +157,7 @@ class DashBoard extends Component {
   showSort = () => {
 
     this.setState({
-      visibleSort: true,
+      showSortFilters: !this.state.showSortFilters,
     });
   };
 
@@ -166,19 +172,28 @@ class DashBoard extends Component {
     });
     let usersLength = await reqUsersLength.json();
 
-
     this.setState({ usersLength: usersLength.usersLength });
-
 
     if (this.props.users.length === 0) {
       this.setState({ loading: true });
     }
 
+    const allCities = await fetch('/api/getCities', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    });
+    const cities = await allCities;
+    const citiesRes = await cities.json()
+
+    this.setState({ cities: citiesRes.response });
+
     const response = await fetch('/api/profilePilot', {
       headers: { 'Content-Type': 'application/json' },
     });
     const result = await response.json();
-    console.log(result);
+    // console.log(result);
     if (result.response !== 'fail') {
 
       await this.props.addUser(result.response);
@@ -190,7 +205,7 @@ class DashBoard extends Component {
       console.log(result.response)
     }
 
-    console.log('есть', this.props.user);
+    // console.log('есть', this.props.user);
 
     const reqComparison = await fetch('/api/getAllFly', {
 
@@ -208,7 +223,7 @@ class DashBoard extends Component {
     this.setState({ loading: false });
 
     this.props.AddUsersDashBoard(users);
-    console.log('есть ', users, this.props.users, this.props.users.response);
+    // console.log('есть ', users, this.props.users, this.props.users.response);
     this.setState({ workingDays: this.getWorkingDays() });
 
     this.setState({
@@ -286,7 +301,7 @@ class DashBoard extends Component {
     })
 
     const result = await response.json();
-    console.log(result)
+    // console.log(result)
     if (result.response === 'success') {
       message.success(`Ваша заявка на полет успешно сохранена`, 5)
       this.setState({
@@ -325,34 +340,23 @@ class DashBoard extends Component {
   showDiagram = (flag1, flag2, flag3, flag4) => {
     let arr = [flag1, flag2, flag3, flag4]
     let count1 = 0;
-    let count2 = 0;
 
     for (let i = 0; i < arr.length; i++) {
       if (arr[i] === true) {
         count1++
-      } else {
-        count2++
       }
-
     }
 
-    console.log(count1, count2)
-
     if (count1 === 0) {
-      console.log('0/100')
-      return '0/100'
+      return { image: circle_0, text: 'к сожалению, не удовлетпорена ни одна из заявок' }
     } else if (count1 === 1) {
-      console.log('25/75')
-      return '25/75'
+      return { image: circle_25, text: 'удовлетворено 25%' }
     } else if (count1 === 2) {
-      console.log('50/50')
-      return '50/50'
+      return { image: circle_50, text: 'удовлетворено 50%' }
     } else if (count1 === 3) {
-      console.log('75/25')
-      return '75/25'
+      return { image: circle_75, text: 'удовлетворено 75%' }
     } else if (count1 === 4) {
-      console.log('100/0')
-      return '100/0'
+      return { image: circle_100, text: 'удовлетворено 100%' }
     }
   };
 
@@ -367,8 +371,15 @@ class DashBoard extends Component {
 
   onChangeTime = value => {
     this.setState({
-      minPrice: value[0],
-      maxPrice: value[1],
+      minTime: value[0],
+      maxTime: value[1],
+    });
+  };
+
+  onChangeDifficulty = value => {
+    this.setState({
+      minDifficulty: value[0],
+      maxDifficulty: value[1],
     });
   };
 
@@ -434,7 +445,7 @@ class DashBoard extends Component {
           day: parseInt(year_month_day[2]),
         });
       });
-      console.log('Здесь дни', days);
+      // console.log('Здесь дни', days);
       return days;
     }
   };
@@ -526,8 +537,6 @@ class DashBoard extends Component {
       checkboxTransAirCoontinent: false,
 
     });
-
-
   };
 
   step4 = () => {
@@ -790,7 +799,50 @@ class DashBoard extends Component {
     });
   };
 
+  handleSelect = (value) => {
+    if (this.state.areaTags.length < 9) {
+      let newStateArray = this.state.areaTags.slice();
+      newStateArray.push(value)
+      this.setState({ areaTags: newStateArray });
+    }
+  };
 
+  handleSelectClear = (id) => {
+    console.log(id)
+    this.state.areaTags.splice(id, 1);
+    this.setState({ areaTags: this.state.areaTags});
+  };
+
+  filterPrise = (budget) => {
+    return this.state.minTime <= budget && budget <= this.state.maxTime;
+  };
+
+  filterCities = (city) => {
+    let array = this.state.citiesSort;
+    if (array.length === 0) {
+      return city
+    } else {
+      for (let i = 0; i < array.length; i++) {
+        if (array[i] === city) {
+          return city
+        }
+      }
+    }
+  };
+
+
+  filterDifficulty = (level_flights) => {
+    return this.state.minDifficulty <= level_flights && level_flights <= this.state.maxDifficulty;
+  };
+
+
+  handleChangeSort = (value) => {
+    if (value.length === 0) {
+      this.setState({ citiesSort: value })
+    }
+    this.setState({ citiesSort: value })
+
+  };
 
   render() {
     const { TabPane } = Tabs;
@@ -840,7 +892,12 @@ class DashBoard extends Component {
 
     let points = 100 - onePreference - twoPreference - thirdPreference - fourthPreference - fithPreference;
 
+    let date = new Date(), y = date.getFullYear(), m = date.getMonth();
+    let firstDay = new Date(y, m, 1);
+    let lastDay = new Date(y, m + 1, 0);
 
+    firstDay = moment(firstDay).format('MM / DD / YYYY');
+    lastDay = moment(lastDay).format('MM / DD / YYYY');
 
     return (
 
@@ -865,8 +922,8 @@ class DashBoard extends Component {
                 <span className='bidding-info--finish'>Финиш подачи</span>
               </div>
               <div className='bidding-date'>
-                <span className='bidding-date--digit'>01.09.2020</span>
-                <span className='bidding-date--digit'>30.09.2020</span>
+                <span className='bidding-date--digit'>firstDay</span>
+                <span className='bidding-date--digit'>lastDay</span>
               </div>
               <div className='date-clock'>
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
@@ -902,7 +959,7 @@ class DashBoard extends Component {
 
 
               {(this.props.user.crewRole === 'командир') &&
-                <div className='stats-icon icons' onClick={() => this.props.history.push('/dashboardC')}>
+                <div className='stats-icon' onClick={() => this.props.history.push('/dashboardC')}>
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <g filter="url(#filter0_d)">
@@ -952,7 +1009,7 @@ class DashBoard extends Component {
               }
 
               {(this.props.user.crewRole === 'КВС') &&
-                <div className='stats-icon icons' onClick={() => this.props.history.push('/dashboardC')}>
+                <div className='stats-icon' onClick={() => this.props.history.push('/dashboardC')}>
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <g filter="url(#filter0_d)">
@@ -1049,18 +1106,38 @@ class DashBoard extends Component {
               <div style={{ textAlign: 'center' }}>
                 <div className="dashBoardContainerMoreFiltres">
                   <div className="dashBoardContentMoreFiltres">
-                    <Card size="small" title="Длительность смены"
-                      className="userCardFilter"
+                    <Card size="small" title="Время полета" className="userCardFilterSort">
+                      <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                        <Slider range value={[this.state.minTime, this.state.maxTime]} max={24}
+                          onChange={this.onChangeTime}
+                          defaultValue={[this.state.minTime, this.state.maxTime]}
+                          marks={{ 0: 'ч', 24: 'ч.' }} />
+                      </div>
+                    </Card>
+                    <Card size="small" title="Город"
+                      className="userCardFilterSort"
                     >
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeLongWork} /> Трансатлантические рейсы
+                      <Select
+                        mode="multiple"
+                        style={{ width: '50%' }}
+                        placeholder="Приоритетный город"
+                        // defaultValue={['china']}
+                        onChange={handleChange}
+                      // optionLabelProp="label"
+                      >
+
+                        {this.state.cities && this.state.cities.map(city => (
+                          <Option value={city.cityName} key={city.cityName}>
+                            <div className="demo-option-label-item">
+                              {city.cityName}
                             </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeShortWork} /> Короткие разворотные рейсы
-                            </div>
+                          </Option>
+                        ))}
+
+                      </Select>
 
                     </Card>
-                    <Card size="small" title="Время полета" className="userCardFilter">
+                    <Card size="small" title="Время полета" className="userCardFilterSort">
                       <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
                         <Slider range value={[this.state.minPrice, this.state.maxPrice]} max={24}
                           onChange={this.onChangeTime}
@@ -1069,27 +1146,7 @@ class DashBoard extends Component {
                       </div>
                     </Card>
 
-                    <Card size="small" title="Время полета" className="userCardFilter">
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeMorning} /> Утро
-                            </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeDay} /> День
-                            </div>
 
-                    </Card>
-
-                    <Card size="small" title="Время полета" className="userCardFilter">
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeEvening} /> Вечер
-                            </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeNight} /> Ночь
-                            </div>
-                      <div>
-
-                      </div>
-                    </Card>
                   </div>
                 </div>
               </div>
@@ -1128,34 +1185,36 @@ class DashBoard extends Component {
                                          */}
                   Здесь можно указать основную информацию о правилах заведения новой заявки для новых пользователей
                   </div>
-
+                  <Button
+                      type="primary"
+                      className='bidding-btn-step--skip'
+                      onClick={this.step}
+                  >
+                    <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                      <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                      <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                    </svg>
+                    <span style={{ marginLeft: '8px' }}>Пропустить</span>
+                  </Button>
                   <Button
                     type="primary"
                     className='bidding-btn'
                     style={{ float: 'right', marginRight: '10px' }}
                     onClick={this.step}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
-
-
                 </Card>
-
-                <Button
-                  type="primary"
-                  className='bidding-btn'
-                  style={{ float: 'right', marginRight: '30px' }}
-                  onClick={this.step}
-                >
-                  <span style={{ marginLeft: '10px' }}>🡲</span>
-                  <span style={{ marginLeft: '15px' }}>Пропустить</span>
-                </Button>
-
               </div>
             </div>
-          )
-        }
+          )}
 
 
         {
@@ -1204,19 +1263,29 @@ class DashBoard extends Component {
                     className='bidding-btn-step'
                     style={{ float: 'right', marginRight: '10px' }}
                     onClick={this.handleSubmit}
-
                   >
-                    <span style={{ marginLeft: '10px' }}>&#10004;</span>
-                    <span style={{ marginLeft: '35px' }}>Сохранить</span>
+                    <span>Сохранить</span>
                   </Button>
 
                   <Button
                     type="primary"
-                    className='bidding-btn-step'
+                    className='bidding-btn-step--back'
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step6}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡸</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
                     <span style={{ marginLeft: '15px' }}>Назад</span>
                   </Button>
 
@@ -1231,7 +1300,7 @@ class DashBoard extends Component {
         {
           (this.state.newWish && this.state.preference1) &&
 
-          < div className="dashBoardContainer">
+          /*< div className="dashBoardContainer">
             <div className="dashBoardContentDrag borderDesign">
               <Card
                 size="small"
@@ -1254,19 +1323,19 @@ class DashBoard extends Component {
                   <Popover content={rulesCount} placement="bottom"><span className='newForm4'>{points}</span></Popover>
                 </div>
 
-                <div style={{ textAlign: 'center', height: '300px' }}>
-                  {/* {this.props.flight_direction && (
+                <div style={{ textAlign: 'center'}}>
+                  {/!* {this.props.flight_direction && (
                     <RadioButtonList dispatcher_func={SetFlightDirection} data={this.props.flight_direction} />
-                  )} */}
+                  )} *!/}
                   <div className={'main_radio_block'}>
-                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: 'rgb(249,221,142)' }} onClick={this.checkboxTransAir}>
+                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: '#FFDC82' }} onClick={this.checkboxTransAir}>
                       <div className={'radio_circle'} style={{ backgroundColor: this.state.colorTransAir }}></div>
                       <div className={'radio_text_wrapper'}>
                         <p className={'radio_text'} style={{ color: 'black' }}>Трансатлантические</p>
                       </div>
                     </div>
 
-                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: 'rgb(119,93,246)' }} onClick={this.checkboxContinent}>
+                    <div className={'sub_radio_block unselectable'} style={{ backgroundColor: '#7D58FF' }} onClick={this.checkboxContinent}>
                       <div className={'radio_circle'} style={{ backgroundColor: this.state.colorContinent }}></div>
                       <div className={'radio_text_wrapper'}>
                         <p className={'radio_text'} style={{ color: 'black' }}>Континентальные</p>
@@ -1275,7 +1344,7 @@ class DashBoard extends Component {
 
 
                     <Select
-                      mode="multiple"
+                      showSearch
                       style={{ width: '50%' }}
                       placeholder="Приоритетный город"
                       // defaultValue={['china']}
@@ -1292,9 +1361,24 @@ class DashBoard extends Component {
                       ))}
 
                     </Select>,
+
+
+
                   </div>
-                  {/* <RadioButtonList /> */}
+                  {/!* <RadioButtonList /> *!/}
                 </div>
+                <Button
+                    type="primary"
+                    className='bidding-btn-step--skip'
+                    onClick={this.step3Clear}
+                >
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                    <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                    <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                  </svg>
+                  <span style={{ marginLeft: '8px' }}>Пропустить</span>
+                </Button>
                 {!this.state.checkboxTransAirCoontinent &&
                   <Button
                     type="primary"
@@ -1303,8 +1387,13 @@ class DashBoard extends Component {
                     onClick={this.step3}
                     disabled
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
                 {this.state.checkboxTransAirCoontinent &&
@@ -1314,33 +1403,163 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step3}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
 
-                {/* 
+                {/!*
                 <Button
                   type="primary"
-                  className='bidding-btn-step'
+                  className='bidding-btn-step--back'
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.stepBack}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
-                  <span style={{ marginLeft: '15px' }}>Назад</span>
-                </Button> */}
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
+                </Button> *!/}
               </Card>
-              <Button
-                type="primary"
-                className='bidding-btn'
-                style={{ float: 'right', marginRight: '20px' }}
-                onClick={this.step3Clear}
-              >
-                <span style={{ marginLeft: '10px' }}>🡲</span>
-                <span style={{ marginLeft: '15px' }}>Пропустить</span>
-              </Button>
             </div>
+          </div>*/
+        < div className="dashBoardContainer">
+          <div className="dashBoardContentDrag borderDesign">
+            <Card
+                size="small"
+                bordered={false}
+                className="userCardSlider"
+            >
+              <div className='newForm'>Новая Заявка &nbsp;
+                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z"
+                      fill="#282828"
+                  />
+                  <path
+                      d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z"
+                      fill="#282828"
+                  />
+                </svg>
+                <span className='newForm2'>&nbsp;&nbsp;&nbsp; 1. Направление полета</span> &nbsp;&nbsp;&nbsp;
+                <span className='newForm3'>Выберите нужные варианты</span>
+              </div>
+
+              <div className="step-city-select">
+                  <Select
+                      showSearch
+                      className="select-city"
+                      placeholder="Введите название города"
+                      onChange={this.handleSelect}
+                      bordered={false}
+                  >
+                    {this.state.cities && this.state.cities.map(el => (
+                        <Option value={el} key={el}>
+                          <div className="demo-option-label-item">
+                            {el}
+                          </div>
+                        </Option>
+                    ))}
+                  </Select>
+                <div className="area-tags" >
+                  <span className="pref-city">Предпочтительные города ({this.state.areaTags.length} из 8) :</span>
+                  <div className="area-tags--grid">
+                    {this.state.areaTags && this.state.areaTags.map((el, id) => (
+                        <div className="area-tags--city" >
+                          {el}
+                          <svg onClick={() => this.handleSelectClear(id)} style={{ marginTop: '2px' }} width="7" height="7" viewBox="0 0 7 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3.49957 4.35524L0.187073 1.05746C-0.0629272 0.808575 -0.0629272 0.419686 0.187073 0.170797C0.437073 -0.0780913 0.827698 -0.0780913 1.0777 0.170797L3.5152 2.59746L5.92145 0.186353C6.17145 -0.0625358 6.56207 -0.0625358 6.81207 0.186353C7.06207 0.435242 7.06207 0.824131 6.81207 1.07302L3.49957 4.35524Z" fill="#1E1E1E"/>
+                            <path d="M6.37518 7.00082C6.21893 7.00082 6.06268 6.9386 5.93768 6.81415L3.50018 4.40304L1.06268 6.81415C0.812683 7.06304 0.422058 7.06304 0.172058 6.81415C-0.0779419 6.56526 -0.0779419 6.17637 0.172058 5.92749L3.50018 2.64526L6.81268 5.94304C7.06268 6.19193 7.06268 6.58082 6.81268 6.82971C6.68768 6.9386 6.53143 7.00082 6.37518 7.00082Z" fill="#1E1E1E"/>
+                          </svg>
+                        </div>
+                    ))}
+                  </div>
+                </div>
+                </div>
+              <Button
+                  type="primary"
+                  className='bidding-btn-step--skip'
+                  onClick={this.step3Clear}
+              >
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                  <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                  <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                </svg>
+                <span style={{ marginLeft: '8px' }}>Пропустить</span>
+              </Button>
+              {(this.state.areaTags.length === 0) &&
+              <Button
+                  type="primary"
+                  className='bidding-btn-step'
+                  style={{ float: 'right', marginRight: '0px' }}
+                  onClick={this.step3}
+                  disabled
+              >
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                <span style={{ marginLeft: '15px' }}>Подтвердить</span>
+              </Button>
+              }
+              {(this.state.areaTags.length > 0) &&
+              <Button
+                  type="primary"
+                  className='bidding-btn-step'
+                  style={{ float: 'right', marginRight: '0px' }}
+                  onClick={this.step3}
+              >
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                <span style={{ marginLeft: '15px' }}>Подтвердить</span>
+              </Button>
+              }
+
+              {/*
+                <Button
+                  type="primary"
+                  className='bidding-btn-step--back'
+                  style={{ float: 'right', marginRight: '0px' }}
+                  onClick={this.stepBack}
+                >
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
+                </Button> */}
+            </Card>
           </div>
+        </div>
         }
 
         {
@@ -1369,6 +1588,18 @@ class DashBoard extends Component {
                   <Popover content={rulesCount} placement="bottom"><span className='newForm4'>{points}</span></Popover>
                 </div>
                 <ItemList_day func={this.timeDayPreference} />
+                <Button
+                    type="primary"
+                    className='bidding-btn-step--skip'
+                    onClick={this.step4Clear}
+                >
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                    <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                    <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                  </svg>
+                  <span style={{ marginLeft: '8px' }}>Пропустить</span>
+                </Button>
                 {this.state.timeDay.length === 0 &&
                   <Button
                     type="primary"
@@ -1377,8 +1608,13 @@ class DashBoard extends Component {
                     disabled
                     onClick={this.step4}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
 
@@ -1390,30 +1626,37 @@ class DashBoard extends Component {
 
                     onClick={this.step4}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
 
                 <Button
                   type="primary"
-                  className='bidding-btn-step'
+                  className='bidding-btn-step--back'
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
-                  <span style={{ marginLeft: '15px' }}>Назад</span>
+                  <span style={{ marginLeft: '10px' }}>
+                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                    </g>
+                    <defs>
+                      <clipPath id="clip0">
+                        <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </span>
                 </Button>
               </Card>
-              <Button
-                type="primary"
-                className='bidding-btn'
-                style={{ float: 'right', marginRight: '20px' }}
-                onClick={this.step4Clear}
-              >
-                <span style={{ marginLeft: '10px' }}>🡲</span>
-                <span style={{ marginLeft: '15px' }}>Пропустить</span>
-              </Button>
             </div>
           </div>
         }
@@ -1468,7 +1711,18 @@ class DashBoard extends Component {
                 </div>
 
 
-
+                <Button
+                    type="primary"
+                    className='bidding-btn-step--skip'
+                    onClick={this.step5Clear}
+                >
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                    <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                    <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                  </svg>
+                  <span style={{ marginLeft: '8px' }}>Пропустить</span>
+                </Button>
                 {!this.state.checkboxWorkLaziness &&
                   <Button
                     type="primary"
@@ -1477,8 +1731,13 @@ class DashBoard extends Component {
                     onClick={this.step5}
                     disabled
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
                 {this.state.checkboxWorkLaziness &&
@@ -1488,31 +1747,38 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step5}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
 
 
                 <Button
                   type="primary"
-                  className='bidding-btn-step'
+                  className='bidding-btn-step--back'
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step3}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
-                  <span style={{ marginLeft: '15px' }}>Назад</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
                 </Button>
               </Card>
-              <Button
-                type="primary"
-                className='bidding-btn'
-                style={{ float: 'right', marginRight: '20px' }}
-                onClick={this.step5Clear}
-              >
-                <span style={{ marginLeft: '10px' }}>🡲</span>
-                <span style={{ marginLeft: '15px' }}>Пропустить</span>
-              </Button>
             </div>
           </div>
         }
@@ -1566,7 +1832,18 @@ class DashBoard extends Component {
                     </div>
                   </div>
                 </div>
-
+                <Button
+                    type="primary"
+                    className='bidding-btn-step--skip'
+                    onClick={this.step6Clear}
+                >
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                    <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                    <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                  </svg>
+                  <span style={{ marginLeft: '8px' }}>Пропустить</span>
+                </Button>
                 {!this.state.checkboxLongDayEasyDay &&
                   <Button
                     type="primary"
@@ -1575,8 +1852,13 @@ class DashBoard extends Component {
                     onClick={this.step6}
                     disabled
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
                 {this.state.checkboxLongDayEasyDay &&
@@ -1586,31 +1868,38 @@ class DashBoard extends Component {
                     style={{ float: 'right', marginRight: '0px' }}
                     onClick={this.step6}
                   >
-                    <span style={{ marginLeft: '10px' }}>🡲</span>
-                    <span style={{ marginLeft: '15px' }}>Сохранить/Далее</span>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>
                 }
 
 
                 <Button
                   type="primary"
-                  className='bidding-btn-step'
+                  className='bidding-btn-step--back'
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step4}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
-                  <span style={{ marginLeft: '15px' }}>Назад</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                    </span>
                 </Button>
               </Card>
-              <Button
-                type="primary"
-                className='bidding-btn'
-                style={{ float: 'right', marginRight: '20px' }}
-                onClick={this.step6Clear}
-              >
-                <span style={{ marginLeft: '10px' }}>🡲</span>
-                <span style={{ marginLeft: '15px' }}>Пропустить</span>
-              </Button>
             </div>
           </div>
         }
@@ -1671,13 +1960,33 @@ class DashBoard extends Component {
                                         </div> */}
                   </div>
                 </div>
-
+                <Button
+                    type="primary"
+                    className='bidding-btn-step--skip'
+                    onClick={this.dataComponent}
+                    value={'clear'}
+                >
+                  <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.9996 3.99972L8.25842 0.214007C7.97607 -0.0717068 7.53489 -0.0717068 7.25254 0.214007C6.97018 0.499722 6.97018 0.946149 7.25254 1.23186L10.0055 4.01758L7.25254 6.78544C6.97018 7.07115 6.97018 7.51758 7.25254 7.80329C7.53489 8.08901 7.97607 8.08901 8.25842 7.80329L11.9996 3.99972Z" fill="black"/>
+                    <path d="M3.68824 3.28578H0.705882C0.317647 3.28578 0 3.60721 0 4.00007C0 4.39293 0.317647 4.71436 0.705882 4.71436H3.68824C4.07647 4.71436 4.39412 4.39293 4.39412 4.00007C4.39412 3.60721 4.07647 3.28578 3.68824 3.28578Z" fill="black"/>
+                    <path d="M10.9419 3.28578H6.65364C6.2654 3.28578 5.94775 3.60721 5.94775 4.00007C5.94775 4.39293 6.2654 4.71436 6.65364 4.71436H10.9419C11.3301 4.71436 11.6478 4.39293 11.6478 4.00007C11.6478 3.60721 11.3301 3.28578 10.9419 3.28578Z" fill="black"/>
+                  </svg>
+                  <span style={{ marginLeft: '8px' }}>Пропустить</span>
+                </Button>
                 {this.state.selectedDates.length === 0 && <Button
                   type="primary"
                   className='bidding-btn-step'
-                  style={{ float: 'right', marginRight: '0px' }} disabled onClick={this.dataComponent}>
-
-                  <span style={{ marginLeft: '35px' }}>Сохранить/Далее</span>
+                  style={{ float: 'right', marginRight: '0px' }}
+                  disabled
+                  onClick={this.dataComponent}
+                >
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                  <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                 </Button>
 
                 }
@@ -1686,35 +1995,38 @@ class DashBoard extends Component {
                   <Button
                     type="primary"
                     className='bidding-btn-step'
-                    style={{ float: 'right', marginRight: '0px' }} onClick={this.dataComponent}>
-
-                    <span style={{ marginLeft: '35px' }}>Сохранить/Далее</span>
+                    style={{ float: 'right', marginRight: '0px' }}
+                    onClick={this.dataComponent}>
+                    <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 5.00004L9.63529 9.73219C9.30588 10.0893 8.79118 10.0893 8.46176 9.73219C8.13235 9.37504 8.13235 8.81701 8.46176 8.45987L11.6735 5.00004L8.46176 1.5179C8.13235 1.16076 8.13235 0.602722 8.46176 0.245579C8.79118 -0.111564 9.30588 -0.111564 9.63529 0.245579L14 5.00004Z" fill="white"/>
+                        <path d="M-0.000100175 5.00003C-0.000100153 4.50896 0.370488 4.10718 0.82343 4.10718L12.7646 4.10718C13.2175 4.10718 13.5881 4.50896 13.5881 5.00003C13.5881 5.49111 13.2175 5.89289 12.7646 5.89289L0.82343 5.89289C0.370488 5.89289 -0.000100196 5.49111 -0.000100175 5.00003Z" fill="white"/>
+                      </svg>
+                    </span>
+                    <span style={{ marginLeft: '15px' }}>Подтвердить</span>
                   </Button>}
 
                 <Button
                   type="primary"
-                  className='bidding-btn-step'
+                  className='bidding-btn-step--back'
                   style={{ float: 'right', marginRight: '0px' }}
                   onClick={this.step5}
                 >
-                  <span style={{ marginLeft: '10px' }}>🡸</span>
-                  <span style={{ marginLeft: '35px' }}>Назад</span>
+                  <span style={{ marginLeft: '10px' }}>
+                      <svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <g clip-path="url(#clip0)">
+                      <path d="M0 4.99996L4.36471 0.267814C4.69412 -0.0893292 5.20882 -0.0893292 5.53824 0.267814C5.86765 0.624957 5.86765 1.18299 5.53824 1.54013L2.32647 4.99996L5.53824 8.4821C5.86765 8.83924 5.86765 9.39728 5.53824 9.75442C5.20882 10.1116 4.69412 10.1116 4.36471 9.75442L0 4.99996Z" fill="white"/>
+                      <path d="M14 4.99997C14 5.49104 13.6294 5.89282 13.1765 5.89282L1.2353 5.89282C0.782362 5.89282 0.411774 5.49104 0.411774 4.99997C0.411774 4.50889 0.782362 4.10711 1.2353 4.10711L13.1765 4.10711C13.6294 4.10711 14 4.50889 14 4.99997Z" fill="white"/>
+                      </g>
+                      <defs>
+                      <clipPath id="clip0">
+                      <rect width="10" height="14" fill="white" transform="translate(0 10) rotate(-90)"/>
+                      </clipPath>
+                      </defs>
+                      </svg>
+                  </span>
                 </Button>
-
               </Card>
-
-
-              <Button
-                type="primary"
-                className='bidding-btn'
-                style={{ float: 'right', marginRight: '20px' }}
-                onClick={this.dataComponent} value={'clear'}
-              >
-                <span style={{ marginLeft: '10px' }}>🡲</span>
-                <span style={{ marginLeft: '15px' }}>Пропустить</span>
-              </Button>
-
-
             </div>
           </div>
         }
@@ -1727,92 +2039,61 @@ class DashBoard extends Component {
 
         <div className="dashBoardContainer">
           <div className="dashBoardContent">
-            <div className='yourTrip' style={{ marginBottom: '15px' }}><font face="Arial Black">Заявка на текущий период:</font></div>
+            <div className='yourTrip'>Заявка на текущий период:</div>
             <Card
               color="primary"
-              className="userCardW shadow-sm"
+              className="bidding-status-card"
               bordered={false}
             >
-              {(!this.props.user.wishForm &&
-                <img src={redCircle} style={{ width: '30px', position: 'absolute', top: '15px', left: '15px' }}></img>)
-                ||
-                (this.props.user.wishForm &&
-                  <img src={greenCircle} style={{ width: '30px', position: 'absolute', top: '15px', left: '15px' }}></img>)}
-              <div style={{ width: '60%', marginLeft: '40px' }}>
-                <div className="userCard1" style={{ width: '70%' }}>
-                  {(!this.props.user.wishForm &&
-                    <div className='greyMediumText' style={{ marginLeft: '100px' }}>
-                      <font face="Arial Black">
-                        Не заполнена
-                        </font>
-                    </div>) ||
-                    (this.props.user.wishForm &&
-                      <div style={{ marginLeft: '10px' }}>
-                        <font face="Arial" color={'#ffffff'} size={4}>Ноябрь</font>
-                      </div>)}
-                </div>
+              <div className='status-month'>
+                {(!this.props.user.wishForm &&
+                  <img src={redCircle} className='status-month--icon'></img>)
+                  ||
+                  (this.props.user.wishForm &&
+                    <img src={greenCircle}className='status-month--icon'></img>)}
 
+                  {(!this.props.user.wishForm &&
+                    <span className='greyMediumText' >
+                        Не заполнена
+                    </span>) ||
+                    (this.props.user.wishForm &&
+                      <span>
+                        Ноябрь
+                      </span>)}
+              </div>
+              <div>
                 {this.state.newWishForm &&
                   this.state.newWishForm.map((user, key) =>
+                  <div className='bidding-status-prefs'>
+                    <div className="bidding-prefs-card hoverCard ">
+                      <span className='bidding-prefs-card--title'>Направление: </span>
+                      <span>{user.longFly}</span>
+                    </div>
+                    <div className="bidding-prefs-card hoverCard">
+                      <span className='bidding-prefs-card--title'>Продолжительность смены: </span>
+                      {user.timeFly}
+                    </div>
+                    <div className="bidding-prefs-card hoverCard ">
+                      <span className='bidding-prefs-card--title'>Подработка: </span>
+                      {user.otherTime}
+                    </div>
 
-                    <div>
-                      <Buttonr
-                        // onClick={this.step}
-                        color="none"
-                        className="userCardWP hoverCard shadow-lg"
-                      >
-                        <font color={'#5a5a5a'}>Направление: {user.longFly}</font>
-                      </Buttonr>
-                      <Buttonr
-                        // onClick={this.step3}
-                        color="none"
-                        className="userCardWP hoverCard shadow-lg"
-                      >
-                        <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly}</font>
-                      </Buttonr>
-                      <Buttonr
-                        // onClick={() => this.changeWork(user.otherTime)}
-                        color="none"
-                        className="userCardWP hoverCard shadow-lg"
-                      >
-                        <font color={'#5a5a5a'}>Подработка: {user.otherTime}</font>
-                      </Buttonr>
+                    <div className="bidding-prefs-card hoverCard">
+                      <span className='bidding-prefs-card--title'>Предпочтительное время вылета: </span>
+                      {user.preferenceTimeFly[0] === "Не заполнено" && "Не заполнено"}
+                      {user.preferenceTimeFly[0] !== "Не заполнено" && ` ${user.preferenceTimeFly[0].name}, 
+                      ${user.preferenceTimeFly[1].name}, ${user.preferenceTimeFly[2].name}, ${user.preferenceTimeFly[3].name}`}
+                    </div>
 
-                      <Buttonr
-                        // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
-                        color="none"
-                        className="userCardWP hoverCard shadow-lg"
-                      >
-                        <font color={'#5a5a5a'}>Предпочтительное время вылета:
-                        {user.preferenceTimeFly[0] === "Не заполнено" && "Не заполнено"}
-
-                          {user.preferenceTimeFly[0] !== "Не заполнено" && ` ${user.preferenceTimeFly[0].name}, ${user.preferenceTimeFly[1].name}, ${user.preferenceTimeFly[2].name}, ${user.preferenceTimeFly[3].name}`}
-                        </font>
-                      </Buttonr>
-
-                      <Buttonr
-                        // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
-                        color="none"
-                        className="userCardWP hoverCard shadow-lg"
-                      >
-                        <font color={'#5a5a5a'}>Выходные дни:
-                        {user.selectedDates[0] === "Не заполнено" && " Не заполнено"}
-
-
-
-                          {user.selectedDates[0] !== "Не заполнено" &&
-
-                            user.selectedDates.map((user, key) =>
-                              <span style={{ color: 'red' }}>  {user.day}.{user.month}.{user.year} </span>
-
-
-
-                            )}
-
-
-                        </font>
-                      </Buttonr>
-                    </div>,
+                    <div className="bidding-prefs-card hoverCard">
+                      <span className='bidding-prefs-card--title'>Выходные дни: </span>
+                      {user.selectedDates[0] === "Не заполнено" && " Не заполнено"}
+                      {user.selectedDates[0] !== "Не заполнено" &&
+                      user.selectedDates.map((user, key) =>
+                          <span style={{ color: 'red' }}>  {user.day}.{user.month}.{user.year} </span>
+                      )}
+                    </div>
+                  </div>
                   )}
               </div>
 
@@ -1839,67 +2120,63 @@ class DashBoard extends Component {
 
             </Card>
 
-            <div className='mediumText'><font face="Arial Black">История заявок:</font></div>
+            <div className='mediumText'>История заявок:</div>
 
             {this.props.user.arrWish &&
               this.props.user.arrWish.map((user, key) =>
-                <Card key={key} color="primary" className="userCardW shadow-sm" bordered={true}>
-                  <div style={{ width: '60%', float: 'inherit' }}>
-                    <div className="userCard1" style={{ width: '70%' }}>
-                      <div style={{ marginLeft: '10px' }}><font face="Arial" color={'#ffffff'} size={4}>{user.month.description}</font>
-                      </div>
-                    </div>
-                    <div>
-                      <Buttonr color="none" id={"form" + key + "toggler1"} className={user.longFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
-                        <font color={'#5a5a5a'}>Направление: {user.longFly[0].fly}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler1"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.longFly[0].fly}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-
-                      <Buttonr color="none" id={"form" + key + "toggler2"} className={user.otherTime[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
-                        <font color={'#5a5a5a'}>Подработка: {user.otherTime[0].time}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler2"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.otherTime[0].time}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-
-                      <Buttonr color="none" id={"form" + key + "toggler3"} className={user.timeFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
-                        <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly[0].flyTime}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler3"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.timeFly[0].flyTime}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-
-                      <Buttonr color="none" id={"form" + key + "toggler4"} className={user.preferenceTimeFly[0].flag ? "userCardGreen hoverCard shadow-lg" : "userCardRed hoverCard shadow-lg"}>
-                        <font color={'#5a5a5a'}>Предпочтительное время вылета: {user.preferenceTimeFly[0].dayTime}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler4"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.preferenceTimeFly[0].dayTime}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-                      <br />
-                      {user && this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag)} + вывод соответствующей картинки
-
-                    </div>
+              <Card
+                key={key}
+                color="primary"
+                className="bidding-status-card"
+                bordered={false}
+              >
+                <div className='status-month'>
+                  <svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="9" height="11" rx="1" fill="#464646"/>
+                    <rect x="1" y="2" width="7" height="4" fill="white"/>
+                  </svg>
+                  <span>{user.month.description}</span>
                   </div>
+                <div>
+                   <div className='history-status-prefs' id={"form" + key + "toggler1"}>
+                      <div className="history-prefs-card hoverCard ">
+                        <span className='bidding-prefs-card--title'>Направление: </span>
+                        {user.longFly[0].fly}
+                        <span className={user.longFly[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
+                      </div>
+                      <div className="history-prefs-card hoverCard" id={"form" + key + "toggler3"}>
+                        <span className='bidding-prefs-card--title'>Продолжительность смены: </span>
+                        {user.timeFly[0].flyTime}
+                        <span className={user.timeFly[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
+                      </div>
+                      <div className="history-prefs-card hoverCard" id={"form" + key + "toggler2"}>
+                        <span className='bidding-prefs-card--title'>Подработка: </span>
+                        {user.otherTime[0].time}
+                        <span className={user.otherTime[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
+                      </div>
 
-                </Card>)}
+                      <div className="history-prefs-card hoverCard" id={"form" + key + "toggler4"}>
+                        <span className='bidding-prefs-card--title'>Предпочтительное время вылета: </span>
+                        {user.preferenceTimeFly[0].dayTime}
+                        <span className={user.preferenceTimeFly[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
+                      </div>
+
+                      {/*<div className="history-prefs-card hoverCard">
+                        <span className='bidding-prefs-card--title'>Выходные дни: </span>
+                      </div>*/}
+                    </div>
+                </div>
+                <div id="c1"></div>
+                <div style={{ float: 'right', margin: '60px'}} >
+                  {user &&
+                  <div>
+                    <img style={{width: "100px", margin: '20px'}} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).image} />
+                    <font>{this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).text}</font>
+                  </div>
+                  }
+                </div>
+              </Card>
+              )}
 
           </div>
 
@@ -2073,104 +2350,128 @@ class DashBoard extends Component {
 
                 <CalendarWithButtons highlighted={this.state.workingDays} />
               </div>
-              <div className='yourTrip1'><font face="Arial Black">Ваши Рейсы</font></div>
-              <div className="userCardW">
+              <div className="userCardW" style={{ marginTop: '30px' }}>
+                <div className='yourTrip1'>Ваши рейсы</div>
+                <div className='sUserCard' onClick={this.showSort}>
+                  <span className='sort-func-title'>Сортировка</span>
+                  <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.5 5.99994L0.241071 1.45709C-0.0803571 1.11423 -0.0803571 0.578516 0.241071 0.235659C0.5625 -0.107199 1.06473 -0.107199 1.38616 0.235659L4.52009 3.57852L7.61384 0.257087C7.93527 -0.0857701 8.4375 -0.0857701 8.75893 0.257087C9.08036 0.599944 9.08036 1.13566 8.75893 1.47852L4.5 5.99994Z" fill="#5459CD"/>
+                  </svg>
+                </div>
 
-                <Card className='sUserCard hoverCard' onClick={this.showSort}> <font className="sortString"
-                  face="Arial Black"><font
-                    face="Arial Black" color={'#615d73'}>Сортировка</font></font>
-                </Card>
-
-
+                {this.state.showSortFilters &&
+                  <div className="userCardWSort">
+                      <div className="userCardFilter">
+                        <span>Время полета, часы</span>
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                          <Slider range value={[this.state.minTime, this.state.maxTime]} max={24}
+                            onChange={this.onChangeTime}
+                            defaultValue={[this.state.minTime, this.state.maxTime]}
+                            marks={{ 0: 'min', 24: 'max' }} />
+                        </div>
+                      </div>
+                      <div className="userCardFilter">
+                        <span>Город</span>
+                        <Select
+                          style={{ width: '100%' }}
+                          mode="multiple"
+                          placeholder="Приоритетный город"
+                          onChange={this.handleChangeSort}
+                        >
+                          {this.props.user.arrFlights && this.props.user.arrFlights.map(city => (
+                            <Option value={city.where_to} key={city.where_to}>
+                              <div className="demo-option-label-item">
+                                {city.where_to}
+                              </div>
+                            </Option>
+                          ))}
+                        </Select>
+                      </div>
+                      <div className="userCardFilter">
+                        <span>Сложность аэропорта, коэфициент</span>
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                          <Slider range value={[this.state.minDifficulty, this.state.maxDifficulty]} max={10}
+                            onChange={this.onChangeDifficulty}
+                            defaultValue={[this.state.minDifficulty, this.state.maxDifficulty]}
+                            marks={{ 0: 'min', 10: 'max' }} />
+                        </div>
+                      </div>
+                  </div>
+                }
                 <Suspense fallback={<h1>Loading posts....</h1>}>
                   {this.props.user.arrFlights &&
 
                     this.props.user.arrFlights.map((user, i) => {
 
-                      // if (this.filterPrise(user.time)) {
-                      if (user.city_photo) {
+                      if (this.filterTime(user.flight_time) && this.filterCities(user.where_to) && this.filterDifficulty(user.level_flights)) {
+                        if (user.city_photo) {
 
-                        // console.log(user);
+                          let srcImg;
+                          if (!user.city_photo) {
+                            srcImg = user.city_photo;
+                          } else {
+                            srcImg = plane;
+                          }
 
-                        let srcImg;
-                        if (!user.city_photo) {
-                          srcImg = user.city_photo;
-                        } else {
-                          srcImg = plane;
+                          let styl, depart, land;
+                          let landing_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACeklEQVQ4jc2U309SYRjHn/ecQ6mAB0UOIOhOxQgRNb1Q07Vps5lrq4tcG2Nr3XnVTWtr6x/oH+imy26iq7ZuWpu2fm4unWL+gB1JzAGCASoECBw4bxcUHPklbV703Lzb+7zP532e7/s8L5q2LsFpGHEqlD8gMxvpM4RLHB3ML4M+itC/gIydh49si6qWpNhBSzNPZr48ffCeUSSrxJaBCMASSrBd48QOztvCZwlGkbROcFViy0ApngKAEcuuqfOg4OCzhNvXAgCjvQFWG6sPlCEBACGwTboIkfprHiUAIITvXHWfCCLNPTNaZfKyJQAAbXTq+tCOTpXAAOFoUzAiPSPJKZtT59ujDrd6P9ZQA0QBwPq2MnTQlBdb3pQZH/COD3jTPOnYZBZc6hdzJr0q3ipPAdAnZJTmyc+rOk1rUq+KF28gsZ6JD5mDN0e3dKr4fqwxEms4SlPVQEjc2cPdAesE196WqHgUY+T20wtOzYJLHQjLaoEAgCTwlT7/5OCOQX9YoxDvT/miS/3pm84fklUGFYzVRG2T3CVDqAYOY/Rmnn3+tgtjVHXWOtTxbjZSgwIACOEbI9v3ppxQcWgRgulx9/3bKxJKKGwKAnxw6J+97lnmGD57LGpqeEfTmih9BYoUZm6tjfX7RPnDV6f25TtjXo6xfp8/JHv10TBo3uu9EGqWZrYDzYmU5BhI2sg/tC5ZzhUrWvmuss9e9OzSYu5Rmprf0M5vaAGAJHBOQCAWm1EkH99d1P1tpU2fwj5rWvcoa8tULCW/nJXkCpQfQdo+Z1zmmDoReStmRBK4i90nCby6pcS47g+tJCMAyAmo/kLK7VT/7P8L9BvboetBm/GZ3QAAAABJRU5ErkJggg==';
+                          let landing_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACaklEQVQ4jc2U309SYRjHn/f1QCmRIBwGQnlUGHkQlblJtraMEGutH5s31szL1mXrvq3/oeuuXeum2lwtQEc31XILiuMJUCxhSAKGuEzieE4XODkinU6bF33v3vd59tn3ed7nedH9CQEOQ/hQKLsgivpqtSbrAgZDzmLJIPQvoBMd6ZuTjzXaojigOvbj9p1Hd+891O6/lwIhEAiCGx2dFQdSKxaOI7Ta4gXvnFxQpaIEgF4nc7IjtRfgOCKdNgOAs48xmr7JApXLSgBACHy+IMa1R0wmKQBASPB4Qn8FNZ3rfaDTrTt6WQBo1ZSG3POkvgCANjZa1wtthKLSenzT1L66mLCVSmoJEAEAy8tU8bum2uyWli3XYNg1GP5VUSTiVpa1B/weA5lXqzelHaHqQKpUW1euztCOzwczeB6lUxaGoZloj4QpJJ5s2sF6vXN6stAwVRBQOt3OLpxiWXshr5MCAQDGfF//J7d73mzJSBSytkayC/aPEWcup28M2pPRmPWNzVptSxI4QUBv3wy9fDEqCOiPu2Yw5qjOLxIUAEBIGD7z7uKlV9BwaRGCEc/r8fGnBLGzd8nzKPyh//mzy/GYjeMIcf7p4fdtunWijtLUtHPt+syAKyLyD+xCTzAwUm3HgCuSz+lCobM0HevqTqpUW9lV4/bPo/tAzc3bEzeedHbVKlpMdAf85zMZk4iLyuUjTJRmojQAYMzzPAZxs7Xa4uTUNEnmq8dUyhz0e6pbIke7jpSKyq2paT2ZB4Bs1hjwj8RjNpmIqmqOMOYpagVjfmmpUxBkf2h1jgCA57H8Qg7qUP/s/wv0G9EW5yQKXtQFAAAAAElFTkSuQmCC';
+                          let depart_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACUUlEQVQ4jc2UXW/SYBTHzwNF3UbpoGsoLw60cxqmqJkhW7KNGS92N7f5Fj+Bt+5r+AH8BBovvFiyi10Yo0uEjLgxsDI3KWVhoYAB9wJDysuoFyULlm7owoXnqj3Pv7/nPP+n56CHT4PQidB0hPJfgrAzf2nExZsDOX1XNbvfFYmTSpARF6fH4m4mF+YoH2vbThtaERayODPOT9wSMG1dzghZvRI0ej0z5UnosHq/uTA9Fheyen/E6metqVwPADjo/OwEPzqU0vxpiZDrUYKWVpxhjno2w7ocuwBAk0WKKEkSXLHvz3ljw1d/IKQs8PM3+uWCG6n+RwjBveEdB51f9DFm469Zb8zN5BQaSYJg1LywPBBN9sJJZksSvF/rdzO5549Dgxf3WlbRepR6+3GQF4jjJPZgknPShcAGvf7dXKpoAQAhacSVmZvknfSB6jav3l1b9F1WJDEuaXx0lxsZSldrmi88xe30em8nrX1FVYRcjp+1tOa1pG1eyOo9rgymlax9xRvMT7y72qwoV7WJjMFkKMuvmwlyKXCpFYQBwMqGpfYGzT8J6bB6084QTxHLIfsn1jblSTC2xjF9rFW10obZq1v0i9d37o/zlZpGyOq30wTLUweH5+RV0iDKD7UjTSCici5ovrVwjArHKFURSZSONYWSTlXzV01LEg2DVG3+B5AJLwFAuaJd2zKfHaTD6nh3BQBWN81i5cRp0R5kwkW5v3xfbafI2s8jEyHWjjQfgvYwp34Vcqg3bXMY8TJC0m7+wumy9hXtFc631UAHZ/ZvaYTXa4YHSp4AAAAASUVORK5CYII=';
+                          let depart_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVQ4jc2UQW/SYBjHn5e+WzJmYZMaimyRUBxCWUaiwahQyHZWb84v44fwOxhv6sWTHiQDZIdNhQ46ug7cgAGWTQdkc4xaD53LhApKOPic3v777+/5p0+foiePVRhFGUZC+S9BeOgnSbLJuPLGie/fDs35bUc3iCSb90JJhilsiQyf9lUqdC/CYjkIcYkFP08QiqbUZaobxPqEQGAd447V+iUYStZliudZnmfrsgUArHSN4xKsL2sw/DZruW7pBq0mA5LEPHj42uHYBYBpy8GU+VD9gWZmylwk7naLCHUHFLI3Xr28j3S/I4Tg5q0PVrqWiN2dvvyV4+KMq9DlUVUQxbmVaLBYtAOAPkgrxlVYXIrOzpZ6EEjMuaLvwuWy7VzE4UiMttWyGY+Yu35yMg4ACKleVghHEjRd1W3w9s1SPHanS8Slkj2yuMKyQqeDt7edxV2735+mruz/KaaqonSK7dWJ+atP6zLl8eYwoVDUvpP5bJw8vuhon45Vq1aTqaVd7uxcW00GekEYADIbXkUhHi2/wFi50Bn29myfPi6kU/OB22t2e0XT+ZRPN+nZ+DcF9/Nny0HufaeDZZmqVOi85Gy1JrW7JlNDOygKkdnw9AMBgCQxksToms5BksQcHU/oev5qac1TTe2g+5r/AUSSDQA4bY/lNueGB2GsGI1HACAI7nZ7fHgQSTa0/eJ5/Xmd9RsIMpmbikKsr/m3RP1RaNVv134laiGkNhpkf9vgRM3mpYEeGOE/+yep49ifb88TZgAAAABJRU5ErkJggg==';
+                          if (i % 2 == 0) {
+                            styl = 'userCard hoverCard ';
+                            depart = depart_purple;
+                            land = landing_purple;
+                          } else {
+                            styl = 'userCard1 hoverCard ';
+                            depart = depart_blue;
+                            land = landing_blue;
+                          }
+
+                          return (
+                            <div>
+                              <div
+                              id={"flight" + i + "toggler"}
+                                className={styl}
+                              >
+                                <div className="flight-number">1234</div>
+                              <div className='flight-info'>
+                                <span className='flight-trip'>Отбытие</span>
+                                <span className='flight-date'>
+                              {/*    <svg width="13" height="7" viewBox="0 0 13 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.2774 1.10973C12.2246 1.02708 12.1586 0.971973 12.0794 0.91687C12.0794 0.91687 11.0893 0.544922 10.5348 0.544922C9.68988 0.544922 9.05619 0.889318 8.35649 1.31637C8.09246 1.48168 7.80201 1.66077 7.48517 1.85363C7.48517 1.85363 7.48517 1.85363 7.47197 1.85363L4.42234 1.30259C4.36953 1.28882 4.31673 1.30259 4.27712 1.31637L3.78865 1.55056C3.66983 1.60566 3.66983 1.78475 3.78865 1.83985L5.80854 2.85926C5.82174 2.85926 5.82174 2.87304 5.80854 2.88682C4.68638 3.58938 3.70944 4.18175 3.70944 4.18175C3.69624 4.18175 3.68304 4.19552 3.68304 4.19552C3.28698 4.42971 2.82492 4.51237 2.37605 4.40216L1.2935 4.14042C1.24069 4.12664 1.17468 4.12664 1.12188 4.14042C0.92385 4.2093 0.871042 4.47104 1.02946 4.62257L2.24403 5.77974C2.42886 5.95883 2.7061 6.01393 2.94373 5.9175L3.55102 5.65576L6.9703 4.15419L11.8418 2.06026C12.317 1.85363 12.5019 1.44035 12.2774 1.10973Z" fill="#FFDC82"/>
+                                    <path d="M7.90797 4.23682L6.46897 4.87051L6.19173 6.11033C6.17853 6.17921 6.23134 6.24809 6.29735 6.24809H6.44257C6.6406 6.24809 6.81222 6.15166 6.91784 5.97257L7.90797 4.23682Z" fill="#FFDC82"/>
+                                  </svg>*/}
+                                  {user.time_of_departure}
+                                </span>
+                              </div>
+                              <div className='flight-divider'>
+                              </div>
+                              <div className='flight-info'>
+                                <span className='flight-trip'>Прибытие</span>
+                                <span className='flight-date'>
+                    {/*              <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M11.917 8.74699C11.9381 8.6512 11.9304 8.56556 11.9133 8.47059C11.9133 8.47059 11.4762 7.50745 11.0841 7.11537C10.4867 6.51793 9.79507 6.31337 8.99833 6.12057C8.69474 6.05076 8.36273 5.97203 8.00232 5.88436C8.00232 5.88436 8.00232 5.88436 7.99298 5.87502L6.22621 3.32897C6.19861 3.28189 6.15153 3.25429 6.11378 3.23602L5.60279 3.05622C5.47981 3.01117 5.35317 3.1378 5.39822 3.26078L6.10566 5.40989C6.115 5.41922 6.10526 5.42896 6.08618 5.42937C4.79591 5.13268 3.68625 4.86074 3.68625 4.86074C3.67691 4.8514 3.65783 4.85181 3.65783 4.85181C3.21218 4.73735 2.82701 4.46907 2.58754 4.07375L2.00714 3.12319C1.97954 3.07611 1.93287 3.02943 1.88578 3.00183C1.69705 2.91051 1.47463 3.05825 1.4795 3.27742L1.52009 4.9545C1.52415 5.21182 1.68122 5.44682 1.91744 5.54667L2.53194 5.791L6.0115 7.14703L10.9368 9.11106C11.419 9.30101 11.8419 9.13947 11.917 8.74699Z" fill="#FFDC82"/>
+                                    <path d="M6.61613 7.86857L5.15051 7.29913L4.07779 7.97978C4.01975 8.01915 4.00838 8.1052 4.05506 8.15187L4.15774 8.25456C4.29777 8.39458 4.48731 8.44775 4.68863 8.3958L6.61613 7.86857Z" fill="#FFDC82"/>
+                                  </svg>*/}
+                                  {user.time_of_arrival}
+                                </span>
+                              </div>
+
+                            </div>
+                              <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
+                                <Cardr className="userCardW">
+                                  <CardBody>
+                                    <span>Маршрут:</span> {user.where_from + ' - ' + user.where_to} <br />
+                                    <span>Аэропорт:</span> {user.airport_name}<br />
+                                    <span>Время в полете:</span> {user.flight_time}<br />
+                                    <span>Сложность аэропорта:</span> {user.level_flights}
+                                  </CardBody>
+                                </Cardr>
+                              </UncontrolledCollapse>
+                            </div>
+                          );
                         }
-
-                        let styl, depart, land;
-                        let landing_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACeklEQVQ4jc2U309SYRjHn/ecQ6mAB0UOIOhOxQgRNb1Q07Vps5lrq4tcG2Nr3XnVTWtr6x/oH+imy26iq7ZuWpu2fm4unWL+gB1JzAGCASoECBw4bxcUHPklbV703Lzb+7zP532e7/s8L5q2LsFpGHEqlD8gMxvpM4RLHB3ML4M+itC/gIydh49si6qWpNhBSzNPZr48ffCeUSSrxJaBCMASSrBd48QOztvCZwlGkbROcFViy0ApngKAEcuuqfOg4OCzhNvXAgCjvQFWG6sPlCEBACGwTboIkfprHiUAIITvXHWfCCLNPTNaZfKyJQAAbXTq+tCOTpXAAOFoUzAiPSPJKZtT59ujDrd6P9ZQA0QBwPq2MnTQlBdb3pQZH/COD3jTPOnYZBZc6hdzJr0q3ipPAdAnZJTmyc+rOk1rUq+KF28gsZ6JD5mDN0e3dKr4fqwxEms4SlPVQEjc2cPdAesE196WqHgUY+T20wtOzYJLHQjLaoEAgCTwlT7/5OCOQX9YoxDvT/miS/3pm84fklUGFYzVRG2T3CVDqAYOY/Rmnn3+tgtjVHXWOtTxbjZSgwIACOEbI9v3ppxQcWgRgulx9/3bKxJKKGwKAnxw6J+97lnmGD57LGpqeEfTmih9BYoUZm6tjfX7RPnDV6f25TtjXo6xfp8/JHv10TBo3uu9EGqWZrYDzYmU5BhI2sg/tC5ZzhUrWvmuss9e9OzSYu5Rmprf0M5vaAGAJHBOQCAWm1EkH99d1P1tpU2fwj5rWvcoa8tULCW/nJXkCpQfQdo+Z1zmmDoReStmRBK4i90nCby6pcS47g+tJCMAyAmo/kLK7VT/7P8L9BvboetBm/GZ3QAAAABJRU5ErkJggg==';
-                        let landing_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACaklEQVQ4jc2U309SYRjHn/f1QCmRIBwGQnlUGHkQlblJtraMEGutH5s31szL1mXrvq3/oeuuXeum2lwtQEc31XILiuMJUCxhSAKGuEzieE4XODkinU6bF33v3vd59tn3ed7nedH9CQEOQ/hQKLsgivpqtSbrAgZDzmLJIPQvoBMd6ZuTjzXaojigOvbj9p1Hd+891O6/lwIhEAiCGx2dFQdSKxaOI7Ta4gXvnFxQpaIEgF4nc7IjtRfgOCKdNgOAs48xmr7JApXLSgBACHy+IMa1R0wmKQBASPB4Qn8FNZ3rfaDTrTt6WQBo1ZSG3POkvgCANjZa1wtthKLSenzT1L66mLCVSmoJEAEAy8tU8bum2uyWli3XYNg1GP5VUSTiVpa1B/weA5lXqzelHaHqQKpUW1euztCOzwczeB6lUxaGoZloj4QpJJ5s2sF6vXN6stAwVRBQOt3OLpxiWXshr5MCAQDGfF//J7d73mzJSBSytkayC/aPEWcup28M2pPRmPWNzVptSxI4QUBv3wy9fDEqCOiPu2Yw5qjOLxIUAEBIGD7z7uKlV9BwaRGCEc/r8fGnBLGzd8nzKPyh//mzy/GYjeMIcf7p4fdtunWijtLUtHPt+syAKyLyD+xCTzAwUm3HgCuSz+lCobM0HevqTqpUW9lV4/bPo/tAzc3bEzeedHbVKlpMdAf85zMZk4iLyuUjTJRmojQAYMzzPAZxs7Xa4uTUNEnmq8dUyhz0e6pbIke7jpSKyq2paT2ZB4Bs1hjwj8RjNpmIqmqOMOYpagVjfmmpUxBkf2h1jgCA57H8Qg7qUP/s/wv0G9EW5yQKXtQFAAAAAElFTkSuQmCC';
-                        let depart_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACUUlEQVQ4jc2UXW/SYBTHzwNF3UbpoGsoLw60cxqmqJkhW7KNGS92N7f5Fj+Bt+5r+AH8BBovvFiyi10Yo0uEjLgxsDI3KWVhoYAB9wJDysuoFyULlm7owoXnqj3Pv7/nPP+n56CHT4PQidB0hPJfgrAzf2nExZsDOX1XNbvfFYmTSpARF6fH4m4mF+YoH2vbThtaERayODPOT9wSMG1dzghZvRI0ej0z5UnosHq/uTA9Fheyen/E6metqVwPADjo/OwEPzqU0vxpiZDrUYKWVpxhjno2w7ocuwBAk0WKKEkSXLHvz3ljw1d/IKQs8PM3+uWCG6n+RwjBveEdB51f9DFm469Zb8zN5BQaSYJg1LywPBBN9sJJZksSvF/rdzO5549Dgxf3WlbRepR6+3GQF4jjJPZgknPShcAGvf7dXKpoAQAhacSVmZvknfSB6jav3l1b9F1WJDEuaXx0lxsZSldrmi88xe30em8nrX1FVYRcjp+1tOa1pG1eyOo9rgymlax9xRvMT7y72qwoV7WJjMFkKMuvmwlyKXCpFYQBwMqGpfYGzT8J6bB6084QTxHLIfsn1jblSTC2xjF9rFW10obZq1v0i9d37o/zlZpGyOq30wTLUweH5+RV0iDKD7UjTSCici5ovrVwjArHKFURSZSONYWSTlXzV01LEg2DVG3+B5AJLwFAuaJd2zKfHaTD6nh3BQBWN81i5cRp0R5kwkW5v3xfbafI2s8jEyHWjjQfgvYwp34Vcqg3bXMY8TJC0m7+wumy9hXtFc631UAHZ/ZvaYTXa4YHSp4AAAAASUVORK5CYII=';
-                        let depart_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVQ4jc2UQW/SYBjHn5e+WzJmYZMaimyRUBxCWUaiwahQyHZWb84v44fwOxhv6sWTHiQDZIdNhQ46ug7cgAGWTQdkc4xaD53LhApKOPic3v777+/5p0+foiePVRhFGUZC+S9BeOgnSbLJuPLGie/fDs35bUc3iCSb90JJhilsiQyf9lUqdC/CYjkIcYkFP08QiqbUZaobxPqEQGAd447V+iUYStZliudZnmfrsgUArHSN4xKsL2sw/DZruW7pBq0mA5LEPHj42uHYBYBpy8GU+VD9gWZmylwk7naLCHUHFLI3Xr28j3S/I4Tg5q0PVrqWiN2dvvyV4+KMq9DlUVUQxbmVaLBYtAOAPkgrxlVYXIrOzpZ6EEjMuaLvwuWy7VzE4UiMttWyGY+Yu35yMg4ACKleVghHEjRd1W3w9s1SPHanS8Slkj2yuMKyQqeDt7edxV2735+mruz/KaaqonSK7dWJ+atP6zLl8eYwoVDUvpP5bJw8vuhon45Vq1aTqaVd7uxcW00GekEYADIbXkUhHi2/wFi50Bn29myfPi6kU/OB22t2e0XT+ZRPN+nZ+DcF9/Nny0HufaeDZZmqVOi85Gy1JrW7JlNDOygKkdnw9AMBgCQxksToms5BksQcHU/oev5qac1TTe2g+5r/AUSSDQA4bY/lNueGB2GsGI1HACAI7nZ7fHgQSTa0/eJ5/Xmd9RsIMpmbikKsr/m3RP1RaNVv134laiGkNhpkf9vgRM3mpYEeGOE/+yep49ifb88TZgAAAABJRU5ErkJggg==';
-                        if (i % 2 == 0) {
-                          styl = 'userCard hoverCard shadow-sm';
-                          depart = depart_purple;
-                          land = landing_purple;
-                        } else {
-                          styl = 'userCard1 hoverCard shadow-sm';
-                          depart = depart_blue;
-                          land = landing_blue;
-                        }
-
-                        return (
-                          <div>
-                            <Buttonr id={"flight" + i + "toggler"}
-                              //onClick={() => this.showModal(user)}
-                              className={styl}
-                            // cover={
-                            //     <img
-                            //         style={{ borderRadius: "10px 10px 0px 0px" }}
-                            //         alt="example"
-                            //         src={srcImg}
-                            //     />
-                            // }
-
-                            >
-
-
-                              {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
-                                        <p>
-                                            <div
-                                                className={'fontModal'}>Информация
-                                    </div>
-                                        </p>
-                                    } type="info" /> */}
-                              <div style={{ float: 'left' }}>
-                                <Tag className="userCardW"><font size={2} color={'#5459cd'}><b>123456</b></font></Tag>
-                              </div>
-                              <div style={{ float: 'left' }}>
-                                <font size={2} color={'#ffffff'}>Отбытие</font> <br />
-                                <img src={depart}></img>
-                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_departure}</font>
-                              </div>
-                              <div color={'#ffffff'} style={{ width: '2px', height: '55px', float: 'left' }}
-                                className="userCardW">
-                              </div>
-                              <div style={{ float: 'left' }}>
-                                <font size={2} color={'#ffffff'}>Прибытие</font> <br />
-                                <img src={land}></img>
-                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_arrival}</font>
-
-                              </div>
-                            </Buttonr>
-                            <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
-                              <Cardr className="userCardW">
-                                <CardBody>
-                                  {'Маршрут: ' + user.where_from + ' - ' + user.where_to} <br />
-                                  {'Аэропорт: ' + user.airport_name}<br />
-                                  {'Время в полете: ' + user.flight_time}<br />
-                                  {'Сложность аэропорта: ' + user.level_flights}
-
-
-
-
-                                </CardBody>
-                              </Cardr>
-                            </UncontrolledCollapse>
-                          </div>
-                        );
                       }
                     })}
                 </Suspense>
@@ -2182,7 +2483,7 @@ class DashBoard extends Component {
         </div>
 
 
-        <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: '80%' }}
+        <footer className='footer-users'
           align={'center'}>
           <p>Зарегистрировано пользователей IBMiX : {this.state.usersLength}</p>
 
