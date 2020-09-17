@@ -7,7 +7,8 @@
 }
 
 .setting {
-    text-align: right;
+    /* text-align: right; */
+    display: inline;
     font-size: 30px;
     padding-right: 15px;
 }
@@ -17,10 +18,48 @@
 }
 
 .right_column_with_avatar {
-    padding-right: 40px;
+    padding-right: 20px;
+    padding-left: 40px;
+    width: 500px;
 }
 
 .subtext {
     font-weight: normal;
     margin-left: 35px;
+}
+
+.unselectable {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.change_this_field {
+    background-color: rgb(249,219, 149);
+    border-radius: 5px;
+    color: rgb(83,93,202);
+}
+
+.main_block {
+    /* border-radius: 20px; */
+    display: flex;
+    /* width: 850px; */
+    /* margin-top: 20px; */
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(6deg, rgba(132,100,250,1) 0%, rgba(74,118,168,1) 100%);
+}
+
+.contact_info {
+    margin-bottom: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-bottom: 1px;
+}
+
+.input_field {
+    background-color: rgba(0,0,0,0);
+    border: none;
+    /* margin-left: 10px; */
 }
