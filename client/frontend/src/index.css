@@ -560,3 +560,25 @@ li {
     opacity: 0.5;
     color: #000000;
 }
+
+.Calendar__monthArrow {
+    background-image: url(images/i/arrow-calendar.svg) !important;
+    transform: rotate(-90deg);
+}
+
+.Calendar__monthText, .Calendar__yearText {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 13px;
+    color: #303030;
+}
+
+.Calendar__weekDay {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 13px;
+    text-decoration: unset !important;
+    color: #303030;
+}

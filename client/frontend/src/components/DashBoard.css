@@ -316,6 +316,11 @@
     justify-content: space-between;
 }
 
+.Calendar {
+    background: unset;
+    box-shadow: unset;
+}
+
 .ant-select-dropdown.ant-select-dropdown--multiple .ant-select-dropdown-menu-item-selected  {
     background-color: #7D58FF;
     color: #ffffff;
