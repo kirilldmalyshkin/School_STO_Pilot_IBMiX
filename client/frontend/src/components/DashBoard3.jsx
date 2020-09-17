@@ -882,11 +882,11 @@ class DashBoard extends Component {
     let points = 100 - onePreference - twoPreference - thirdPreference - fourthPreference - fithPreference;
 
     let date = new Date(), y = date.getFullYear(), m = date.getMonth();
-    let firstDay = new Date(y, m, 1);
-    let lastDay = new Date(y, m + 1, 0);
+    let first = new Date(y, m, 1);
+    let last = new Date(y, m + 1, 0);
 
-    firstDay = moment(firstDay).format('MM / DD / YYYY');
-    lastDay = moment(lastDay).format('MM / DD / YYYY');
+    let firstDay = moment(first).format('MM / DD / YYYY');
+    let lastDay = moment(last).format('MM / DD / YYYY');
 
     return (
 
@@ -911,8 +911,8 @@ class DashBoard extends Component {
                 <span className='bidding-info--finish'>Финиш подачи</span>
               </div>
               <div className='bidding-date'>
-                <span className='bidding-date--digit'>firstDay</span>
-                <span className='bidding-date--digit'>lastDay</span>
+                <span className='bidding-date--digit'>{firstDay}</span>
+                <span className='bidding-date--digit'>{lastDay}</span>
               </div>
               <div className='date-clock'>
                 <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
