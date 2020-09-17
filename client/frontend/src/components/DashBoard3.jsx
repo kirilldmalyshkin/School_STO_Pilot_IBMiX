@@ -2289,7 +2289,12 @@ class DashBoard extends Component {
               </div>
               <div className="userCardW" style={{ marginTop: '30px' }}>
                 <div className='yourTrip1'>Ваши Рейсы</div>
-                <div className='sUserCard' onClick={this.showSort}>Сортировка</div>
+                <div className='sUserCard' onClick={this.showSort}>
+                  <span className='sort-func-title'>Сортировка</span>
+                  <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4.5 5.99994L0.241071 1.45709C-0.0803571 1.11423 -0.0803571 0.578516 0.241071 0.235659C0.5625 -0.107199 1.06473 -0.107199 1.38616 0.235659L4.52009 3.57852L7.61384 0.257087C7.93527 -0.0857701 8.4375 -0.0857701 8.75893 0.257087C9.08036 0.599944 9.08036 1.13566 8.75893 1.47852L4.5 5.99994Z" fill="#5459CD"/>
+                  </svg>
+                </div>
                 <Suspense fallback={<h1>Loading posts....</h1>}>
                   {this.props.user.arrFlights &&
 

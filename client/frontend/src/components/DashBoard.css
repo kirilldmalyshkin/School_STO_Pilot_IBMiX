@@ -348,3 +348,13 @@
 .ant-select-selected-icon {
     color: #ffffff;
 }
+
+.sort-func-title {
+    margin-right: 4px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.sUserCard {
+    margin-bottom: 7px;
+}
