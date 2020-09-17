@@ -677,3 +677,10 @@ li {
     text-decoration: unset !important;
     color: #303030;
 }
+
+.footer-users {
+    width: 89%;
+    border-radius: 15px;
+    background-color: #f6f9fe;
+    margin: 30px auto 0 auto;
+}

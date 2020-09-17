@@ -2386,7 +2386,7 @@ class DashBoard extends Component {
         </div>
 
 
-        <footer style={{ backgroundColor: '#4A76A8', color: '#ffffff', margin: '0 auto', width: '90%' }}
+        <footer className='footer-users'
           align={'center'}>
           <p>Зарегистрировано пользователей IBMiX : {this.state.usersLength}</p>
 
