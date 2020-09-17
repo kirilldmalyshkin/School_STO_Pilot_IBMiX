@@ -248,6 +248,13 @@ a {
     margin: 10px !important;
 }
 
+.userCardFilterSort{
+    width: 300px !important;
+    border-radius: 10px !important;
+    padding: 0px 8px 0 8px !important;
+    margin: 0px !important;
+}
+
 .collapseCard{
     border-radius: 30px !important;
     background-color: #F3F3FF !important;
@@ -260,6 +267,17 @@ a {
     background-color: #ffffff !important;
 }
 
+.userCardWSort{
+    border-radius: 30px !important;
+    /* padding: 0px 8px 0 8px !important; */
+    margin: 0px !important;
+    padding: 0px !important;
+    background-color: #ffffff !important;
+}
+
+.card-body{
+    padding: 1.0rem !important;
+}
 
 .userCardWP{
     border-radius: 30px !important;

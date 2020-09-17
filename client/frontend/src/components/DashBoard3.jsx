@@ -40,6 +40,10 @@ function handleChange(value) {
   console.log(`selected ${value}`);
 }
 
+
+
+
+
 const { Option } = Select;
 const { Panel } = Collapse;
 const openNotification = (placement, icon, title, message) => {
@@ -73,20 +77,17 @@ class DashBoard extends Component {
     this.state = {
       modalUser: null,
       loading: false,
-
       visibleSort: false,
-
       showLongWork: true,
       showShortWork: true,
-
       minTime: 0,
-      maxTime: 50000,
-
+      maxTime: 24,
+      minDifficulty: 0,
+      maxDifficulty: 10,
       visible: false,
       visible2: false,
       visible4: false,
       flagVisit: false,
-      // isRedirect: false,
       usersLength: null,
       newWish: false,
       preference: false,
@@ -114,7 +115,9 @@ class DashBoard extends Component {
       checkboxLongDayEasyDay: false,
       data: [],
       timeDay: [],
-      newWishForm: []
+      newWishForm: [],
+      citiesSort: [],
+      showSortFilters: false,
     };
   }
 
@@ -122,8 +125,6 @@ class DashBoard extends Component {
 
     this.setState({
       modalUser: {
-        // id: user.id,
-        // about: user.plane.about,
         where_to: user.where_to,
         where_from: user.where_from,
         flight_time: user.flight_time,
@@ -140,7 +141,7 @@ class DashBoard extends Component {
   showSort = () => {
 
     this.setState({
-      visibleSort: true,
+      showSortFilters: !this.state.showSortFilters,
     });
   };
 
@@ -357,8 +358,15 @@ class DashBoard extends Component {
 
   onChangeTime = value => {
     this.setState({
-      minPrice: value[0],
-      maxPrice: value[1],
+      minTime: value[0],
+      maxTime: value[1],
+    });
+  };
+
+  onChangeDifficulty = value => {
+    this.setState({
+      minDifficulty: value[0],
+      maxDifficulty: value[1],
     });
   };
 
@@ -780,7 +788,36 @@ class DashBoard extends Component {
     });
   };
 
+  filterPrise = (budget) => {
+    return this.state.minTime <= budget && budget <= this.state.maxTime;
+  };
 
+  filterCities = (city) => {
+    let array = this.state.citiesSort;
+    if (array.length === 0) {
+      return city
+    } else {
+      for (let i = 0; i < array.length; i++) {
+        if (array[i] === city) {
+          return city
+        }
+      }
+    }
+  };
+
+
+  filterDifficulty = (level_flights) => {
+    return this.state.minDifficulty <= level_flights && level_flights <= this.state.maxDifficulty;
+  };
+
+
+  handleChangeSort = (value) => {
+    if (value.length === 0) {
+      this.setState({ citiesSort: value })
+    }
+    this.setState({ citiesSort: value })
+
+  }
 
   render() {
     const { TabPane } = Tabs;
@@ -1032,18 +1069,38 @@ class DashBoard extends Component {
               <div style={{ textAlign: 'center' }}>
                 <div className="dashBoardContainerMoreFiltres">
                   <div className="dashBoardContentMoreFiltres">
-                    <Card size="small" title="Длительность смены"
-                      className="userCardFilter"
+                    <Card size="small" title="Время полета" className="userCardFilterSort">
+                      <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                        <Slider range value={[this.state.minTime, this.state.maxTime]} max={24}
+                          onChange={this.onChangeTime}
+                          defaultValue={[this.state.minTime, this.state.maxTime]}
+                          marks={{ 0: 'ч', 24: 'ч.' }} />
+                      </div>
+                    </Card>
+                    <Card size="small" title="Город"
+                      className="userCardFilterSort"
                     >
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeLongWork} /> Трансатлантические рейсы
+                      <Select
+                        mode="multiple"
+                        style={{ width: '50%' }}
+                        placeholder="Приоритетный город"
+                        // defaultValue={['china']}
+                        onChange={handleChange}
+                      // optionLabelProp="label"
+                      >
+
+                        {this.state.cities && this.state.cities.map(city => (
+                          <Option value={city.cityName} key={city.cityName}>
+                            <div className="demo-option-label-item">
+                              {city.cityName}
                             </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeShortWork} /> Короткие разворотные рейсы
-                            </div>
+                          </Option>
+                        ))}
+
+                      </Select>
 
                     </Card>
-                    <Card size="small" title="Время полета" className="userCardFilter">
+                    <Card size="small" title="Время полета" className="userCardFilterSort">
                       <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
                         <Slider range value={[this.state.minPrice, this.state.maxPrice]} max={24}
                           onChange={this.onChangeTime}
@@ -1052,27 +1109,7 @@ class DashBoard extends Component {
                       </div>
                     </Card>
 
-                    <Card size="small" title="Время полета" className="userCardFilter">
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeMorning} /> Утро
-                            </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeDay} /> День
-                            </div>
 
-                    </Card>
-
-                    <Card size="small" title="Время полета" className="userCardFilter">
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeEvening} /> Вечер
-                            </div>
-                      <div style={{ textAlign: 'left' }}>
-                        <Switch defaultChecked onChange={this.onChangeNight} /> Ночь
-                            </div>
-                      <div>
-
-                      </div>
-                    </Card>
                   </div>
                 </div>
               </div>
@@ -1258,7 +1295,7 @@ class DashBoard extends Component {
 
 
                     <Select
-                      mode="multiple"
+                      showSearch
                       style={{ width: '50%' }}
                       placeholder="Приоритетный город"
                       // defaultValue={['china']}
@@ -1275,6 +1312,9 @@ class DashBoard extends Component {
                       ))}
 
                     </Select>,
+
+
+
                   </div>
                   {/* <RadioButtonList /> */}
                 </div>
@@ -2065,95 +2105,142 @@ class DashBoard extends Component {
                 </Card>
 
 
+                {this.state.showSortFilters &&
+                  <Cardr className="userCardWSort">
+                    <CardBody>
+
+                      <Card size="small" title="Время полета, часы" className="userCardFilter">
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                          <Slider range value={[this.state.minTime, this.state.maxTime]} max={24}
+                            onChange={this.onChangeTime}
+                            defaultValue={[this.state.minTime, this.state.maxTime]}
+                            marks={{ 0: 'мин.', 24: 'макс.' }} />
+                        </div>
+                      </Card>
+                      <Card size="small" title="Город"
+                        className="userCardFilter"
+                      >
+
+                        <Select
+                          mode="multiple"
+                          style={{ width: '100%' }}
+                          placeholder="Приоритетный город"
+                          onChange={this.handleChangeSort}
+                        >
+
+                          {this.props.user.arrFlights && this.props.user.arrFlights.map(city => (
+                            <Option value={city.where_to} key={city.where_to}>
+                              <div className="demo-option-label-item">
+                                {city.where_to}
+                              </div>
+                            </Option>
+                          ))}
+
+                        </Select>
+
+
+
+                      </Card>
+                      <Card size="small" title="Сложность аэропорта, коэфициент" className="userCardFilter">
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
+                          <Slider range value={[this.state.minDifficulty, this.state.maxDifficulty]} max={10}
+                            onChange={this.onChangeDifficulty}
+                            defaultValue={[this.state.minDifficulty, this.state.maxDifficulty]}
+                            marks={{ 0: 'мин.', 10: 'макс.' }} />
+                        </div>
+                      </Card>
+
+                    </CardBody>
+                  </Cardr>
+                }
                 <Suspense fallback={<h1>Loading posts....</h1>}>
                   {this.props.user.arrFlights &&
 
                     this.props.user.arrFlights.map((user, i) => {
 
-                      // if (this.filterPrise(user.time)) {
-                      if (user.city_photo) {
+                      if (this.filterTime(user.flight_time) && this.filterCities(user.where_to) && this.filterDifficulty(user.level_flights)) {
+                        if (user.city_photo) {
 
-                        // console.log(user);
+                          let srcImg;
+                          if (!user.city_photo) {
+                            srcImg = user.city_photo;
+                          } else {
+                            srcImg = plane;
+                          }
 
-                        let srcImg;
-                        if (!user.city_photo) {
-                          srcImg = user.city_photo;
-                        } else {
-                          srcImg = plane;
-                        }
+                          let styl, depart, land;
+                          let landing_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACeklEQVQ4jc2U309SYRjHn/ecQ6mAB0UOIOhOxQgRNb1Q07Vps5lrq4tcG2Nr3XnVTWtr6x/oH+imy26iq7ZuWpu2fm4unWL+gB1JzAGCASoECBw4bxcUHPklbV703Lzb+7zP532e7/s8L5q2LsFpGHEqlD8gMxvpM4RLHB3ML4M+itC/gIydh49si6qWpNhBSzNPZr48ffCeUSSrxJaBCMASSrBd48QOztvCZwlGkbROcFViy0ApngKAEcuuqfOg4OCzhNvXAgCjvQFWG6sPlCEBACGwTboIkfprHiUAIITvXHWfCCLNPTNaZfKyJQAAbXTq+tCOTpXAAOFoUzAiPSPJKZtT59ujDrd6P9ZQA0QBwPq2MnTQlBdb3pQZH/COD3jTPOnYZBZc6hdzJr0q3ipPAdAnZJTmyc+rOk1rUq+KF28gsZ6JD5mDN0e3dKr4fqwxEms4SlPVQEjc2cPdAesE196WqHgUY+T20wtOzYJLHQjLaoEAgCTwlT7/5OCOQX9YoxDvT/miS/3pm84fklUGFYzVRG2T3CVDqAYOY/Rmnn3+tgtjVHXWOtTxbjZSgwIACOEbI9v3ppxQcWgRgulx9/3bKxJKKGwKAnxw6J+97lnmGD57LGpqeEfTmih9BYoUZm6tjfX7RPnDV6f25TtjXo6xfp8/JHv10TBo3uu9EGqWZrYDzYmU5BhI2sg/tC5ZzhUrWvmuss9e9OzSYu5Rmprf0M5vaAGAJHBOQCAWm1EkH99d1P1tpU2fwj5rWvcoa8tULCW/nJXkCpQfQdo+Z1zmmDoReStmRBK4i90nCby6pcS47g+tJCMAyAmo/kLK7VT/7P8L9BvboetBm/GZ3QAAAABJRU5ErkJggg==';
+                          let landing_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACaklEQVQ4jc2U309SYRjHn/f1QCmRIBwGQnlUGHkQlblJtraMEGutH5s31szL1mXrvq3/oeuuXeum2lwtQEc31XILiuMJUCxhSAKGuEzieE4XODkinU6bF33v3vd59tn3ed7nedH9CQEOQ/hQKLsgivpqtSbrAgZDzmLJIPQvoBMd6ZuTjzXaojigOvbj9p1Hd+891O6/lwIhEAiCGx2dFQdSKxaOI7Ta4gXvnFxQpaIEgF4nc7IjtRfgOCKdNgOAs48xmr7JApXLSgBACHy+IMa1R0wmKQBASPB4Qn8FNZ3rfaDTrTt6WQBo1ZSG3POkvgCANjZa1wtthKLSenzT1L66mLCVSmoJEAEAy8tU8bum2uyWli3XYNg1GP5VUSTiVpa1B/weA5lXqzelHaHqQKpUW1euztCOzwczeB6lUxaGoZloj4QpJJ5s2sF6vXN6stAwVRBQOt3OLpxiWXshr5MCAQDGfF//J7d73mzJSBSytkayC/aPEWcup28M2pPRmPWNzVptSxI4QUBv3wy9fDEqCOiPu2Yw5qjOLxIUAEBIGD7z7uKlV9BwaRGCEc/r8fGnBLGzd8nzKPyh//mzy/GYjeMIcf7p4fdtunWijtLUtHPt+syAKyLyD+xCTzAwUm3HgCuSz+lCobM0HevqTqpUW9lV4/bPo/tAzc3bEzeedHbVKlpMdAf85zMZk4iLyuUjTJRmojQAYMzzPAZxs7Xa4uTUNEnmq8dUyhz0e6pbIke7jpSKyq2paT2ZB4Bs1hjwj8RjNpmIqmqOMOYpagVjfmmpUxBkf2h1jgCA57H8Qg7qUP/s/wv0G9EW5yQKXtQFAAAAAElFTkSuQmCC';
+                          let depart_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACUUlEQVQ4jc2UXW/SYBTHzwNF3UbpoGsoLw60cxqmqJkhW7KNGS92N7f5Fj+Bt+5r+AH8BBovvFiyi10Yo0uEjLgxsDI3KWVhoYAB9wJDysuoFyULlm7owoXnqj3Pv7/nPP+n56CHT4PQidB0hPJfgrAzf2nExZsDOX1XNbvfFYmTSpARF6fH4m4mF+YoH2vbThtaERayODPOT9wSMG1dzghZvRI0ej0z5UnosHq/uTA9Fheyen/E6metqVwPADjo/OwEPzqU0vxpiZDrUYKWVpxhjno2w7ocuwBAk0WKKEkSXLHvz3ljw1d/IKQs8PM3+uWCG6n+RwjBveEdB51f9DFm469Zb8zN5BQaSYJg1LywPBBN9sJJZksSvF/rdzO5549Dgxf3WlbRepR6+3GQF4jjJPZgknPShcAGvf7dXKpoAQAhacSVmZvknfSB6jav3l1b9F1WJDEuaXx0lxsZSldrmi88xe30em8nrX1FVYRcjp+1tOa1pG1eyOo9rgymlax9xRvMT7y72qwoV7WJjMFkKMuvmwlyKXCpFYQBwMqGpfYGzT8J6bB6084QTxHLIfsn1jblSTC2xjF9rFW10obZq1v0i9d37o/zlZpGyOq30wTLUweH5+RV0iDKD7UjTSCici5ovrVwjArHKFURSZSONYWSTlXzV01LEg2DVG3+B5AJLwFAuaJd2zKfHaTD6nh3BQBWN81i5cRp0R5kwkW5v3xfbafI2s8jEyHWjjQfgvYwp34Vcqg3bXMY8TJC0m7+wumy9hXtFc631UAHZ/ZvaYTXa4YHSp4AAAAASUVORK5CYII=';
+                          let depart_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVQ4jc2UQW/SYBjHn5e+WzJmYZMaimyRUBxCWUaiwahQyHZWb84v44fwOxhv6sWTHiQDZIdNhQ46ug7cgAGWTQdkc4xaD53LhApKOPic3v777+/5p0+foiePVRhFGUZC+S9BeOgnSbLJuPLGie/fDs35bUc3iCSb90JJhilsiQyf9lUqdC/CYjkIcYkFP08QiqbUZaobxPqEQGAd447V+iUYStZliudZnmfrsgUArHSN4xKsL2sw/DZruW7pBq0mA5LEPHj42uHYBYBpy8GU+VD9gWZmylwk7naLCHUHFLI3Xr28j3S/I4Tg5q0PVrqWiN2dvvyV4+KMq9DlUVUQxbmVaLBYtAOAPkgrxlVYXIrOzpZ6EEjMuaLvwuWy7VzE4UiMttWyGY+Yu35yMg4ACKleVghHEjRd1W3w9s1SPHanS8Slkj2yuMKyQqeDt7edxV2735+mruz/KaaqonSK7dWJ+atP6zLl8eYwoVDUvpP5bJw8vuhon45Vq1aTqaVd7uxcW00GekEYADIbXkUhHi2/wFi50Bn29myfPi6kU/OB22t2e0XT+ZRPN+nZ+DcF9/Nny0HufaeDZZmqVOi85Gy1JrW7JlNDOygKkdnw9AMBgCQxksToms5BksQcHU/oev5qac1TTe2g+5r/AUSSDQA4bY/lNueGB2GsGI1HACAI7nZ7fHgQSTa0/eJ5/Xmd9RsIMpmbikKsr/m3RP1RaNVv134laiGkNhpkf9vgRM3mpYEeGOE/+yep49ifb88TZgAAAABJRU5ErkJggg==';
+                          if (i % 2 == 0) {
+                            styl = 'userCard hoverCard shadow-sm';
+                            depart = depart_purple;
+                            land = landing_purple;
+                          } else {
+                            styl = 'userCard1 hoverCard shadow-sm';
+                            depart = depart_blue;
+                            land = landing_blue;
+                          }
 
-                        let styl, depart, land;
-                        let landing_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACeklEQVQ4jc2U309SYRjHn/ecQ6mAB0UOIOhOxQgRNb1Q07Vps5lrq4tcG2Nr3XnVTWtr6x/oH+imy26iq7ZuWpu2fm4unWL+gB1JzAGCASoECBw4bxcUHPklbV703Lzb+7zP532e7/s8L5q2LsFpGHEqlD8gMxvpM4RLHB3ML4M+itC/gIydh49si6qWpNhBSzNPZr48ffCeUSSrxJaBCMASSrBd48QOztvCZwlGkbROcFViy0ApngKAEcuuqfOg4OCzhNvXAgCjvQFWG6sPlCEBACGwTboIkfprHiUAIITvXHWfCCLNPTNaZfKyJQAAbXTq+tCOTpXAAOFoUzAiPSPJKZtT59ujDrd6P9ZQA0QBwPq2MnTQlBdb3pQZH/COD3jTPOnYZBZc6hdzJr0q3ipPAdAnZJTmyc+rOk1rUq+KF28gsZ6JD5mDN0e3dKr4fqwxEms4SlPVQEjc2cPdAesE196WqHgUY+T20wtOzYJLHQjLaoEAgCTwlT7/5OCOQX9YoxDvT/miS/3pm84fklUGFYzVRG2T3CVDqAYOY/Rmnn3+tgtjVHXWOtTxbjZSgwIACOEbI9v3ppxQcWgRgulx9/3bKxJKKGwKAnxw6J+97lnmGD57LGpqeEfTmih9BYoUZm6tjfX7RPnDV6f25TtjXo6xfp8/JHv10TBo3uu9EGqWZrYDzYmU5BhI2sg/tC5ZzhUrWvmuss9e9OzSYu5Rmprf0M5vaAGAJHBOQCAWm1EkH99d1P1tpU2fwj5rWvcoa8tULCW/nJXkCpQfQdo+Z1zmmDoReStmRBK4i90nCby6pcS47g+tJCMAyAmo/kLK7VT/7P8L9BvboetBm/GZ3QAAAABJRU5ErkJggg==';
-                        let landing_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACaklEQVQ4jc2U309SYRjHn/f1QCmRIBwGQnlUGHkQlblJtraMEGutH5s31szL1mXrvq3/oeuuXeum2lwtQEc31XILiuMJUCxhSAKGuEzieE4XODkinU6bF33v3vd59tn3ed7nedH9CQEOQ/hQKLsgivpqtSbrAgZDzmLJIPQvoBMd6ZuTjzXaojigOvbj9p1Hd+891O6/lwIhEAiCGx2dFQdSKxaOI7Ta4gXvnFxQpaIEgF4nc7IjtRfgOCKdNgOAs48xmr7JApXLSgBACHy+IMa1R0wmKQBASPB4Qn8FNZ3rfaDTrTt6WQBo1ZSG3POkvgCANjZa1wtthKLSenzT1L66mLCVSmoJEAEAy8tU8bum2uyWli3XYNg1GP5VUSTiVpa1B/weA5lXqzelHaHqQKpUW1euztCOzwczeB6lUxaGoZloj4QpJJ5s2sF6vXN6stAwVRBQOt3OLpxiWXshr5MCAQDGfF//J7d73mzJSBSytkayC/aPEWcup28M2pPRmPWNzVptSxI4QUBv3wy9fDEqCOiPu2Yw5qjOLxIUAEBIGD7z7uKlV9BwaRGCEc/r8fGnBLGzd8nzKPyh//mzy/GYjeMIcf7p4fdtunWijtLUtHPt+syAKyLyD+xCTzAwUm3HgCuSz+lCobM0HevqTqpUW9lV4/bPo/tAzc3bEzeedHbVKlpMdAf85zMZk4iLyuUjTJRmojQAYMzzPAZxs7Xa4uTUNEnmq8dUyhz0e6pbIke7jpSKyq2paT2ZB4Bs1hjwj8RjNpmIqmqOMOYpagVjfmmpUxBkf2h1jgCA57H8Qg7qUP/s/wv0G9EW5yQKXtQFAAAAAElFTkSuQmCC';
-                        let depart_blue = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACUUlEQVQ4jc2UXW/SYBTHzwNF3UbpoGsoLw60cxqmqJkhW7KNGS92N7f5Fj+Bt+5r+AH8BBovvFiyi10Yo0uEjLgxsDI3KWVhoYAB9wJDysuoFyULlm7owoXnqj3Pv7/nPP+n56CHT4PQidB0hPJfgrAzf2nExZsDOX1XNbvfFYmTSpARF6fH4m4mF+YoH2vbThtaERayODPOT9wSMG1dzghZvRI0ej0z5UnosHq/uTA9Fheyen/E6metqVwPADjo/OwEPzqU0vxpiZDrUYKWVpxhjno2w7ocuwBAk0WKKEkSXLHvz3ljw1d/IKQs8PM3+uWCG6n+RwjBveEdB51f9DFm469Zb8zN5BQaSYJg1LywPBBN9sJJZksSvF/rdzO5549Dgxf3WlbRepR6+3GQF4jjJPZgknPShcAGvf7dXKpoAQAhacSVmZvknfSB6jav3l1b9F1WJDEuaXx0lxsZSldrmi88xe30em8nrX1FVYRcjp+1tOa1pG1eyOo9rgymlax9xRvMT7y72qwoV7WJjMFkKMuvmwlyKXCpFYQBwMqGpfYGzT8J6bB6084QTxHLIfsn1jblSTC2xjF9rFW10obZq1v0i9d37o/zlZpGyOq30wTLUweH5+RV0iDKD7UjTSCici5ovrVwjArHKFURSZSONYWSTlXzV01LEg2DVG3+B5AJLwFAuaJd2zKfHaTD6nh3BQBWN81i5cRp0R5kwkW5v3xfbafI2s8jEyHWjjQfgvYwp34Vcqg3bXMY8TJC0m7+wumy9hXtFc631UAHZ/ZvaYTXa4YHSp4AAAAASUVORK5CYII=';
-                        let depart_purple = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAIAAABvFaqvAAAABmJLR0QA/wD/AP+gvaeTAAACO0lEQVQ4jc2UQW/SYBjHn5e+WzJmYZMaimyRUBxCWUaiwahQyHZWb84v44fwOxhv6sWTHiQDZIdNhQ46ug7cgAGWTQdkc4xaD53LhApKOPic3v777+/5p0+foiePVRhFGUZC+S9BeOgnSbLJuPLGie/fDs35bUc3iCSb90JJhilsiQyf9lUqdC/CYjkIcYkFP08QiqbUZaobxPqEQGAd447V+iUYStZliudZnmfrsgUArHSN4xKsL2sw/DZruW7pBq0mA5LEPHj42uHYBYBpy8GU+VD9gWZmylwk7naLCHUHFLI3Xr28j3S/I4Tg5q0PVrqWiN2dvvyV4+KMq9DlUVUQxbmVaLBYtAOAPkgrxlVYXIrOzpZ6EEjMuaLvwuWy7VzE4UiMttWyGY+Yu35yMg4ACKleVghHEjRd1W3w9s1SPHanS8Slkj2yuMKyQqeDt7edxV2735+mruz/KaaqonSK7dWJ+atP6zLl8eYwoVDUvpP5bJw8vuhon45Vq1aTqaVd7uxcW00GekEYADIbXkUhHi2/wFi50Bn29myfPi6kU/OB22t2e0XT+ZRPN+nZ+DcF9/Nny0HufaeDZZmqVOi85Gy1JrW7JlNDOygKkdnw9AMBgCQxksToms5BksQcHU/oev5qac1TTe2g+5r/AUSSDQA4bY/lNueGB2GsGI1HACAI7nZ7fHgQSTa0/eJ5/Xmd9RsIMpmbikKsr/m3RP1RaNVv134laiGkNhpkf9vgRM3mpYEeGOE/+yep49ifb88TZgAAAABJRU5ErkJggg==';
-                        if (i % 2 == 0) {
-                          styl = 'userCard hoverCard shadow-sm';
-                          depart = depart_purple;
-                          land = landing_purple;
-                        } else {
-                          styl = 'userCard1 hoverCard shadow-sm';
-                          depart = depart_blue;
-                          land = landing_blue;
-                        }
+                          return (
+                            <div>
+                              <Buttonr id={"flight" + i + "toggler"}
 
-                        return (
-                          <div>
-                            <Buttonr id={"flight" + i + "toggler"}
-                              //onClick={() => this.showModal(user)}
-                              className={styl}
-                            // cover={
-                            //     <img
-                            //         style={{ borderRadius: "10px 10px 0px 0px" }}
-                            //         alt="example"
-                            //         src={srcImg}
-                            //     />
-                            // }
+                                className={styl}
+                              // cover={
+                              //     <img
+                              //         style={{ borderRadius: "10px 10px 0px 0px" }}
+                              //         alt="example"
+                              //         src={srcImg}
+                              //     />
+                              // }
 
-                            >
+                              >
 
 
-                              {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
+                                {/* <Alert style={{ background: 'white !important', width: '10%', height: '10%' }} message={
                                         <p>
                                             <div
                                                 className={'fontModal'}>Информация
                                     </div>
                                         </p>
                                     } type="info" /> */}
-                              <div style={{ float: 'left' }}>
-                                <Tag className="userCardW"><font size={2} color={'#5459cd'}><b>123456</b></font></Tag>
-                              </div>
-                              <div style={{ float: 'left' }}>
-                                <font size={2} color={'#ffffff'}>Отбытие</font> <br />
-                                <img src={depart}></img>
-                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_departure}</font>
-                              </div>
-                              <div color={'#ffffff'} style={{ width: '2px', height: '55px', float: 'left' }}
-                                className="userCardW">
-                              </div>
-                              <div style={{ float: 'left' }}>
-                                <font size={2} color={'#ffffff'}>Прибытие</font> <br />
-                                <img src={land}></img>
-                                <font size={2} color={'#ffffff'} className="textRight">{user.time_of_arrival}</font>
+                                <div style={{ float: 'left' }}>
+                                  <Tag className="userCardW"><font size={2} color={'#5459cd'}><b>123456</b></font></Tag>
+                                </div>
+                                <div style={{ float: 'left' }}>
+                                  <font size={2} color={'#ffffff'}>Отбытие</font> <br />
+                                  <img src={depart}></img>
+                                  <font size={2} color={'#ffffff'} className="textRight">{user.time_of_departure}</font>
+                                </div>
+                                <div color={'#ffffff'} style={{ width: '2px', height: '55px', float: 'left' }}
+                                  className="userCardW">
+                                </div>
+                                <div style={{ float: 'left' }}>
+                                  <font size={2} color={'#ffffff'}>Прибытие</font> <br />
+                                  <img src={land}></img>
+                                  <font size={2} color={'#ffffff'} className="textRight">{user.time_of_arrival}</font>
 
-                              </div>
-                            </Buttonr>
-                            <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
-                              <Cardr className="userCardW">
-                                <CardBody>
-                                  {'Маршрут: ' + user.where_from + ' - ' + user.where_to} <br />
-                                  {'Аэропорт: ' + user.airport_name}<br />
-                                  {'Время в полете: ' + user.flight_time}<br />
-                                  {'Сложность аэропорта: ' + user.level_flights}
-
-
+                                </div>
+                              </Buttonr>
+                              <UncontrolledCollapse toggler={"#flight" + i + "toggler"}>
+                                <Cardr className="userCardW">
+                                  <CardBody>
+                                    {'Маршрут: ' + user.where_from + ' - ' + user.where_to} <br />
+                                    {'Аэропорт: ' + user.airport_name}<br />
+                                    {'Время в полете: ' + user.flight_time}<br />
+                                    {'Сложность аэропорта: ' + user.level_flights}
 
 
-                                </CardBody>
-                              </Cardr>
-                            </UncontrolledCollapse>
-                          </div>
-                        );
+
+
+                                  </CardBody>
+                                </Cardr>
+                              </UncontrolledCollapse>
+                            </div>
+                          );
+                        }
                       }
                     })}
                 </Suspense>
