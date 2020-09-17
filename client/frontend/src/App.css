@@ -1,14 +1,5 @@
 @import '~antd/dist/antd.css';
 
-@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Lobster&family=Marck+Script&family=Pangolin&family=Pattaya&family=Warnes&display=swap');
-
-
-.fontModal {
-    font-family: 'Pangolin', cursive;
-    font-size: 16px;
-}
-
-
 .icons:hover {
     box-shadow: 0 0 10px 0 blue inset, 0 0 10px 1px blue;
     color: red;
@@ -76,8 +67,6 @@
         margin: 0 auto;
         justify-content: space-around;
         width: 30%;
-        font-family: 'Caveat', cursive,
-
     }
 
     .ibmxFontSize {
@@ -99,8 +88,6 @@
         margin: 0 auto;
         justify-content: space-around;
         width: 30%;
-        font-family: 'Oswald', sans-serif;
-
     }
 
     .hoverCard:hover {
