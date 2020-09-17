@@ -130,6 +130,12 @@
 
 .stats-icon {
     margin-right: 82px;
+    cursor: pointer;
+    border-radius: 45px;
+}
+
+.stats-icon:hover {
+    box-shadow: 0 0 10px -1px rgb(21, 168, 236);
 }
 
 .bidding-stats--first {

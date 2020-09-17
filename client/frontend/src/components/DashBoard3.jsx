@@ -948,7 +948,7 @@ class DashBoard extends Component {
 
 
               {(this.props.user.crewRole === 'командир') &&
-                <div className='stats-icon icons' onClick={() => this.props.history.push('/dashboardC')}>
+                <div className='stats-icon' onClick={() => this.props.history.push('/dashboardC')}>
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <g filter="url(#filter0_d)">
@@ -998,7 +998,7 @@ class DashBoard extends Component {
               }
 
               {(this.props.user.crewRole === 'КВС') &&
-                <div className='stats-icon icons' onClick={() => this.props.history.push('/dashboardC')}>
+                <div className='stats-icon' onClick={() => this.props.history.push('/dashboardC')}>
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
                     <g filter="url(#filter0_d)">

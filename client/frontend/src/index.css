@@ -214,16 +214,26 @@ a {
 
 
 .dashBoardContentDataLeans {
-
     width: 90%;
     padding: 30px;
-    margin-right: 30px;
     background: #F3F3FF;
     box-shadow: 0px 0px 6px #F3F3FF;
     border-radius: 15px;
 }
 
+.iframe {
+    margin-top: 12px;
+    border: unset;
+    border-radius: 15px;
+}
 
+.ant-radio-checked .ant-radio-inner {
+    border-color: #7D58FF !important;
+}
+
+.ant-radio-inner::after {
+    background-color: #7D58FF !important;
+}
 
 .accordion {
     padding: 30px;
