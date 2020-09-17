@@ -85,26 +85,33 @@ router.post("/expierence/pilot", sessionChecker, async (req, res, next) => {
 
 router.post("/api/pilot/edit", sessionChecker, async (req, res, next) => {
   try {
-    const { email } = req.session.user;
+    const current_email = req.session.user.email;
 
     const {
       firstName,
       lastName,
       crewRole,
+      email,
+      phone
     } = req.body.editUser;
 
 
-
     await Pilot.updateOne(
-      { email },
+      { email: current_email },
       {
         $set: {
           firstName,
           lastName,
           crewRole,
+          email,
+          phone
         }
       }
     );
+    
+    //Можно ли так делать?
+    req.session.user.email = email;
+    req.session.user.phone = phone;
 
     res.status(200).json({ response: 'success' });
   } catch (e) {

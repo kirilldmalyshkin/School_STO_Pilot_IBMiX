@@ -54,13 +54,15 @@ export default function(oldState = initialState, action) {
         ...oldState,
         usersDashBoard: action.users,
       };
-    case CLEAN_REDUX:
-      return {
-        photos: [],
-        isLogin: false,
-        user: {},
-        usersDashBoard: [],
-      };
+    case CLEAN_REDUX: {
+        console.log('CLEANING REDUX');
+        return {
+          photos: [],
+          isLogin: false,
+          user: {},
+          usersDashBoard: [],
+        };
+      }
     case SET_PRIORITY:
       return {
         ...oldState,

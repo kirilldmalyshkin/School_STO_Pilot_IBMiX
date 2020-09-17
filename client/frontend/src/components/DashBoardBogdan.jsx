@@ -84,7 +84,6 @@ class DashBoard extends Component {
     };
 
     showSort = () => {
-
         this.setState({
             visibleSort: true
         });
