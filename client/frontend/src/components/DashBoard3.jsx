@@ -17,6 +17,9 @@ import RadioButtonList_WorkDay from './WorkTime/RadioButtonList';
 import { data_work_time } from './WorkTime/radio_data';
 import { data_work_day } from './WorkDay/radio_data';
 import RadioButtonList_WorkTime from './WorkDay/RadioButtonList';
+
+import Profile from './Profile';
+
 import { Popover, Tabs } from 'antd';
 import {
   Card,
@@ -58,12 +61,19 @@ const openNotification = (placement, icon, title, message) => {
   });
 };
 
-const content = (
-  <div>
-    <p><a href="/profile">Профиль</a></p>
-    <p><a href="/logout">Выйти</a></p>
-  </div>
-);
+// КНОПОЧКИ НА НАВИГАЦИОННОЙ ПАНЕЛИ
+const content = (func) => {
+  return (
+    <div>
+      {/* <p><a href="/profile">Профиль</a></p> */}
+      {/* <p onClick={() => this.setState({modalProfileShow: !this.state.modalProfileShow})}>{this.state.modalProfileShow.toSring()}</p> */}
+      {/* <p onClick={() => this.setState({modalProfileShow: !this.state.modalProfileShow})}>Профиль</p> */}
+      <p onClick={() => func()}><a href='#'>Профиль</a></p>
+      <p><a href="/logout">Выйти</a></p>
+    </div>
+  );
+}
+// КОНЕЦ 
 
 const rulesCount = (
   <div>
@@ -79,11 +89,13 @@ class DashBoard extends Component {
       areaTags: [],
 
       modalUser: null,
+      modalProfileShow: false,
       loading: false,
       visibleSort: false,
       showLongWork: true,
       showShortWork: true,
       minTime: 0,
+      maxTime: 50000,
       maxTime: 24,
       minDifficulty: 0,
       maxDifficulty: 10,
@@ -216,8 +228,7 @@ class DashBoard extends Component {
 
     this.setState({
       newWishForm: this.props.user.wishForm,
-    })
-
+    });
   }
 
 
@@ -1076,6 +1087,11 @@ class DashBoard extends Component {
                   </svg>
                 </div>
               }
+
+              {/* Модальное окно профиля */}
+                <Profile isOpen={this.state.modalProfileShow} closeFunc={() => this.setState({modalProfileShow: !this.state.modalProfileShow})} />
+              {/* Модальное окно профиля конец */}
+
               {/* <Popover content={content} placement="bottom"> */}
               <Avatar
                 className="user-avatar"
@@ -1093,7 +1109,9 @@ class DashBoard extends Component {
                   this.props.user.lastName}</span>
               </div>
               {/* </Popover> */}
-              <Popover content={content} placement="bottom">
+              <Popover content={content(() => {
+                this.setState({modalProfileShow: !this.state.modalProfileShow});
+              })} placement="bottom">
                 <div className="user-more">
                   <svg width="4" height="14" viewBox="0 0 4 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="2" cy="2" r="2" fill="#686CD7" />

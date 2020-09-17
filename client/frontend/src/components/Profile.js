@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { Avatar, Tabs, Icon, Button, Card, Form, DatePicker } from "antd";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import pilotAvatar from "../images/pilotAvatarHalf.jpg";
 import './Profile.css';
 
+// const fetch = require('node-fetch');
+
 import { Link, Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+// import { connect } from "react-redux";
+// import {EditProfilePageAC} from '../redux/action';
 import moment from 'moment';
 
 const { TabPane } = Tabs;
@@ -20,44 +24,60 @@ class Profile extends Component {
     super(props);
     this.state = {
       isRedirect: false,
-      edit: false
+      edit: false,
+      user: null,
     };
+  }
+  
+  componentDidMount() {
+    (async () => {
+      const response = await fetch('/api/profilePilot', {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      const result = await response.json();
+      this.setState({user: result.response});
+    })();
+  }
+
+  saveToBase(user) {
+    (async () => {
+      fetch('/api/pilot/edit', {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({editUser: user}),
+      }).then((res) => res.json()).then((res) => console.log("IN FETCH", res));
+    })();
+    this.setState({edit: !this.state.edit});
   }
 
   render() {
-    const { getFieldDecorator } = this.props.form;
     if (this.state.isRedirect) {
       return <Redirect to={"/login"} />;
     }
     let linkEdite = '';
 
-    if (this.props.user.crewRole === 'командир') {
+    if (this.state.user && this.state.user.crewRole === 'командир') {
       linkEdite = '/edit/profile_comander'
-    } else if (this.props.user.crewRole !== 'командир') {
+    } else if (this.state.user && this.state.user.crewRole !== 'командир') {
       linkEdite = '/edit/profile_pilot'
     }
     else {
       linkEdite = "/login"
     }
 
+    console.log('123', this.state.phone)
     return (
-        <div style={{ padding: "10px" }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <div
-                style={{
-                  borderRadius: "20px",
-                  display: "flex",
-                  width: "850px",
-                  marginTop: "20px",
-                  display: 'flex',
-                  flexDirection: 'column',
-                  background: 
-                      "linear-gradient(6deg, rgba(132,100,250,1) 0%, rgba(74,118,168,1) 100%)"
-                }}
-            >
-            
-            <div className={"setting"}>
-              <a href={linkEdite} style={{color: 'white'}}><Icon type='setting' /></a>
+          <Modal isOpen={this.props.isOpen} className={'modal-lg'}> 
+
+            <ModalBody className={'main_block'}>
+
+            <div style={{textAlign: 'right'}}>
+              <div className={"setting"}>
+                <Icon type='setting' style={{color: 'white'}} className={'unselectable'} onClick={() => this.setState({edit: !this.state.edit})} />
+              </div>
+              <div className={"setting"}>
+                <Icon type='close' style={{color: 'white'}} className={'unselectable'} onClick={() => this.props.closeFunc()} />
+              </div>
             </div>
 
               <div className="block_with_avatar">
@@ -65,35 +85,55 @@ class Profile extends Component {
                     <Avatar
                         size={150}
                         icon="user"
-                        src={this.props.user.photo ? this.props.user.photo : pilotAvatar}
+                        src={this.state.photo && this.state.user.photo ? this.state.user.photo : pilotAvatar}
                     />
                 </div>
                 <div className="right_column_with_avatar">
                       <h3
                           style={{ color: "#ffffff" }}
-                      >{`${this.props.user.firstName} ${this.props.user.lastName}`}</h3>
+                      >{`${this.state.user ? this.state.user.firstName : "Name"} ${this.state.user ? this.state.user.lastName : 'Surname'}`}</h3>
  
-                      <div>
+                      <div className={'contact_info'} style={{marginBottom: '0px'}}>
                         <h5 style={{ color: "#ffffff" }}>
                       <span style={{ fontWeight: "bold" }}>
-                        <Icon type="user" /> &nbsp; Должность: <span style={{ fontWeight: "normal" }}> {this.props.user.crewRole ? this.props.user.crewRole : '-/-'} </span>
+                        <Icon type="user" /> &nbsp; Должность: <span style={{ fontWeight: "normal" }}> {this.state.user && this.state.user.crewRole ? this.state.user.crewRole : '-/-'} </span>
                       </span>
                         </h5>
                       </div>
 
-                      <div>
-                        <h5 style={{ color: "#ffffff" }}>
-                          <span style={{ fontWeight: "bold" }}>
-                            <Icon type="mail" /> &nbsp; E-mail: <span style={{ fontWeight: "normal" }}>{this.props.user.email ? this.props.user.email : '-/-'}</span>
+                      <div className={'contact_info' + (this.state.edit ? ' change_this_field' : '')}>
+                        <h5 style={{ color: this.state.edit ? "rgb(83,93,202)" : "#ffffff" }}>
+                          <span style={{ fontWeight: "bold", marginLeft: '10px'}}>
+                            <Icon type="mail" /> &nbsp; E-mail:
+                            <input 
+                            value = {this.state.user && this.state.user.email ? this.state.user.email : (!this.state.edit ? '-/-' : '')}
+                            className={'input_field'}
+                            onChange={(val) => {
+                              let tmp = this.state.user;
+                              tmp.email = val.target.value;
+                              this.setState({user: tmp})
+                            }}
+                            disabled={!this.state.edit}
+                            />
                           </span>
                         </h5>
                       </div>
 
-                      <div>
-                        <h5 style={{ color: "#ffffff" }}>
-                      <span style={{ fontWeight: "bold" }}>
-                        <Icon type="phone" /> &nbsp; Телефон: <span style={{ fontWeight: "normal" }}>{this.props.user.phone ? this.props.user.phone : '-/-'}</span>
-                      </span>
+                      <div  className={'contact_info' + (this.state.edit ? ' change_this_field' : '')}>
+                        <h5 style={{ color: this.state.edit ? "rgb(83,93,202)" : "#ffffff", marginLeft: '11px' }}>
+                          <span style={{ fontWeight: "bold", marginLeft: '10px' }}>
+                            <Icon type="phone" /> &nbsp; Телефон: 
+                            <input 
+                            value = {this.state.user && this.state.user.phone ? this.state.user.phone : (!this.state.edit ? '-/-' : '')}
+                            className={'input_field'}
+                            onChange={(val) => {
+                              let tmp = this.state.user;
+                              tmp.phone = val.target.value;
+                              this.setState({user: tmp})
+                            }}
+                            disabled={!this.state.edit}
+                            />
+                          </span>
                         </h5>
                       </div>
                 </div>
@@ -109,7 +149,7 @@ class Profile extends Component {
                             <Icon type="calendar" /> &nbsp; Стаж работы в должности: 
                           </span>
                           <li type='disc'>
-                            <span className={'subtext'}>с {this.props.user.standingFromDateInRole ? this.props.user.standingFromDateInRole : '-/-'} </span>
+                            <span className={'subtext'}>с {this.state.user && this.state.user.standingFromDateInRole ? this.state.user.standingFromDateInRole : '-/-'} </span>
                           </li>
                         </h5>
                       </div>
@@ -120,7 +160,7 @@ class Profile extends Component {
                             <Icon type="calendar" /> &nbsp; Стаж работы в авиакомпании:
                           </span>
                           <li>
-                            <span className={'subtext'}> с {this.props.user.standingFromDate ? this.props.user.standingFromDate : '-/-'}</span>
+                            <span className={'subtext'}> с {this.state.user && this.state.user.standingFromDate ? this.state.user.standingFromDate : '-/-'}</span>
                           </li>
                         </h5>
                       </div>
@@ -133,7 +173,7 @@ class Profile extends Component {
                             <Icon type="global" /> &nbsp; Индекс сеньорити: 
                           </span>
                           <li>
-                            <span className={'subtext'}> {this.props.user.reliabilityIndex ? this.props.user.reliabilityIndex : '-/-'} </span>
+                            <span className={'subtext'}> {this.state.user && this.state.user.reliabilityIndex ? this.state.user.reliabilityIndex : '-/-'} </span>
                           </li>
                         </h5>
                       </div>
@@ -144,100 +184,22 @@ class Profile extends Component {
                             <Icon type="bell" /> &nbsp; Индекс поощрений и наказаний:
                           </span>
                           <li>
-                            <span className={'subtext'}> {this.props.user.rewardsAndPunishments ? this.props.user.rewardsAndPunishments : '-/-'}</span>
+                            <span className={'subtext'}> {this.state.user && this.state.user.rewardsAndPunishments ? this.state.user.rewardsAndPunishments : '-/-'}</span>
                           </li>
                         </h5>
                       </div>
-
-
-                      {this.props.user.vk && (
-                          <div>
-                            <h5 style={{ color: "#ffffff" }}>
-                        <span style={{ fontWeight: "bold" }}>
-                          <Icon type="global" /> &nbsp; VK:{" "}
-                        </span>{" "}
-                              <span style={{ fontWeight: "normal" }}>
-                          {this.props.user.vk}
-                        </span>
-                            </h5>
-                          </div>
-                      )}
-                      {this.props.user.nativeLocation && (
-                          <div>
-                            <h5 style={{ color: "#ffffff" }}>
-                        <span style={{ fontWeight: "bold" }}>
-                          <Icon type="compass" /> &nbsp; Приоритетный город для полетов:{" "}
-                        </span>{" "}
-                              <span style={{ fontWeight: "normal" }}>
-                          {this.props.user.nativeLocation}
-                        </span>
-                            </h5>
-                          </div>
-                      )}
                     </div>
               </div>
 
-
-            </div>
-
-          </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <Card className="newCard">
-              <Tabs defaultActiveKey="1">
-                <TabPane
-                    tab={
-                      <span>
-                    <Icon type="picture" />
-                    Все заявки
-                  </span>
-                    }
-                    key="1"
-                >
-                  <div style={{ display: "block", textAlign: "center" }}>
-                    {/* {this.props.photos &&
-                    this.props.photos.map((url, i) => {
-                      return (
-                        <Avatar
-                          size={150}
-                          icon="user"
-                          shape="square"
-                          src={url.thumbUrl}
-                          style={{ margin: "10px 10px 0 0" }}
-                          onClick={this.showModal}
-                          key={i}
-                        />
-                      );
-                    })} */}
-                    Какая то информация
-                  </div>
-                </TabPane>
-                <TabPane
-                    tab={
-                      <span>
-                    <Icon type="picture" theme="twoTone" twoToneColor="#eb2f96" />
-Удовлетворенные заявки
-                  </span>
-                    }
-                    key="2"
-                >
-                  <div>
-                    Какая то информация
-                  </div>
-                </TabPane>
-              </Tabs>
-            </Card>
-          </div>
-        </div>
+              <div style={{ display: 'flex', justifyContent: 'center', height: '70px'}}>
+                <div style={!this.state.edit ? {display: 'none'} : {display: 'block'}}>
+                  <Button onClick={() => this.saveToBase(this.state.user)}>Сохранить</Button>
+                </div>
+              </div>
+            </ModalBody>
+        </Modal>
     );
   }
 }
 
-function mapStateToProps(store) {
-  return {
-    edit: store.editProfile,
-    photos: store.photos,
-    user: store.user
-  };
-}
-
-export default Form.create()(connect(mapStateToProps)(Profile));
+export default Profile;
