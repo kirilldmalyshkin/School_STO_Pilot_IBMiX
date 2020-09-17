@@ -2332,48 +2332,34 @@ class DashBoard extends Component {
 
                 <CalendarWithButtons highlighted={this.state.workingDays} />
               </div>
-              {/*<div className="userCardW" style={{ marginTop: '30px' }}>
+              <div className="userCardW" style={{ marginTop: '30px' }}>
                 <div className='yourTrip1'>Ваши Рейсы</div>
-                <div className='sUserCard' onClick={this.showSort}> sortString
+                <div className='sUserCard' onClick={this.showSort}>
                   <span className='sort-func-title'>Сортировка</span>
                   <svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M4.5 5.99994L0.241071 1.45709C-0.0803571 1.11423 -0.0803571 0.578516 0.241071 0.235659C0.5625 -0.107199 1.06473 -0.107199 1.38616 0.235659L4.52009 3.57852L7.61384 0.257087C7.93527 -0.0857701 8.4375 -0.0857701 8.75893 0.257087C9.08036 0.599944 9.08036 1.13566 8.75893 1.47852L4.5 5.99994Z" fill="#5459CD"/>
                   </svg>
-                </div>*/}
-
-
-              <div className='yourTrip1'><font face="Arial Black">Ваши Рейсы</font></div>
-              <div className="userCardW">
-
-                <Card className='sUserCard hoverCard' onClick={this.showSort}> <font className="sortString"
-                  face="Arial Black"><font
-                    face="Arial Black" color={'#615d73'}>Сортировка</font></font>
-                </Card>
-
+                </div>
 
                 {this.state.showSortFilters &&
-                  <Cardr className="userCardWSort">
-                    <CardBody>
-
-                      <Card size="small" title="Время полета, часы" className="userCardFilter">
+                  <div className="userCardWSort">
+                      <div className="userCardFilter">
+                        <span>Время полета, часы</span>
                         <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
                           <Slider range value={[this.state.minTime, this.state.maxTime]} max={24}
                             onChange={this.onChangeTime}
                             defaultValue={[this.state.minTime, this.state.maxTime]}
-                            marks={{ 0: 'мин.', 24: 'макс.' }} />
+                            marks={{ 0: 'min', 24: 'max' }} />
                         </div>
-                      </Card>
-                      <Card size="small" title="Город"
-                        className="userCardFilter"
-                      >
-
+                      </div>
+                      <div className="userCardFilter">
+                        <span>Город</span>
                         <Select
-                          mode="multiple"
                           style={{ width: '100%' }}
+                          mode="multiple"
                           placeholder="Приоритетный город"
                           onChange={this.handleChangeSort}
                         >
-
                           {this.props.user.arrFlights && this.props.user.arrFlights.map(city => (
                             <Option value={city.where_to} key={city.where_to}>
                               <div className="demo-option-label-item">
@@ -2381,23 +2367,18 @@ class DashBoard extends Component {
                               </div>
                             </Option>
                           ))}
-
                         </Select>
-
-
-
-                      </Card>
-                      <Card size="small" title="Сложность аэропорта, коэфициент" className="userCardFilter">
+                      </div>
+                      <div className="userCardFilter">
+                        <span>Сложность аэропорта, коэфициент</span>
                         <div style={{ marginLeft: 'auto', marginRight: 'auto', width: 'auto' }}>
                           <Slider range value={[this.state.minDifficulty, this.state.maxDifficulty]} max={10}
                             onChange={this.onChangeDifficulty}
                             defaultValue={[this.state.minDifficulty, this.state.maxDifficulty]}
-                            marks={{ 0: 'мин.', 10: 'макс.' }} />
+                            marks={{ 0: 'min', 10: 'max' }} />
                         </div>
-                      </Card>
-
-                    </CardBody>
-                  </Cardr>
+                      </div>
+                  </div>
                 }
                 <Suspense fallback={<h1>Loading posts....</h1>}>
                   {this.props.user.arrFlights &&
