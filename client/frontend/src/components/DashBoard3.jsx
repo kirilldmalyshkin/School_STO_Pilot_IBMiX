@@ -1977,87 +1977,58 @@ class DashBoard extends Component {
             <div className='yourTrip'>Заявка на текущий период:</div>
             <Card
               color="primary"
-              className="userCardW"
+              className="bidding-status-card"
               bordered={false}
             >
-              {(!this.props.user.wishForm &&
-                <img src={redCircle} style={{ width: '30px', position: 'absolute', top: '15px', left: '15px' }}></img>)
-                ||
-                (this.props.user.wishForm &&
-                  <img src={greenCircle} style={{ width: '30px', position: 'absolute', top: '15px', left: '15px' }}></img>)}
-              <div style={{ width: '60%', marginLeft: '40px' }}>
-                <div className="userCard1" style={{ width: '70%' }}>
-                  {(!this.props.user.wishForm &&
-                    <div className='greyMediumText' style={{ marginLeft: '100px' }}>
-                        Не заполнена
-                    </div>) ||
-                    (this.props.user.wishForm &&
-                      <div style={{ marginLeft: '10px' }}>
-                        <font face="Arial" color={'#ffffff'} size={4}>Ноябрь</font>
-                      </div>)}
-                </div>
+              <div className='status-month'>
+                {(!this.props.user.wishForm &&
+                  <img src={redCircle} className='status-month--icon'></img>)
+                  ||
+                  (this.props.user.wishForm &&
+                    <img src={greenCircle}className='status-month--icon'></img>)}
 
+                  {(!this.props.user.wishForm &&
+                    <span className='greyMediumText' >
+                        Не заполнена
+                    </span>) ||
+                    (this.props.user.wishForm &&
+                      <span>
+                        Ноябрь
+                      </span>)}
+              </div>
+              <div>
                 {this.state.newWishForm &&
                   this.state.newWishForm.map((user, key) =>
+                  <div className='bidding-status-prefs'>
+                    <div className="bidding-prefs-card hoverCard ">
+                      <span className='bidding-prefs-card--title'>Направление: </span>
+                      <span>{user.longFly}</span>
+                    </div>
+                    <div className="bidding-prefs-card hoverCard">
+                      <span className='bidding-prefs-card--title'>Продолжительность смены: </span>
+                      {user.timeFly}
+                    </div>
+                    <div className="bidding-prefs-card hoverCard ">
+                      <span className='bidding-prefs-card--title'>Подработка: </span>
+                      {user.otherTime}
+                    </div>
 
-                    <div>
-                      <Buttonr
-                        // onClick={this.step}
-                        color="none"
-                        className="userCardWP hoverCard "
-                      >
-                        <font color={'#5a5a5a'}>Направление: {user.longFly}</font>
-                      </Buttonr>
-                      <Buttonr
-                        // onClick={this.step3}
-                        color="none"
-                        className="userCardWP hoverCard "
-                      >
-                        <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly}</font>
-                      </Buttonr>
-                      <Buttonr
-                        // onClick={() => this.changeWork(user.otherTime)}
-                        color="none"
-                        className="userCardWP hoverCard "
-                      >
-                        <font color={'#5a5a5a'}>Подработка: {user.otherTime}</font>
-                      </Buttonr>
+                    <div className="bidding-prefs-card hoverCard">
+                      <span className='bidding-prefs-card--title'>Предпочтительное время вылета: </span>
+                      {user.preferenceTimeFly[0] === "Не заполнено" && "Не заполнено"}
+                      {user.preferenceTimeFly[0] !== "Не заполнено" && ` ${user.preferenceTimeFly[0].name}, 
+                      ${user.preferenceTimeFly[1].name}, ${user.preferenceTimeFly[2].name}, ${user.preferenceTimeFly[3].name}`}
+                    </div>
 
-                      <Buttonr
-                        // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
-                        color="none"
-                        className="userCardWP hoverCard "
-                      >
-                        <font color={'#5a5a5a'}>Предпочтительное время вылета:
-                        {user.preferenceTimeFly[0] === "Не заполнено" && "Не заполнено"}
-
-                          {user.preferenceTimeFly[0] !== "Не заполнено" && ` ${user.preferenceTimeFly[0].name}, ${user.preferenceTimeFly[1].name}, ${user.preferenceTimeFly[2].name}, ${user.preferenceTimeFly[3].name}`}
-                        </font>
-                      </Buttonr>
-
-                      <Buttonr
-                        // onClick={() => this.changeDepartTime(user.preferenceTimeFly)}
-                        color="none"
-                        className="userCardWP hoverCard "
-                      >
-                        <font color={'#5a5a5a'}>Выходные дни:
-                        {user.selectedDates[0] === "Не заполнено" && " Не заполнено"}
-
-
-
-                          {user.selectedDates[0] !== "Не заполнено" &&
-
-                            user.selectedDates.map((user, key) =>
-                              <span style={{ color: 'red' }}>  {user.day}.{user.month}.{user.year} </span>
-
-
-
-                            )}
-
-
-                        </font>
-                      </Buttonr>
-                    </div>,
+                    <div className="bidding-prefs-card hoverCard">
+                      <span className='bidding-prefs-card--title'>Выходные дни: </span>
+                      {user.selectedDates[0] === "Не заполнено" && " Не заполнено"}
+                      {user.selectedDates[0] !== "Не заполнено" &&
+                      user.selectedDates.map((user, key) =>
+                          <span style={{ color: 'red' }}>  {user.day}.{user.month}.{user.year} </span>
+                      )}
+                    </div>
+                  </div>
                   )}
               </div>
 
@@ -2088,67 +2059,50 @@ class DashBoard extends Component {
 
             {this.props.user.arrWish &&
               this.props.user.arrWish.map((user, key) =>
-                <Card key={key} color="primary" className="userCardW " bordered={true}>
-                  <div style={{ width: '60%', float: 'inherit' }}>
-                    <div className="userCard1" style={{ width: '70%' }}>
-                      <div style={{ marginLeft: '10px' }}><font face="Arial" color={'#ffffff'} size={4}>{user.month.description}</font>
+              <Card
+                key={key}
+                color="primary"
+                className="bidding-status-card"
+                bordered={false}
+              >
+                <div className='status-month'>
+                  <svg width="9" height="11" viewBox="0 0 9 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="9" height="11" rx="1" fill="#464646"/>
+                    <rect x="1" y="2" width="7" height="4" fill="white"/>
+                  </svg>
+                  <span>{user.month.description}</span>
+                  </div>
+                <div>
+                   <div className='history-status-prefs' id={"form" + key + "toggler1"}>
+                      <div className="history-prefs-card hoverCard ">
+                        <span className='bidding-prefs-card--title'>Направление: </span>
+                        {user.longFly[0].fly}
+                        <span className={user.longFly[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
                       </div>
+                      <div className="history-prefs-card hoverCard" id={"form" + key + "toggler3"}>
+                        <span className='bidding-prefs-card--title'>Продолжительность смены: </span>
+                        {user.timeFly[0].flyTime}
+                        <span className={user.timeFly[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
+                      </div>
+                      <div className="history-prefs-card hoverCard" id={"form" + key + "toggler2"}>
+                        <span className='bidding-prefs-card--title'>Подработка: </span>
+                        {user.otherTime[0].time}
+                        <span className={user.otherTime[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
+                      </div>
+
+                      <div className="history-prefs-card hoverCard" id={"form" + key + "toggler4"}>
+                        <span className='bidding-prefs-card--title'>Предпочтительное время вылета: </span>
+                        {user.preferenceTimeFly[0].dayTime}
+                        <span className={user.preferenceTimeFly[0].flag ? "prefs-status-color --green hoverCard" : "prefs-status-color --red hoverCard"} />
+                      </div>
+
+                      {/*<div className="history-prefs-card hoverCard">
+                        <span className='bidding-prefs-card--title'>Выходные дни: </span>
+                      </div>*/}
                     </div>
-                    <div>
-                      <Buttonr color="none" id={"form" + key + "toggler1"} className={user.longFly[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
-                        <font color={'#5a5a5a'}>Направление: {user.longFly[0].fly}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler1"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.longFly[0].fly}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-
-                      <Buttonr color="none" id={"form" + key + "toggler2"} className={user.otherTime[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
-                        <font color={'#5a5a5a'}>Подработка: {user.otherTime[0].time}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler2"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.otherTime[0].time}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-
-                      <Buttonr color="none" id={"form" + key + "toggler3"} className={user.timeFly[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
-                        <font color={'#5a5a5a'}>Продолжительность смены: {user.timeFly[0].flyTime}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler3"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.timeFly[0].flyTime}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-
-                      <Buttonr color="none" id={"form" + key + "toggler4"} className={user.preferenceTimeFly[0].flag ? "userCardGreen hoverCard " : "userCardRed hoverCard "}>
-                        <font color={'#5a5a5a'}>Предпочтительное время вылета: {user.preferenceTimeFly[0].dayTime}</font>
-                      </Buttonr>
-                      <UncontrolledCollapse toggler={"#form" + key + "toggler4"}>
-                        <Cardr className="userCardW">
-                          <CardBody>
-                            {user.preferenceTimeFly[0].dayTime}
-                          </CardBody>
-                        </Cardr>
-                      </UncontrolledCollapse>
-                    </div>
-                  </div>
-                  <div style={{ float: 'right', margin: '60px'}} >
-                    {user &&
-                        <div>
-                    <img style={{width: "100px", margin: '20px'}} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).image} />
-                    <font>{this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).text}</font>
-                        </div>
-                    }
-                  </div>
-                </Card>)}
+                </div>
+              </Card>
+              )}
 
           </div>
 
