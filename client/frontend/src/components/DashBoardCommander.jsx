@@ -345,6 +345,7 @@ class DashBoardCommander extends Component {
               <Radio.Group onChange={this.onChangeIframe} value={this.state.valueIframe}>
                 <Radio value={1}>Информация о пилотах</Radio>
                 <Radio value={2}>Статистика истории заявок</Radio>
+                <Radio value={3}>Метрика посещаемости сервиса</Radio>
 
               </Radio.Group>
             </div>
@@ -354,12 +355,16 @@ class DashBoardCommander extends Component {
             {this.state.valueIframe === 2 &&
               <Iframe className='iframe' url="https://datalens.yandex/z8qygi47ww50u?_embedded=1&tab=N6&_theme=dark" width="100%" height={window.innerHeight - 70} />
             }
+
+            {this.state.valueIframe === 3 &&
+              <Iframe className='iframe' url="https://datalens.yandex/nyy5y6czunswi" width="100%" height={window.innerHeight - 70} />
+            }
           </div>
         </div>
 
 
         <footer className='footer-users'
-                align={'center'}>
+          align={'center'}>
           <p>Зарегистрировано пользователей IBMiX : {this.state.usersLength}</p>
 
           <div dangerouslySetInnerHTML={{ __html: this.ym() }} />

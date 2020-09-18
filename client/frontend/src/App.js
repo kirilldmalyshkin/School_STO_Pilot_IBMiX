@@ -14,28 +14,31 @@ import IBMiX from "./components/IBMiX";
 import Password from "./components/newPassword/Password";
 import InstructionsNewPassword from "./components/newPassword/InstructionsNewPassword";
 import SetNewPassword from "./components/newPassword/SetNewPassword";
+import OurCompany from './components/OurCompany';
 
 
 class App extends React.Component {
   render() {
     // const isLogin = this.props.cookies.get("isLogin");
     return (
-        <Router>
-          <Switch>
-            <Route exact path={"/"} component={Logout} />
-            <Route exact path={"/dashboard3"} component={DashBoard3} />
-            <Route exact path={"/dashboardbogdan"} component={DashBoardBogdan} />
-            <Route exact path={"/dashboardC"} component={DashBoardCommander} />
-            <Route exact path={'/IBMiX'} component={IBMiX} />
-            <Route exact path={"/profile"} component={Profile} />
-            <Route exact path={"/login"} component={Login} />
-            <Route exact path={"/password"} component={Password} />
-            <Route exact path={"/instructions_new_password"} component={InstructionsNewPassword} />
-            <Route exact path={"/set_new_password/:id"} component={SetNewPassword} />
-            <Route exact path={"/signupAll"} component={SignupAll} />
-            <Route exact path={"/logout"} component={Logout} />
-          </Switch>
-        </Router>
+      <Router>
+        <Switch>
+          <Route exact path={"/"} component={Logout} />
+          <Route exact path={"/dashboard3"} component={DashBoard3} />
+          <Route exact path={"/dashboardbogdan"} component={DashBoardBogdan} />
+          <Route exact path={"/dashboardC"} component={DashBoardCommander} />
+          <Route exact path={'/IBMiX'} component={IBMiX} />
+          <Route exact path={"/profile"} component={Profile} />
+          <Route exact path={"/login"} component={Login} />
+          <Route exact path={"/password"} component={Password} />
+          <Route exact path={"/instructions_new_password"} component={InstructionsNewPassword} />
+          <Route exact path={"/set_new_password/:id"} component={SetNewPassword} />
+          <Route exact path={"/signupAll"} component={SignupAll} />
+          <Route exact path={"/logout"} component={Logout} />
+          <Route exact path={"/wow"} component={OurCompany} />
+
+        </Switch>
+      </Router>
     );
   }
 }
