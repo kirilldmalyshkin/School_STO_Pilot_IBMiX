@@ -1,10 +1,5 @@
 import React, { Suspense, Component } from 'react';
 import plane from '../images/plane.jpg';
-import circle_0 from '../images/0%.png';
-import circle_25 from '../images/25%.png';
-import circle_50 from '../images/50%.png';
-import circle_75 from '../images/75%.png';
-import circle_100 from '../images/100%.png';
 import Iframe from 'react-iframe'
 
 import team from '../images/CEO3.jpg';
@@ -12,7 +7,6 @@ import github from '../images/github.png';
 import inst from '../images/inst.png';
 import npm from '../images/npm.png';
 import moment from 'moment';
-import logo from '../images/logo.png';
 import ItemList from '../components/DnD/itemList';
 import ItemList_day from '../components/DnD_day/itemList';
 import { UncontrolledCollapse, Button as Buttonr, CardBody, Card as Cardr, Collapse as Collapser } from 'reactstrap';
@@ -103,7 +97,6 @@ class DashBoard extends Component {
       showLongWork: true,
       showShortWork: true,
       minTime: 0,
-      maxTime: 50000,
       maxTime: 24,
       minDifficulty: 0,
       maxDifficulty: 10,
@@ -360,15 +353,15 @@ class DashBoard extends Component {
     }
 
     if (count1 === 0) {
-      return { image: circle_0, text: 'к сожалению, не удовлетпорена ни одна из заявок' }
+      return { text: 'к сожалению, ни одна преференция не удовлетворена' }
     } else if (count1 === 1) {
-      return { image: circle_25, text: 'удовлетворено 25%' }
+      return { text: 'удовлетворено 25% преференций' }
     } else if (count1 === 2) {
-      return { image: circle_50, text: 'удовлетворено 50%' }
+      return { text: 'удовлетворено 50% преференций' }
     } else if (count1 === 3) {
-      return { image: circle_75, text: 'удовлетворено 75%' }
+      return { text: 'удовлетворено 75% преференций' }
     } else if (count1 === 4) {
-      return { image: circle_100, text: 'удовлетворено 100%' }
+      return { text: 'удовлетворено 100% преференций' }
     }
   };
 
@@ -2192,16 +2185,11 @@ class DashBoard extends Component {
                       </div>*/}
                     </div>
                   </div>
-                  <div id="c1"></div>
-                  <div style={{ float: 'right', margin: '60px' }} >
                     {user &&
-                      <div>
-                        <img style={{ width: "100px", margin: '20px' }} src={this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).image} />
-                        <font>{this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).text}</font>
-
+                      <div className='bid-stat-info'>
+                        <span>{this.showDiagram(user.longFly[0].flag, user.otherTime[0].flag, user.timeFly[0].flag, user.preferenceTimeFly[0].flag).text}</span>
                       </div>
                     }
-                  </div>
                 </Card>
               )}
 

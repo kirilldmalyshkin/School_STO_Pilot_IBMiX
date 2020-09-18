@@ -227,6 +227,14 @@ a {
     border-radius: 15px;
 }
 
+.bid-stat-info {
+    text-align: right;
+    padding-right: 48px;
+    font-style: normal;
+    font-size: 13px;
+    color: #000000;
+}
+
 .ant-radio-checked .ant-radio-inner {
     border-color: #7D58FF !important;
 }
