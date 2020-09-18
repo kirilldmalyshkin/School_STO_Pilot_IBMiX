@@ -230,7 +230,7 @@ a {
 .bid-stat-info {
     text-align: right;
     padding-right: 48px;
-    font-style: normal;
+    font-weight: 600;
     font-size: 13px;
     color: #000000;
 }
